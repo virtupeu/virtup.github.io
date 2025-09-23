@@ -21,10 +21,7 @@
     body{
       margin:0; font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
       color:var(--fg);
-      background:
-        radial-gradient(1100px 560px at 85% -240px, rgba(88,120,255,.18), transparent 60%),
-        radial-gradient(900px 500px at -10% -200px, rgba(0,166,255,.12), transparent 60%),
-        var(--bg);
+      background: var(--bg);
       -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
       scroll-behavior:smooth;
     }
@@ -33,7 +30,7 @@
     a:visited{color:inherit}
     .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px 80px}
 
-    /* Header */
+    /* ================= HEADER ================= */
     header{
       position:sticky; top:0; z-index:20;
       background:linear-gradient(to bottom, color-mix(in oklab,var(--bg) 96%, transparent), transparent);
@@ -50,22 +47,55 @@
     .jira-btn{padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--panel); font-size:14.5px}
     .jira-btn:hover{border-color:color-mix(in oklab,var(--border), var(--fg) 25%)}
 
-    /* Sections + divider */
-    .section{padding:104px 0}
-    .section--tight{padding:28px 0 44px}
-    .section + .section{position:relative}
-    .section + .section::before{
+    /* ============ GENERIC SECTION + DIVIDER ============ */
+    .section{position:relative; overflow:hidden; padding:104px 0}
+    .section--tight{padding:28px 0 44px} /* tighter space after divider before cards */
+    /* gradient hairline divider between sections */
+    .section + .section::after{
       content:""; position:absolute; top:-1px; left:0; right:0; height:1px;
       background:linear-gradient(to right, transparent, color-mix(in oklab,var(--border), var(--fg) 10%), transparent);
       pointer-events:none;
     }
 
-    /* Hero */
+    /* ====== BACKGROUND IMAGE (GLASS / BLUR) ======
+       Each section gets a ::before with the repeating it.png,
+       blurred slightly; we alternate light/dark treatments.
+    */
+    .section::before{
+      content:""; position:absolute; inset:-20px; z-index:-1;
+      background-image:url('it.png');
+      background-repeat:repeat;
+      background-size: 640px auto;      /* “wider” feel; tweak as you like */
+      background-position:center;
+      filter: blur(10px);                /* soft blur behind glass */
+      opacity:.20;                       /* base opacity; overridden per theme below */
+    }
+    /* Light variant: brighter, more visible */
+    .bg-light::before{
+      opacity:.28;
+      filter: blur(10px) brightness(1.35) saturate(0.8);
+    }
+    /* Dark variant: inverted/dimmed to read well */
+    .bg-dark::before{
+      opacity:.18;
+      filter: blur(12px) invert(1) brightness(0.35) saturate(0.7);
+    }
+
+    /* Optional “glass” panels for contained content */
+    .glass{
+      border:1px solid color-mix(in oklab,var(--border), var(--fg) 8%);
+      background: color-mix(in oklab, var(--panel-2), transparent 60%);
+      backdrop-filter: blur(9px) saturate(140%);
+      border-radius:16px; padding:22px;
+      box-shadow:0 10px 34px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.02);
+    }
+
+    /* ================= HERO ================= */
     .hero{text-align:center}
     .title{font-size:clamp(26px,4.8vw,42px); margin:0 0 12px; font-weight:900; letter-spacing:.15px}
     .sub{color:var(--muted); font-size:clamp(15px,2.2vw,18px); margin:0 auto; max-width:820px}
 
-    /* Services row */
+    /* =============== SERVICES ROW =============== */
     .row{
       margin-top:14px;
       display:flex; gap:18px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding:2px 2px 10px;
@@ -81,22 +111,17 @@
       display:flex; align-items:center; justify-content:center; text-align:center;
       font-size:20px; font-weight:700;
       transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      backdrop-filter: blur(6px) saturate(120%); /* glass over bg */
     }
     .card:hover{transform:translateY(-4px); box-shadow:0 22px 54px rgba(0,0,0,.28); border-color:color-mix(in oklab,var(--border), var(--fg) 35%)}
     .card:hover, .card:focus{ text-decoration:none }
 
-    /* --- Full-bleed image (no white container) --- */
-    .image-section{padding:36px 0; background:transparent; border:0}
-    .image-bleed{margin-left:calc(50% - 50vw); margin-right:calc(50% - 50vw)}
-    .image-bleed img{
-      width:100vw; height:auto; display:block; border-radius:0;   /* edge-to-edge */
-    }
-
-    /* Form */
-    .form-section{padding:64px 0}
+    /* =============== FORM =============== */
     .form-card{
-      max-width:820px; border:1px solid var(--border); background:var(--panel-2); border-radius:16px;
+      max-width:820px; margin:0 auto;
+      border:1px solid var(--border); background:var(--panel-2); border-radius:16px;
       padding:22px; box-shadow:0 14px 40px rgba(0,0,0,.18);
+      backdrop-filter: blur(8px) saturate(120%); /* glass over bg */
     }
     label{display:block; font-size:14px; color:var(--muted); margin:12px 0 6px}
     input, textarea{
@@ -104,15 +129,15 @@
     }
     input:focus, textarea:focus{border-color:color-mix(in oklab,var(--border), var(--fg) 35%)}
     textarea{min-height:140px; resize:vertical}
-    .form-actions{margin-top:14px; display:flex; gap:10px}
+    .form-actions{margin-top:14px; display:flex; gap:10px; align-items:center}
     .btn{display:inline-block; padding:12px 16px; border-radius:12px; border:1px solid var(--border); background:var(--panel)}
     .btn:hover{border-color:color-mix(in oklab,var(--border), var(--fg) 25%)}
     .btn.primary{color:#fff}
-    .status{margin-left:10px; font-size:14px; color:var(--muted)}
+    .status{font-size:14px; color:var(--muted)}
 
     footer{margin-top:56px; padding:24px 0; color:var(--muted); border-top:1px solid var(--border)}
 
-    /* Responsive */
+    /* ================== RESPONSIVE ================== */
     @media (max-width: 900px){
       .head{padding:20px 0}
       .brand span{display:none}
@@ -122,6 +147,8 @@
       .section--tight{padding:24px 0 36px}
       .row{flex-wrap:wrap; overflow-x:visible}
       .card{min-width:100%}
+      nav{gap:8px}
+      .jira-btn{padding:8px 12px}
     }
   </style>
 </head>
@@ -133,7 +160,7 @@
         <nav>
           <a href="#about">About</a>
           <a href="#work">Work</a>
-          <a href="#image">Contact</a>
+          <a href="#form">Contact</a>
         </nav>
         <!-- brand + Jira right -->
         <div class="right">
@@ -147,41 +174,46 @@
     </header>
 
     <main id="top">
-      <!-- Hero -->
-      <section class="section hero" id="about">
-        <h1 class="title">IT Services.</h1>
-        <p class="sub">Simple. Reliable. Maintainable.</p>
-      </section>
-
-      <!-- Services -->
-      <section class="section section--tight" id="work" aria-label="Work">
-        <div class="row">
-          <a class="card" href="#form">DevOps &amp; SRE</a>
-          <a class="card" href="#form">Backend Engineering</a>
-          <a class="card" href="#form">Advisory</a>
+      <!-- HERO (bg = light) -->
+      <section class="section bg-light hero" id="about">
+        <div class="glass" style="max-width:820px;margin:0 auto;">
+          <h1 class="title" style="margin-top:6px;">IT Services.</h1>
+          <p class="sub">Simple. Reliable. Maintainable.</p>
         </div>
       </section>
 
-      <!-- Full-bleed image (no white background/container) -->
-      <section class="section image-section" id="image" aria-label="Illustration">
-        <div class="image-bleed">
-          <img src="it.png" alt="IT services illustration" />
+      <!-- SERVICES (bg = dark) -->
+      <section class="section section--tight bg-dark" id="work" aria-label="Work">
+        <div class="glass" style="padding:18px;">
+          <div class="row">
+            <a class="card" href="#form">DevOps &amp; SRE</a>
+            <a class="card" href="#form">Backend Engineering</a>
+            <a class="card" href="#form">Advisory</a>
+          </div>
         </div>
       </section>
 
-      <!-- Form (EmailJS) -->
-      <section class="form-section" id="form" aria-labelledby="formTitle">
-        <h2 id="formTitle" style="margin:0 0 16px; font-size:26px; font-weight:800;">Send a message</h2>
+      <!-- CONTACT FORM (bg = light) -->
+      <section class="section bg-light" id="form" aria-labelledby="formTitle">
+        <h2 id="formTitle" style="margin:0 0 16px; font-size:26px; font-weight:800; text-align:center;">Send a message</h2>
         <div class="form-card">
-          <form id="contactForm">
+          <!-- ========== FormSubmit: NO KEYS, sends to info@virtup.eu ========= -->
+          <form action="https://formsubmit.co/info@virtup.eu" method="POST">
+            <!-- visible fields -->
             <label for="name">Name</label>
-            <input id="name" name="name" autocomplete="name" placeholder="Your name" required />
+            <input id="name" name="name" placeholder="Your name" required />
 
             <label for="email">Your email</label>
-            <input id="email" name="email" type="email" autocomplete="email" placeholder="you@example.com" required />
+            <input id="email" name="email" type="email" placeholder="you@example.com" required />
 
             <label for="message">Message</label>
             <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
+
+            <!-- options -->
+            <input type="hidden" name="_subject" value="Contact from virtup.eu" />
+            <input type="hidden" name="_captcha" value="false" />
+            <input type="hidden" name="_next" value="https://www.virtup.eu/?sent=1#form" />
+            <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
 
             <div class="form-actions">
               <button class="btn primary" type="submit">Send email</button>
@@ -197,47 +229,15 @@
     </main>
   </div>
 
-  <!-- EmailJS client -->
-  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <script>
-    // Replace with your working keys (same as before)
-    const EJ_PUBLIC_KEY  = 'YOUR_EXISTING_PUBLIC_KEY';
-    const EJ_SERVICE_ID  = 'YOUR_EXISTING_SERVICE_ID';
-    const EJ_TEMPLATE_ID = 'YOUR_EXISTING_TEMPLATE_ID';
-    const TO_EMAIL       = 'info@virtup.eu';
-
+    // year
     document.getElementById('y').textContent = new Date().getFullYear();
 
-    const statusEl = document.getElementById('status');
-    const formEl   = document.getElementById('contactForm');
-    function setStatus(msg, ok){ statusEl.textContent = msg; statusEl.style.color = ok ? '#7dd87d' : 'var(--muted)'; }
-
-    formEl.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const name = document.getElementById('name').value.trim();
-      const from = document.getElementById('email').value.trim();
-      const msg  = document.getElementById('message').value.trim();
-
-      if (!window.emailjs || EJ_PUBLIC_KEY.includes('YOUR_EXISTING')) {
-        setStatus('Configure EmailJS keys.', false);
-        return;
-      }
-      try {
-        emailjs.init({ publicKey: EJ_PUBLIC_KEY });
-        setStatus('Sending…', false);
-        await emailjs.send(EJ_SERVICE_ID, EJ_TEMPLATE_ID, {
-          from_name: name,
-          reply_to:  from,
-          message:   msg,
-          to_email:  TO_EMAIL
-        });
-        setStatus('Sent. Thanks! ✅', true);
-        formEl.reset();
-      } catch (err) {
-        console.error(err);
-        setStatus('Send failed. Check EmailJS setup.', false);
-      }
-    });
+    // Show success message when returning from FormSubmit
+    if (new URLSearchParams(location.search).get('sent') === '1') {
+      const s = document.getElementById('status');
+      if (s) { s.textContent = 'Sent. Thanks! ✅'; s.style.color = '#7dd87d'; }
+    }
   </script>
 </body>
 </html>
