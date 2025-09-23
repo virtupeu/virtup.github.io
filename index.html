@@ -245,7 +245,13 @@
       font-size:15px; font-weight:700; margin-bottom:14px; position:relative; color:#fff;
     }
     .footer-col h4::after{
-      content:""; display:block; width:40px; height:2px; background:#3b3b98; margin-top:6px;
+      content:"";
+      display:block;
+      height:2px;
+      background:#3b3b98;
+      margin-top:6px;
+      width:100%;            /* full underline */
+      max-width:max-content; /* only as long as text */
     }
     .footer-col p{ color:var(--muted); line-height:1.6; }
     .footer-col ul{ list-style:none; padding:0; margin:0; }
@@ -353,13 +359,13 @@
         <a href="#"><i>💬</i></a>
       </div>
     </div>
-
+  
     <div class="wrap footer-content">
       <div class="footer-col">
         <h4>VIRTUP</h4>
         <p>We provide IT infrastructure services, automation, and cloud solutions that are simple, reliable, and maintainable.</p>
       </div>
-
+  
       <div class="footer-col">
         <h4>SERVICES</h4>
         <ul>
@@ -369,7 +375,7 @@
           <li><a href="#">IT Advisory</a></li>
         </ul>
       </div>
-
+  
       <div class="footer-col">
         <h4>RESOURCES</h4>
         <ul>
@@ -379,27 +385,25 @@
           <li><a href="#">System Status</a></li>
         </ul>
       </div>
-
+  
       <div class="footer-col">
         <h4>CONTACT</h4>
         <div class="contact-item"><i>🏠</i> Berlin, Germany</div>
         <div class="contact-item"><i>✉️</i> info@virtup.eu</div>
       </div>
     </div>
-
+  
     <div class="footer-bottom">
       © 2025 Virtup. All rights reserved.
     </div>
   </footer>
 
   <script>
-    // Show success message when returning from FormSubmit
     if (new URLSearchParams(location.search).get('sent') === '1') {
       const s = document.getElementById('status');
       if (s) { s.textContent = 'Sent. Thanks! ✅'; s.style.color = '#7dd87d'; }
     }
 
-    // Reveal-on-scroll & persistent animation for form
     (function(){
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const els = document.querySelectorAll('.reveal, .reveal-form');
