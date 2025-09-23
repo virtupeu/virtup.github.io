@@ -6,138 +6,77 @@
   <title>Virtup</title>
   <meta name="description" content="Virtup — Building IT infrastructure." />
   <link rel="icon" href="virtup-logo.png" />
-
   <style>
-    /* ==== Theme =========================================================== */
-    :root{
-      --bg:#0b0d12;
-      --panel:#12151c;
-      --panel-2:#0e1117;
-      --fg:#e6e9ef;
-      --muted:#98a2b3;
-      --border:#232936;
-      --accent:#8ab4ff;           /* subtle indigo/blue */
-      --ring: rgba(138,180,255,.35);
-      --radius:18px;
-      --maxw:1040px;
+    :root{--bg:#fff;--fg:#111;--muted:#6b7280;--card:#f6f7f9;--border:#e5e7eb;--accent:#111;--radius:18px;--maxw:980px}
+    @media (prefers-color-scheme: dark){
+      :root{--bg:#0b0c0f;--fg:#e5e7eb;--muted:#9aa3b2;--card:#13151a;--border:#242833;--accent:#e5e7eb}
     }
-    @media (prefers-color-scheme: light){
-      :root{
-        --bg:#ffffff;
-        --panel:#f6f7fb;
-        --panel-2:#f9fafb;
-        --fg:#0f172a;
-        --muted:#667085;
-        --border:#e5e7eb;
-        --accent:#3b82f6;
-        --ring: rgba(59,130,246,.25);
-      }
-    }
-
-    /* ==== Base ============================================================ */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
-      margin:0;
-      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif;
-      color:var(--fg);
-      background:
-        radial-gradient(1000px 500px at 80% -200px, rgba(79,70,229,.25), transparent 55%),
-        radial-gradient(800px 500px at -10% -200px, rgba(0,141,255,.18), transparent 55%),
-        var(--bg);
-      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
-      scroll-behavior:smooth;
+      margin:0;font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+      color:var(--fg);background:radial-gradient(1200px 700px at 80% -200px,rgba(0,0,0,.06),transparent 60%),var(--bg);
+      -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility
     }
-    .wrap{max-width:var(--maxw); margin:0 auto; padding:28px 20px 72px}
+    /* Make all links inherit theme color and avoid “blue/purple” */
+    a{color:inherit;text-decoration:none}
+    a:hover{ text-decoration:underline }
+    a:visited{ color:inherit }
 
-    /* ==== Header ========================================================== */
+    .wrap{max-width:var(--maxw);margin:0 auto;padding:32px 20px 64px}
     header{
-      display:flex; align-items:center; justify-content:space-between; gap:16px;
-      position:sticky; top:0; z-index:10; padding:10px 0 24px;
-      background: linear-gradient(to bottom, color-mix(in oklab, var(--bg) 96%, transparent), transparent);
-      backdrop-filter: blur(6px) saturate(130%);
+      display:flex;align-items:center;justify-content:space-between;gap:16px;padding:14px 0 28px;
+      position:sticky;top:0;background:linear-gradient(to bottom,var(--bg),color-mix(in oklab,var(--bg),transparent 100%));
+      backdrop-filter:saturate(140%) blur(6px);z-index:10
     }
-    .brand{display:flex; align-items:center; gap:12px; text-decoration:none; color:inherit}
-    .brand img{width:40px; height:40px; border-radius:12px; object-fit:contain; box-shadow:0 4px 18px rgba(0,0,0,.25)}
-    .brand span{font-weight:700; letter-spacing:.2px; font-size:16px}
-
-    /* pill nav */
-    nav{display:flex; gap:10px}
+    .brand{display:flex;align-items:center;gap:14px}
+    .brand img{width:40px;height:40px;border-radius:10px;object-fit:contain}
+    .brand span{font-weight:700;letter-spacing:.2px}
+    nav{display:flex;gap:10px;align-items:center}
     nav a{
-      text-decoration:none; color:inherit; font-size:14.5px;
-      padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--panel-2);
-      transition: border-color .15s ease, background .15s ease, transform .15s ease;
+      font-size:14.5px;border:1px solid var(--border);background:var(--card);
+      padding:8px 12px;border-radius:9999px;opacity:.95
     }
-    nav a:hover{border-color:color-mix(in oklab, var(--border), var(--fg) 25%);}
-    nav a:focus-visible{outline:2px solid var(--ring); outline-offset:2px}
+    nav a:hover{border-color:color-mix(in oklab,var(--border),var(--fg) 20%)}
 
-    /* ==== Hero ============================================================ */
-    .hero{padding:46px 0 8px; text-align:center}
-    .title{font-size:clamp(32px,6vw,56px); margin:0 0 12px; font-weight:900; letter-spacing:.1px}
-    .sub{color:var(--muted); font-size:clamp(15px,2.2vw,18px); margin:0 auto; max-width:780px}
+    .hero{padding:40px 0 10px;text-align:center}
+    .title{font-size:clamp(28px,5vw,40px);margin:0;font-weight:800;letter-spacing:.2px}
+    .sub{color:var(--muted);font-size:clamp(15px,2.3vw,18px);max-width:760px;margin:10px auto 0}
 
-    /* ==== Cards row ======================================================= */
-    .row{
-      margin:42px 0 18px;
-      display:flex; gap:16px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:10px;
-      scroll-snap-type:x proximity;
-      mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
-    }
+    /* one-row panels with gentle shadow; horizontal scroll on small screens */
+    .grid{margin:36px 0 18px;display:flex;flex-wrap:nowrap;gap:16px;overflow-x:auto;-webkit-overflow-scrolling:touch;padding-bottom:6px}
     .card{
-      scroll-snap-align:center;
-      min-width:310px; flex:1 0 0;
-      border:1px solid var(--border); border-radius:var(--radius);
-      background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 92%, transparent), var(--panel));
-      box-shadow: 0 12px 40px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.02);
-      padding:18px 18px 16px;
-      display:flex; justify-content:space-between; align-items:flex-start; gap:8px;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+      border:1px solid var(--border);background:var(--card);border-radius:var(--radius);
+      padding:18px;min-height:120px;display:flex;flex-direction:row;align-items:center;justify-content:space-between;
+      transition:transform .18s ease,box-shadow .18s ease,border-color .18s ease;min-width:280px;flex:1 0 0;
+      box-shadow:0 6px 14px rgba(0,0,0,.06)
     }
-    .card:hover{ transform: translateY(-3px); box-shadow: 0 18px 46px rgba(0,0,0,.26); border-color: color-mix(in oklab, var(--border), var(--accent) 35%) }
-    .card h3{margin:2px 0 0; font-size:18px}
-    .arrow{margin-left:auto; opacity:.85; border:1px solid var(--border); border-radius:12px; width:36px; height:36px; display:grid; place-items:center}
-    .card:hover .arrow{border-color:color-mix(in oklab, var(--border), var(--accent) 40%)}
-    .card a{text-decoration:none; color:inherit}
-    .card a:focus-visible{outline:2px solid var(--ring); border-radius:12px}
+    .card:hover{transform:translateY(-2px);box-shadow:0 12px 28px rgba(0,0,0,.10);border-color:color-mix(in oklab,var(--border),var(--fg) 18%)}
+    .card h3{margin:0;font-size:18px}
+    .card .arrow{opacity:.75}
 
-    /* ==== Contact strip & CTA ============================================ */
     .strip{
-      margin-top:40px; padding:16px 18px; text-align:center;
-      border:1px dashed var(--border); border-radius:16px; color:var(--muted);
-      background: color-mix(in oklab, var(--panel), transparent 35%);
+      margin-top:30px;padding:16px;border:1px dashed var(--border);border-radius:14px;text-align:center;background:color-mix(in oklab,var(--card),transparent 30%)
     }
-    .strip a{color:var(--fg); text-decoration:none; border-bottom:1px dotted color-mix(in oklab, var(--fg), var(--accent) 35%)}
-    .strip a:hover{border-bottom-style:solid}
+    .email{
+      display:inline-block;margin-top:6px;padding:6px 10px;border:1px solid var(--border);border-radius:10px;
+      background:var(--card); text-decoration:none
+    }
+    .email:hover{border-color:var(--fg); text-decoration:none}
 
-    .cta{
-      margin:46px auto 0; text-align:center;
+    .cta-bottom{margin:40px auto 0;text-align:center}
+    .cta-bottom a{
+      display:inline-block;padding:14px 18px;border:1px solid var(--border);border-radius:14px;background:var(--card)
     }
-    .cta a{
-      display:inline-block; padding:14px 20px; border-radius:14px;
-      background: linear-gradient(180deg, color-mix(in oklab, var(--accent) 28%, var(--panel)), var(--panel));
-      border:1px solid color-mix(in oklab, var(--border), var(--accent) 35%);
-      color:var(--fg); text-decoration:none;
-      box-shadow: 0 8px 28px rgba(0,0,0,.25);
-      transition: transform .12s ease, box-shadow .12s ease;
-    }
-    .cta a:hover{ transform: translateY(-1px); box-shadow: 0 12px 34px rgba(0,0,0,.32) }
-    .cta a:focus-visible{ outline:2px solid var(--ring); outline-offset:3px }
-
-    /* ==== Footer ========================================================== */
-    footer{margin:46px 0 0; padding-top:24px; border-top:1px solid var(--border); color:var(--muted); font-size:14px}
-    footer a{color:inherit}
-
-    /* reduce motion */
-    @media (prefers-reduced-motion: reduce){
-      .card, .cta a{ transition:none }
-    }
+    .cta-bottom a:hover{border-color:var(--fg)}
+    footer{margin:34px 0 0;padding-top:24px;border-top:1px solid var(--border);color:var(--muted);font-size:14px}
   </style>
 </head>
 <body>
   <div class="wrap">
     <header>
-      <a class="brand" href="#top" aria-label="Home">
-        <img src="virtup-logo.png" alt="Virtup logo">
+      <a class="brand" href="#top">
+        <img src="virtup-logo.png" alt="Virtup logo" />
         <span>Virtup</span>
       </a>
       <nav>
@@ -150,30 +89,27 @@
     <main id="top">
       <section class="hero" id="about">
         <h1 class="title">Building IT infrastructure.</h1>
-        <p class="sub">Simple. Reliable. Maintainable.</p>
+        <p class="sub">Simple, reliable, maintainable.</p>
       </section>
 
-      <section id="work" class="row" aria-label="Work">
+      <section id="work" class="grid" aria-label="Work">
         <a class="card" href="#contact" aria-label="DevOps and SRE">
-          <h3>DevOps &amp; SRE</h3>
-          <div class="arrow">→</div>
+          <h3>DevOps &amp; SRE</h3> <span class="arrow">→</span>
         </a>
         <a class="card" href="#contact" aria-label="Backend engineering">
-          <h3>Backend Engineering</h3>
-          <div class="arrow">→</div>
+          <h3>Backend Engineering</h3> <span class="arrow">→</span>
         </a>
         <a class="card" href="#contact" aria-label="Advisory">
-          <h3>Advisory</h3>
-          <div class="arrow">→</div>
+          <h3>Advisory</h3> <span class="arrow">→</span>
         </a>
       </section>
 
       <section id="contact" class="strip" aria-label="Contact">
-        <strong>Contact</strong><br />
-        <a href="mailto:info@virtup.eu">info@virtup.eu</a>
+        <strong>Contact</strong><br>
+        <a class="email" href="mailto:info@virtup.eu">info@virtup.eu</a>
       </section>
 
-      <div class="cta">
+      <div class="cta-bottom">
         <a href="mailto:info@virtup.eu">Get in touch →</a>
       </div>
     </main>
@@ -183,8 +119,6 @@
     </footer>
   </div>
 
-  <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
-  </script>
+  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
 </body>
 </html>
