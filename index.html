@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
   <title>Virtup</title>
   <meta name="description" content="Virtup — IT Services." />
   <link rel="icon" href="virtup-logo.png" />
@@ -10,7 +10,7 @@
     :root{
       --bg:#0b0c10; --panel:#14171e; --panel-2:#0f1217;
       --fg:#e7eaef; --muted:#9aa3b2; --border:#242a36;
-      --radius:18px; --maxw:1120px; --headerH:72px;
+      --radius:18px; --maxw:1120px;
     }
     @media (prefers-color-scheme: light){
       :root{--bg:#fff; --panel:#f5f6fa; --panel-2:#fafbfc; --fg:#101828; --muted:#667085; --border:#e6e8ec;}
@@ -29,35 +29,59 @@
     a:visited{color:inherit}
     .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px 80px}
 
-    /* ===== Header (full-bleed glass → fade to bottom line) ===== */
+    /* ===== Header (full-bleed glass, safe-area aware, fades to bottom line) ===== */
     header{
-      position:sticky; top:0; z-index:50;
-      height:var(--headerH);
-      display:flex; align-items:center;
+      position: sticky;
+      top: 0;
+      z-index: 50;
     }
-    /* Full-bleed glass layer */
     header::before{
-      content:""; position:absolute; top:0; left:50%; transform:translateX(-50%);
-      width:100vw; height:100%;
+      content:"";
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 100%;
       backdrop-filter: blur(10px) saturate(130%);
       -webkit-backdrop-filter: blur(10px) saturate(130%);
       background:
-        linear-gradient(to bottom,
+        linear-gradient(
+          to bottom,
           color-mix(in oklab, var(--bg) 82%, transparent) 0%,
           color-mix(in oklab, var(--bg) 55%, transparent) 60%,
           color-mix(in oklab, var(--bg) 35%, transparent) 85%,
-          transparent 100%);
-      pointer-events:none; z-index:-1;
+          transparent 100%
+        );
+      pointer-events: none;
+      z-index: -1;
     }
-    /* Hairline across the full width */
     header::after{
-      content:""; position:absolute; left:50%; transform:translateX(-50%);
-      bottom:0; width:100vw; height:1px;
-      background:linear-gradient(to right, transparent, color-mix(in oklab,var(--border), var(--fg) 12%), transparent);
-      pointer-events:none;
+      content:"";
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      bottom: 0;
+      width: 100vw;
+      height: 1px;
+      background: linear-gradient(to right, transparent, color-mix(in oklab,var(--border), var(--fg) 12%), transparent);
+      pointer-events: none;
     }
-
-    .head{width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px}
+    .head{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      padding-top: calc(14px + env(safe-area-inset-top));
+      padding-bottom: 14px;
+    }
+    @media (max-width: 900px){
+      .head{
+        padding-top: calc(10px + env(safe-area-inset-top));
+        padding-bottom: 10px;
+      }
+    }
     nav{display:flex; gap:10px; flex-wrap:wrap}
     nav a{font-size:14.5px; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--panel-2)}
     nav a:hover{border-color:color-mix(in oklab,var(--border), var(--fg) 25%)}
@@ -114,7 +138,7 @@
       background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 94%, transparent), var(--panel));
       border:1px solid var(--border); border-radius:var(--radius);
       box-shadow:0 14px 40px rgba(0,0,0,.2), inset 0 0 0 1px rgba(255,255,255,.02);
-      padding:22px; /* was 28px → 20% smaller */
+      padding:22px; /* 20% smaller than 28px */
       display:flex; align-items:center; justify-content:center; text-align:center;
       font-size:20px; font-weight:700;
       transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
@@ -149,7 +173,6 @@
     /* ===== Responsive ===== */
     @media (max-width: 900px){
       .brand span{display:none}
-      :root{ --headerH:64px; }
     }
     @media (max-width: 720px){
       .section{padding:84px 0}
@@ -170,7 +193,7 @@
         <a href="#work">Work</a>
         <a href="#form">Contact</a>
       </nav>
-      <!-- brand + Jira right (no Send message) -->
+      <!-- brand + Jira right -->
       <div class="right">
         <a class="brand" href="#top" aria-label="Home">
           <span>Virtup</span>
@@ -205,12 +228,11 @@
       </div>
     </section>
 
-    <!-- CONTACT FORM -->
+    <!-- CONTACT FORM (FormSubmit, no keys) -->
     <section class="section bg-light" id="form" aria-labelledby="formTitle">
       <div class="wrap">
         <h2 id="formTitle" style="margin:0 0 16px; font-size:26px; font-weight:800; text-align:center;">Send a message</h2>
         <div class="form-card">
-          <!-- FormSubmit: no keys, delivers to info@virtup.eu -->
           <form action="https://formsubmit.co/info@virtup.eu" method="POST">
             <label for="name">Name</label>
             <input id="name" name="name" placeholder="Your name" required />
