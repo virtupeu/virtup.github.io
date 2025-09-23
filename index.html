@@ -29,12 +29,12 @@
     a:visited{color:inherit}
     .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px 40px}
 
-    /* ===== Header (full-bleed glass, safe-area aware, fade to bottom) ===== */
+    /* ===== Header ===== */
     header{ position: sticky; top: 0; z-index: 50; }
     header::before{
       content:""; position:absolute; top:0; left:50%; transform:translateX(-50%);
       width:100vw; height:100%;
-      backdrop-filter: blur(10px) saturate(130%); -webkit-backdrop-filter: blur(10px) saturate(130%);
+      backdrop-filter: blur(10px) saturate(130%); -webkit-backdrop-filter: blur(20px) saturate(130%);
       background:linear-gradient(
         to bottom,
         color-mix(in oklab, var(--bg) 82%, transparent) 0%,
@@ -51,7 +51,7 @@
     }
     .head{
       width:100%; display:flex; align-items:center; justify-content:space-between; gap:16px;
-      padding-top:calc(16px + env(safe-area-inset-top)); padding-bottom:16px; /* ~15% taller */
+      padding-top:calc(16px + env(safe-area-inset-top)); padding-bottom:16px;
     }
     @media (max-width:900px){
       .head{ padding-top:calc(12px + env(safe-area-inset-top)); padding-bottom:12px; }
@@ -60,12 +60,10 @@
     nav a{font-size:14.5px; padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--panel-2)}
     nav a:hover{border-color:color-mix(in oklab,var(--border), var(--fg) 25%)}
     .right{display:flex; align-items:center; gap:12px}
-    .brand{display:flex; align-items:center; gap:12px}
-    .brand img{width:46px; height:46px; border-radius:12px; object-fit:contain; box-shadow:0 4px 18px rgba(0,0,0,.25)} /* +15% */
+    .brand img{width:46px; height:46px; border-radius:12px; object-fit:contain; box-shadow:0 4px 18px rgba(0,0,0,.25)}
     .jira-btn{ padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--panel); font-size:14.5px }
-    .jira-btn:hover{ border-color:color-mix(in oklab,var(--border), var(--fg) 25%) }
 
-    /* ===== Sections with full-bleed repeating bg ===== */
+    /* ===== Sections ===== */
     .section{position:relative; overflow:visible; padding:104px 0}
     .section + .section::after{
       content:""; position:absolute; top:-1px; left:0; right:0; height:1px;
@@ -75,10 +73,10 @@
     .section::before{
       content:""; position:absolute; top:0; left:50%; transform:translateX(-50%);
       width:100vw; height:100%;
-      background-image:url('it.png'); background-repeat:repeat; background-position:center; background-size:640px auto;
+      background-image:url('it.png'); background-repeat:repeat; background-position:center; background-size:800px auto;
       filter: blur(10px); opacity:.20; z-index:-1;
     }
-    .bg-light::before{ opacity:.28; filter: blur(10px) brightness(1.35) saturate(0.8); }
+    .bg-light::before{ opacity:.28; filter: blur(10px) brightness(1.35) saturate(0.8);}
     .bg-dark::before{  opacity:.18; filter: blur(12px) invert(1) brightness(0.35) saturate(0.7); }
 
     /* “Glass” wrapper */
@@ -91,21 +89,6 @@
     }
     .glass--tb{ border-width:1px 0; border-left:0; border-right:0; border-radius:0; box-shadow:0 10px 34px rgba(0,0,0,.18); }
 
-    /* Faded top hairline for panels */
-    .top-fade{ position:relative; border-top:0; }           /* kill solid top border */
-    .top-fade::before{
-      content:""; position:absolute; top:-1px; left:0; right:0; height:1px;
-      background:linear-gradient(
-        to right,
-        transparent 0%,
-        color-mix(in oklab,var(--border), var(--fg) 10%) 15%,
-        color-mix(in oklab,var(--border), var(--fg) 18%) 50%,
-        color-mix(in oklab,var(--border), var(--fg) 10%) 85%,
-        transparent 100%
-      );
-      pointer-events:none;
-    }
-
     /* ===== Reveal-on-scroll ===== */
     .reveal{opacity:0; transform:translateY(42px); transition:transform .6s cubic-bezier(.2,.65,.2,1), opacity .6s ease; will-change:transform,opacity;}
     .reveal.in-view{opacity:1; transform:translateY(0);}
@@ -113,15 +96,40 @@
       .reveal{opacity:1; transform:none; transition:none;}
     }
 
-    /* ===== Hero ===== */
-    .hero{text-align:center}
+    /* ===== Hero: custom blurred background layer ===== */
+    #about-background.section::before{ content:none; } /* kill global pattern bg */
+
+    #about-background{
+      position: relative;
+      height:300px;
+      padding-top:30px;
+      isolation:isolate;
+      overflow:hidden;
+    }
+    #about-background .hero-bg{
+      position:absolute;
+      inset:0;
+      background:url('it-header.png') center/cover no-repeat;
+      filter:blur(10px);
+      transform:scale(1.06);
+      opacity:.35;
+      z-index:0;
+      pointer-events:none;
+    }
+    #about-background .hero-overlay{
+      position:absolute;
+      inset:0;
+      background:linear-gradient(to bottom, rgba(0,0,0,.35), rgba(0,0,0,.45));
+      z-index:0;
+      pointer-events:none;
+    }
+    #about-background > .wrap{ position:relative; z-index:1; }
+
+    .hero{text-align:center;}
     .title{font-size:clamp(26px,4.8vw,42px); margin:0 0 12px; font-weight:900; letter-spacing:.15px}
     .sub{color:var(--muted); font-size:clamp(15px,2.2vw,18px); margin:0 auto; max-width:820px}
 
     /* ===== Services row ===== */
-    .section--less-bottom{padding-bottom:73px}
-    .no-top-divider::after{display:none}
-    .section--tight{padding:18px 0 40px}
     .row{
       margin-top:14px; display:flex; gap:18px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding:2px 2px 10px;
       scroll-snap-type:x proximity; mask-image: linear-gradient(to right, transparent 0, #000 24px, #000 calc(100% - 24px), transparent 100%);
@@ -130,7 +138,7 @@
       scroll-snap-align:center;
       min-width:340px; flex:1 0 0;
       background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 94%, transparent), var(--panel));
-      border-width:1px 0; border-style:solid; border-color:var(--border); /* top/bottom only */
+      border-width:1px 0; border-style:solid; border-color:var(--border);
       border-radius:0; box-shadow:0 14px 40px rgba(0,0,0,.2);
       padding:22px; display:flex; align-items:center; justify-content:center; text-align:center;
       font-size:20px; font-weight:700;
@@ -141,7 +149,6 @@
     .card:hover, .card:focus{ text-decoration:none }
 
     /* ===== Form ===== */
-    .section--less-top-25{padding-top:78px}
     .form-card{
       max-width:820px; margin:0 auto;
       border:1px solid var(--border); background:var(--panel-2); border-radius:16px;
@@ -165,17 +172,13 @@
     footer{
       margin-top:56px; padding:24px 0; color:var(--muted);
       border-top:1px solid var(--border);
-      font-size:80%; text-align:center; /* 20% smaller */
+      font-size:80%; text-align:center;
     }
 
-    /* ===== Mobile (≤720px) overrides ===== */
+    /* ===== Mobile ===== */
     @media (max-width:720px){
       .wrap{padding:0 12px 32px}
       .section{padding:84px 0}
-      /* 40% of previous gap under hero */
-      .section--less-bottom{padding-bottom:20px;}
-      .section--tight{padding:10px 0 32px;}
-      .section--less-top-25{padding-top:70px}
       .row{flex-wrap:wrap; overflow-x:visible}
       .card{min-width:100%}
       nav{gap:8px}
@@ -202,9 +205,10 @@
 
   <main id="top">
     <!-- HERO -->
-    <section class="section section--less-bottom bg-light hero" id="about" style="height:300px; padding-top:30px;">
+    <section class="section bg-light hero" id="about-background">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-overlay" aria-hidden="true"></div>
       <div class="wrap">
-        <!-- faded top hairline -->
         <div class="glass glass--tb top-fade reveal" style="max-width:820px;margin:0 auto; height:180px;">
           <h1 class="title" style="margin-top:6px;">IT Services</h1>
           <p class="sub">Simple. Reliable. Maintainable.</p>
@@ -213,9 +217,8 @@
     </section>
 
     <!-- SERVICES -->
-    <section class="section section--tight no-top-divider bg-dark" id="work" aria-label="Work">
+    <section class="section bg-dark" id="work" aria-label="Work">
       <div class="wrap">
-        <!-- faded top hairline -->
         <div class="glass glass--tb top-fade reveal" style="padding:28px;">
           <div class="row">
             <a class="card" style="font-size:medium;" href="#form">DevOps  SRE</a>
@@ -223,31 +226,25 @@
             <a class="card" style="font-size:medium;" href="#form">ML &amp; AI Integration</a>
           </div>
         </div>
-      </div>
+      </div >
     </section>
 
     <!-- CONTACT FORM -->
-    <section class="section section--less-top-25 bg-light" id="form" aria-labelledby="formTitle" style="padding-top:0;">
+    <section class="section bg-light" id="form" aria-labelledby="formTitle">
       <div class="wrap">
         <div class="form-card reveal">
           <form action="https://formsubmit.co/info@virtup.eu" method="POST">
             <h2 id="formTitle" style="margin:0 0 16px; font-size:24px; font-weight:800; text-align:left;">Send a message</h2>
-
             <label for="name">Name</label>
             <input id="name" name="name" placeholder="Your name" required />
-
             <label for="email">Your email</label>
             <input id="email" name="email" type="email" placeholder="you@example.com" required />
-
             <label for="message">Message</label>
             <textarea id="message" name="message" placeholder="How can we help?" required></textarea>
-
-            <!-- options -->
             <input type="hidden" name="_subject" value="Contact from virtup.eu" />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_next" value="https://www.virtup.eu/?sent=1#form" />
             <input type="text" name="_honey" style="display:none" tabindex="-1" autocomplete="off" />
-
             <div class="form-actions">
               <button class="btn primary" type="submit">Send email</button>
               <span class="status" id="status"></span>
@@ -263,23 +260,18 @@
   </main>
 
   <script>
-    // Show success message when returning from FormSubmit
     if (new URLSearchParams(location.search).get('sent') === '1') {
       const s = document.getElementById('status');
       if (s) { s.textContent = 'Sent. Thanks! ✅'; s.style.color = '#7dd87d'; }
     }
-
-    // Reveal-on-scroll for all .reveal elements (slides up)
     (function(){
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const els = document.querySelectorAll('.reveal');
       if (!els.length) return;
-
       if (prefersReduced || !('IntersectionObserver' in window)) {
         els.forEach(el => el.classList.add('in-view'));
         return;
       }
-
       const io = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting) {
@@ -288,7 +280,6 @@
           }
         });
       }, { root: null, rootMargin: '0px 0px -10% 0px', threshold: 0.15 });
-
       els.forEach(el => io.observe(el));
     })();
   </script>
