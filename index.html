@@ -199,8 +199,11 @@
       /* make form a bit wider: reduce side padding on the container */
       .wrap{padding:0 12px 32px}
       .section{padding:84px 0}
-      .section--less-bottom{padding-bottom:60px}
-      .section--tight{padding:16px 0 32px}
+
+      /* ↓↓↓ 40% of previous mobile gap under hero ↓↓↓ */
+      .section--less-bottom{padding-bottom:20px;}   /* was 60px */
+      .section--tight{padding:10px 0 32px;}         /* was 16px top */
+
       .section--less-top-25{padding-top:70px}
       .row{flex-wrap:wrap; overflow-x:visible}
       .card{min-width:100%}
@@ -244,9 +247,9 @@
       <div class="wrap">
         <div class="glass glass--tb" style="padding:28px;">
           <div class="row">
-            <a class="card" style=font-size:medium; href="#form">DevOps  SRE </a>
-            <a class="card" style=font-size:medium; href="#form">Backend Engineering</a>
-            <a class="card" style=font-size:medium; href="#form">ML &amp; AI Integration</a>
+            <a class="card" style="font-size:medium;" href="#form">DevOps  SRE </a>
+            <a class="card" style="font-size:medium;" href="#form">Backend Engineering</a>
+            <a class="card" style="font-size:medium;" href="#form">ML &amp; AI Integration</a>
           </div>
         </div>
       </div>
