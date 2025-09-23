@@ -1,170 +1,90 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Virtup</title>
-  <meta name="description" content="Virtup — infrastructure & software engineering." />
-  <link rel="icon" href="virtup-logo.png" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   <style>
-    :root{
-      --bg:#ffffff; --fg:#111; --muted:#6b7280; --card:#f6f7f9; --border:#e5e7eb; --accent:#111;
-      --radius:18px; --maxw:980px;
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f7f8fa;
+      color: #333;
+      text-align: center;
     }
-    @media (prefers-color-scheme: dark){
-      :root{--bg:#0b0c0f; --fg:#e5e7eb; --muted:#9aa3b2; --card:#13151a; --border:#242833; --accent:#e5e7eb;}
+    header {
+      padding: 2rem;
     }
-    *{box-sizing:border-box}
-    html,body{height:100%}
-    body{
-      margin:0; font-family:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-      color:var(--fg); background:radial-gradient(1200px 700px at 80% -200px, rgba(0,0,0,.06), transparent 60%), var(--bg);
-      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+    header img {
+      height: 80px;
     }
-    .wrap{max-width:var(--maxw); margin:0 auto; padding:32px 20px 64px}
-    header{
-      display:flex; align-items:center; justify-content:space-between; gap:16px; padding:14px 0 28px;
-      position:sticky; top:0; background:linear-gradient(to bottom,var(--bg),color-mix(in oklab, var(--bg), transparent 100%));
-      backdrop-filter:saturate(140%) blur(6px); z-index:10;
+    h1 {
+      font-size: 2.5rem;
+      margin: 1rem 0;
     }
-    .brand{display:flex; align-items:center; gap:14px; text-decoration:none; color:inherit}
-    .brand img{width:40px; height:40px; border-radius:10px; object-fit:contain}
-    .brand span{font-weight:700; letter-spacing:.2px}
-
-    /* pill nav */
-    nav{display:flex; gap:10px; align-items:center}
-    nav a{
-      color:var(--fg); text-decoration:none; font-size:14.5px;
-      border:1px solid var(--border); background:var(--card);
-      padding:8px 12px; border-radius:9999px; opacity:.9;
+    p {
+      font-size: 1.2rem;
+      margin: 0.5rem 0 2rem;
     }
-    nav a:hover{opacity:1; border-color:color-mix(in oklab, var(--border), var(--fg) 20%)}
-
-    .hero{padding:48px 0 10px; text-align:center}
-    .title{font-size:clamp(28px,5vw,40px); margin:0 0 10px; font-weight:800; letter-spacing:.2px}
-    .sub{color:var(--muted); font-size:clamp(15px,2.3vw,18px); max-width:760px; margin:0 auto}
-
-    /* one-row panels: flex, no-wrap; scroll on small screens */
-    .grid{
-      margin:40px 0 18px; display:flex; flex-wrap:nowrap; gap:16px; overflow-x:auto; -webkit-overflow-scrolling:touch; padding-bottom:6px;
+    .panels {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem auto;
+      max-width: 800px;
     }
-    .card{
-      border:1px solid var(--border); background:var(--card); border-radius:var(--radius);
-      padding:18px; min-height:140px; display:flex; flex-direction:column; justify-content:space-between;
-      transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-      min-width:280px; /* ensures horizontal scroll on narrow screens */
-      flex:1 0 0;
+    .panel {
+      background: white;
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+      flex: 1;
     }
-    .card:hover{transform:translateY(-2px); box-shadow:0 10px 30px rgba(0,0,0,.10); border-color:color-mix(in oklab, var(--border), var(--fg) 18%)}
-    .card h3{margin:2px 0 8px; font-size:18px}
-    .card p{margin:0; color:var(--muted); font-size:14.5px; line-height:1.5}
-    .card a{margin-top:12px; text-decoration:none; color:var(--accent)}
-    .card a:hover{text-decoration:underline}
-
-    .strip{
-      margin-top:40px; padding:14px 16px; border:1px dashed var(--border); border-radius:14px; color:var(--muted);
-      display:flex; flex-wrap:wrap; gap:12px; align-items:center; justify-content:center;
-      background: color-mix(in oklab, var(--card), transparent 30%);
+    .contact {
+      margin: 3rem 0;
     }
-    .cta-bottom{
-      margin:46px auto 0; text-align:center;
+    .contact a {
+      display: inline-block;
+      margin: 0.5rem;
+      padding: 0.8rem 1.5rem;
+      border-radius: 20px;
+      background: #333;
+      color: white;
+      text-decoration: none;
+      transition: background 0.3s;
     }
-    .cta-bottom a{
-      display:inline-block; padding:14px 18px; border:1px solid var(--border); border-radius:14px;
-      text-decoration:none; color:var(--fg); background:var(--card);
+    .contact a:hover {
+      background: #555;
     }
-    .cta-bottom a:hover{border-color:var(--fg)}
-    footer{margin:34px 0 0; padding-top:24px; border-top:1px solid var(--border); color:var(--muted); font-size:14px}
-    footer a{color:inherit}
+    footer {
+      margin: 2rem 0;
+      font-size: 0.9rem;
+      color: #777;
+    }
   </style>
 </head>
 <body>
-  <div class="wrap">
-    <header>
-      <a class="brand" href="#top">
-        <img src="virtup-logo.png" alt="Virtup logo" />
-        <span>Virtup</span>
-      </a>
-      <nav>
-        <a href="#about">About</a>
-        <a href="#work">Work</a>
-        <a href="#contact">Contact</a>
-      </nav>
-    </header>
+  <header>
+    <img src="virtup-logo.png" alt="Virtup Logo">
+    <h1>Virtup</h1>
+    <p>Building IT infrastructure</p>
+  </header>
 
-    <main id="top">
-      <section class="hero">
-        <h1 class="title">Infrastructure & Software Engineering</h1>
-        <p class="sub">
-          We build, operate and optimize reliable systems — cloud, on-prem, and everything between.
-          Lean automation, observability, and pragmatic code.
-        </p>
-      </section>
+  <section class="panels">
+    <div class="panel">DevOps & SRE</div>
+    <div class="panel">Backend Engineering</div>
+    <div class="panel">Cloud Solutions</div>
+  </section>
 
-      <section id="work" class="grid" aria-label="Work panels">
-        <article class="card">
-          <div>
-            <h3>DevOps &amp; SRE</h3>
-            <p>Kubernetes, IaC, CI/CD, Grafana/Prometheus, cost controls, and production hardening.</p>
-          </div>
-          <a href="#contact" aria-label="Contact about DevOps and SRE">Discuss a stack →</a>
-        </article>
+  <section class="contact">
+    <h2>Get in touch</h2>
+    <a href="mailto:info@virtup.eu"><i class="fa fa-envelope"></i> info@virtup.eu</a>
+    <a href="https://www.linkedin.com/company/virtup" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
+  </section>
 
-        <article class="card">
-          <div>
-            <h3>Backend Engineering</h3>
-            <p>Python/Go services, APIs, eventing, data pipelines, and performance tuning.</p>
-          </div>
-          <a href="#contact" aria-label="Contact about backend engineering">Ship features →</a>
-        </article>
-
-        <article class="card">
-          <div>
-            <h3>Advisory</h3>
-            <p>Architecture reviews, incident response drills, reliability roadmaps, and trainings.</p>
-          </div>
-          <a href="#contact" aria-label="Contact about advisory">Book a session →</a>
-        </article>
-      </section>
-
-      <section id="about" class="strip" aria-label="About Virtup">
-        <span>Based in Berlin · Working across EU/remote</span>
-        <span>Focused on maintainable, observable, and secure systems</span>
-      </section>
-
-      <section id="contact" style="margin-top:34px">
-        <div class="grid" style="flex-wrap:wrap; overflow:visible">
-          <article class="card" style="min-width:260px">
-            <h3>Contact</h3>
-            <p>Prefer email. We usually reply within one business day.</p>
-            <a href="mailto:info@virtup.eu">info@virtup.eu</a>
-          </article>
-
-          <article class="card" style="min-width:260px">
-            <h3>Links</h3>
-            <p>Profiles &amp; code.</p>
-            <a href="https://github.com/virtupeu" target="_blank" rel="noopener">GitHub →</a><br/>
-            <a href="https://www.linkedin.com/in/leopold-g-2aa446159/" target="_blank" rel="noopener">LinkedIn →</a>
-          </article>
-
-          <article class="card" style="min-width:260px">
-            <h3>Company</h3>
-            <p>Virtup — Infrastructure &amp; Software.</p>
-            <p>VAT/Details on request.</p>
-          </article>
-        </div>
-      </section>
-
-      <div class="cta-bottom">
-        <a href="mailto:info@virtup.eu">Get in touch →</a>
-      </div>
-    </main>
-
-    <footer>
-      © <span id="y"></span> Virtup. All rights reserved.
-    </footer>
-  </div>
-
-  <script>document.getElementById('y').textContent=new Date().getFullYear();</script>
+  <footer>
+    © 2025 Virtup
+  </footer>
 </body>
 </html>
