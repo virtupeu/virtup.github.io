@@ -29,7 +29,7 @@
     a:visited{color:inherit}
     .wrap{max-width:var(--maxw); margin:0 auto; padding:0 20px 40px}
 
-    /* ===== Header (full-bleed glass, safe-area aware, fades to bottom line) ===== */
+    /* ===== Header (full-bleed glass, safe-area aware, fade to bottom) ===== */
     header{
       position: sticky;
       top: 0;
@@ -73,13 +73,14 @@
       align-items: center;
       justify-content: space-between;
       gap: 16px;
-      padding-top: calc(14px + env(safe-area-inset-top));
-      padding-bottom: 14px;
+      /* +15% taller than before */
+      padding-top: calc(16px + env(safe-area-inset-top));
+      padding-bottom: 16px;
     }
     @media (max-width: 900px){
       .head{
-        padding-top: calc(10px + env(safe-area-inset-top));
-        padding-bottom: 10px;
+        padding-top: calc(12px + env(safe-area-inset-top));
+        padding-bottom: 12px;
       }
     }
     nav{display:flex; gap:10px; flex-wrap:wrap}
@@ -88,7 +89,6 @@
     .right{display:flex; align-items:center; gap:12px}
     .brand{display:flex; align-items:center; gap:12px}
     .brand img{width:40px; height:40px; border-radius:12px; object-fit:contain; box-shadow:0 4px 18px rgba(0,0,0,.25)}
-    .brand span{font-weight:700; letter-spacing:.2px}
     .jira-btn{
       padding:8px 14px; border-radius:999px; border:1px solid var(--border); background:var(--panel); font-size:14.5px
     }
@@ -111,7 +111,7 @@
     .bg-light::before{ opacity:.28; filter: blur(10px) brightness(1.35) saturate(0.8); }
     .bg-dark::before{  opacity:.18; filter: blur(12px) invert(1) brightness(0.35) saturate(0.7); }
 
-    /* “Glass” wrapper (base) */
+    /* “Glass” wrapper */
     .glass{
       border:1px solid color-mix(in oklab,var(--border), var(--fg) 8%);
       background: color-mix(in oklab, var(--panel-2), transparent 60%);
@@ -120,12 +120,11 @@
       border-radius:16px; padding:22px;
       box-shadow:0 10px 34px rgba(0,0,0,.18), inset 0 0 0 1px rgba(255,255,255,.02);
     }
-    /* Variant: top/bottom edges only (no left/right border) */
+    /* Variant for hero/services panels: top & bottom borders only (no L/R) */
     .glass--tb{
-      border-width:1px 0;            /* keep only top & bottom borders */
-      border-left:0; border-right:0;
-      border-radius:0;               /* square edges to avoid ghost rounding */
-      box-shadow:0 10px 34px rgba(0,0,0,.18); /* remove inner inset stroke */
+      border-width:1px 0; border-left:0; border-right:0;
+      border-radius:0;
+      box-shadow:0 10px 34px rgba(0,0,0,.18); /* remove inset line */
     }
 
     /* ===== Hero ===== */
@@ -133,7 +132,11 @@
     .title{font-size:clamp(26px,4.8vw,42px); margin:0 0 12px; font-weight:900; letter-spacing:.15px}
     .sub{color:var(--muted); font-size:clamp(15px,2.2vw,18px); margin:0 auto; max-width:820px}
 
-    /* ===== Services row (padding 20% smaller) ===== */
+    /* ===== Services row ===== */
+    /* Shorten bottom padding of hero to 70% and remove divider below it */
+    .section--less-bottom{padding-bottom:73px}   /* was 104px */
+    .no-top-divider::after{display:none}         /* hide the line above this section */
+
     .section--tight{padding:18px 0 40px}
     .row{
       margin-top:14px; display:flex; gap:18px; flex-wrap:nowrap; overflow-x:auto; -webkit-overflow-scrolling:touch; padding:2px 2px 10px;
@@ -143,9 +146,11 @@
       scroll-snap-align:center;
       min-width:340px; flex:1 0 0;
       background:linear-gradient(180deg, color-mix(in oklab, var(--panel) 94%, transparent), var(--panel));
-      border:1px solid var(--border); border-radius:var(--radius);
-      box-shadow:0 14px 40px rgba(0,0,0,.2), inset 0 0 0 1px rgba(255,255,255,.02);
-      padding:22px; /* 20% smaller than 28px */
+      /* top/bottom border only, no left/right */
+      border-width:1px 0; border-style:solid; border-color:var(--border);
+      border-radius:0;
+      box-shadow:0 14px 40px rgba(0,0,0,.2); /* removed inset */
+      padding:22px; /* 20% smaller */
       display:flex; align-items:center; justify-content:center; text-align:center;
       font-size:20px; font-weight:700;
       transition:transform .18s ease, box-shadow .18s ease, border-color .18s ease;
@@ -155,7 +160,8 @@
     .card:hover{transform:translateY(-4px); box-shadow:0 22px 54px rgba(0,0,0,.28); border-color:color-mix(in oklab,var(--border), var(--fg) 35%)}
     .card:hover, .card:focus{ text-decoration:none }
 
-    /* ===== Form ===== */
+    /* ===== Form (top spacing reduced by 25%) ===== */
+    .section--less-top-25{padding-top:78px}  /* was 104px */
     .form-card{
       max-width:820px; margin:0 auto;
       border:1px solid var(--border); background:var(--panel-2); border-radius:16px;
@@ -175,7 +181,12 @@
     .btn.primary{color:#fff}
     .status{font-size:14px; color:var(--muted)}
 
-    footer{margin-top:56px; padding:24px 0; color:var(--muted); border-top:1px solid var(--border)}
+    footer{
+      margin-top:56px; padding:24px 0; color:var(--muted);
+      border-top:1px solid var(--border);
+      font-size:80%;        /* 20% smaller */
+      text-align:center;
+    }
 
     /* ===== Responsive ===== */
     @media (max-width: 900px){
@@ -183,7 +194,9 @@
     }
     @media (max-width: 720px){
       .section{padding:84px 0}
+      .section--less-bottom{padding-bottom:60px}
       .section--tight{padding:16px 0 32px}
+      .section--less-top-25{padding-top:70px}
       .row{flex-wrap:wrap; overflow-x:visible}
       .card{min-width:100%}
       nav{gap:8px}
@@ -200,10 +213,9 @@
         <a href="#work">Work</a>
         <a href="#form">Contact</a>
       </nav>
-      <!-- brand + Jira right -->
+      <!-- brand + Jira right (logo only, no text) -->
       <div class="right">
         <a class="brand" href="#top" aria-label="Home">
-          <span>Virtup</span>
           <img src="virtup-logo.png" alt="Virtup logo" />
         </a>
         <a class="jira-btn" href="https://virtup.atlassian.net/jira/software/projects/VIR/list" target="_blank" rel="noopener">Jira</a>
@@ -212,8 +224,8 @@
   </header>
 
   <main id="top">
-    <!-- HERO -->
-    <section class="section bg-light hero" id="about">
+    <!-- HERO (less bottom padding; no divider below) -->
+    <section class="section section--less-bottom bg-light hero" id="about">
       <div class="wrap">
         <div class="glass glass--tb" style="max-width:820px;margin:0 auto;">
           <h1 class="title" style="margin-top:6px;">IT Services.</h1>
@@ -222,8 +234,8 @@
       </div>
     </section>
 
-    <!-- SERVICES (with tighter outer padding) -->
-    <section class="section section--tight bg-dark" id="work" aria-label="Work">
+    <!-- SERVICES (no top divider) -->
+    <section class="section section--tight no-top-divider bg-dark" id="work" aria-label="Work">
       <div class="wrap">
         <div class="glass glass--tb" style="padding:18px;">
           <div class="row">
@@ -235,8 +247,8 @@
       </div>
     </section>
 
-    <!-- CONTACT FORM (FormSubmit, no keys) -->
-    <section class="section bg-light" id="form" aria-labelledby="formTitle">
+    <!-- CONTACT FORM (top padding reduced 25%) -->
+    <section class="section section--less-top-25 bg-light" id="form" aria-labelledby="formTitle">
       <div class="wrap">
         <div class="form-card">
           <form action="https://formsubmit.co/info@virtup.eu" method="POST">
@@ -266,12 +278,12 @@
     </section>
 
     <footer>
-      <div class="wrap">© <span id="y"></span> Virtup.</div>
+      <div class="wrap">Virtup 2025.</div>
     </footer>
   </main>
 
   <script>
-    document.getElementById('y').textContent = new Date().getFullYear();
+    // Show success message when returning from FormSubmit
     if (new URLSearchParams(location.search).get('sent') === '1') {
       const s = document.getElementById('status');
       if (s) { s.textContent = 'Sent. Thanks! ✅'; s.style.color = '#7dd87d'; }
