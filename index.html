@@ -91,6 +91,13 @@
     }
     .glass--tb{ border-width:1px 0; border-left:0; border-right:0; border-radius:0; box-shadow:0 10px 34px rgba(0,0,0,.18); }
 
+    /* ===== Reveal-on-scroll ===== */
+    .reveal{opacity:0; transform:translateY(42px); transition:transform .6s cubic-bezier(.2,.65,.2,1), opacity .6s ease; will-change:transform,opacity;}
+    .reveal.in-view{opacity:1; transform:translateY(0);}
+    @media (prefers-reduced-motion: reduce){
+      .reveal{opacity:1; transform:none; transition:none;}
+    }
+
     /* ===== Hero ===== */
     .hero{text-align:center}
     .title{font-size:clamp(26px,4.8vw,42px); margin:0 0 12px; font-weight:900; letter-spacing:.15px}
@@ -118,7 +125,7 @@
     .card:hover{transform:translateY(-4px); box-shadow:0 22px 54px rgba(0,0,0,.28); border-color:color-mix(in oklab,var(--border), var(--fg) 35%)}
     .card:hover, .card:focus{ text-decoration:none }
 
-    /* ===== Form (top spacing reduced by 25%) ===== */
+    /* ===== Form ===== */
     .section--less-top-25{padding-top:78px}
     .form-card{
       max-width:820px; margin:0 auto;
@@ -127,14 +134,6 @@
       box-shadow:0 14px 40px rgba(0,0,0,.18);
       backdrop-filter: blur(8px) saturate(120%); -webkit-backdrop-filter: blur(8px) saturate(120%);
     }
-
-    /* Reveal-on-scroll animation */
-    .reveal{opacity:0; transform:translateY(42px); transition:transform .6s cubic-bezier(.2,.65,.2,1), opacity .6s ease; will-change:transform,opacity;}
-    .reveal.in-view{opacity:1; transform:translateY(0);}
-    @media (prefers-reduced-motion: reduce){
-      .reveal{opacity:1; transform:none; transition:none;}
-    }
-
     label{display:block; font-size:14px; color:var(--muted); margin:12px 0 6px}
     input, textarea{
       width:100%; padding:17px 19px; /* +5px field padding */
@@ -156,13 +155,11 @@
 
     /* ===== Mobile (≤720px) overrides ===== */
     @media (max-width:720px){
-      .wrap{padding:0 12px 32px}       /* wider feel on mobile */
+      .wrap{padding:0 12px 32px}
       .section{padding:84px 0}
-
       /* 40% of previous gap under hero */
       .section--less-bottom{padding-bottom:20px;}
       .section--tight{padding:10px 0 32px;}
-
       .section--less-top-25{padding-top:70px}
       .row{flex-wrap:wrap; overflow-x:visible}
       .card{min-width:100%}
@@ -192,7 +189,7 @@
     <!-- HERO -->
     <section class="section section--less-bottom bg-light hero" id="about" style="height:300px; padding-top:30px;">
       <div class="wrap">
-        <div class="glass glass--tb" style="max-width:820px;margin:0 auto; height:180px;">
+        <div class="glass glass--tb reveal" style="max-width:820px;margin:0 auto; height:180px;">
           <h1 class="title" style="margin-top:6px;">IT Services</h1>
           <p class="sub">Simple. Reliable. Maintainable.</p>
         </div>
@@ -202,7 +199,7 @@
     <!-- SERVICES -->
     <section class="section section--tight no-top-divider bg-dark" id="work" aria-label="Work">
       <div class="wrap">
-        <div class="glass glass--tb" style="padding:28px;">
+        <div class="glass glass--tb reveal" style="padding:28px;">
           <div class="row">
             <a class="card" style="font-size:medium;" href="#form">DevOps  SRE</a>
             <a class="card" style="font-size:medium;" href="#form">Backend Engineering</a>
@@ -244,7 +241,7 @@
     </section>
 
     <footer>
-      <div class="wrap">Virtup 2025.</div>
+      <div class="wrap reveal">Virtup 2025.</div>
     </footer>
   </main>
 
@@ -255,7 +252,7 @@
       if (s) { s.textContent = 'Sent. Thanks! ✅'; s.style.color = '#7dd87d'; }
     }
 
-    // Reveal-on-scroll for the form (slides up)
+    // Reveal-on-scroll for all .reveal elements (slides up)
     (function(){
       const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const els = document.querySelectorAll('.reveal');
@@ -275,7 +272,7 @@
         });
       }, {
         root: null,
-        rootMargin: '0px 0px -10% 0px', // start a bit before full view
+        rootMargin: '0px 0px -10% 0px',
         threshold: 0.15
       });
 
