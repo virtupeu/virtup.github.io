@@ -7,8 +7,7 @@
 
   <!-- Google Font + icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" integrity="sha512-Bx4Q8q6m...=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
   <meta name="theme-color" content="#0b1020">
 
@@ -231,7 +230,7 @@
     .testim-meta{display:flex;align-items:center;gap:12px;margin-bottom:8px}
     .avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#07212b;font-weight:700}
 
-    /* Team */
+    /* Team - polished baseline (some rules later override) */
     .team-grid{grid-template-columns: repeat(auto-fit,minmax(160px,1fr))}
     .member{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid var(--glass-border);text-align:center}
     .member img{border-radius:10px; height:120px; object-fit:cover; margin-bottom:12px}
@@ -252,6 +251,94 @@
     /* Footer */
     footer{padding:28px 0 60px;color:rgba(255,255,255,0.6)}
     .footer-grid{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
+
+    /* ===== Polished team styles (override baseline) ===== */
+    .polished-team { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:18px; }
+
+    .member-card{
+      display:flex;
+      flex-direction:column;
+      align-items:stretch;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border: 1px solid rgba(255,255,255,0.06);
+      border-radius:14px;
+      padding:12px;
+      transition:transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
+      cursor:pointer;
+      outline: none;
+    }
+    .member-card:focus { box-shadow: 0 8px 30px rgba(110,231,183,0.06); transform:translateY(-6px); }
+
+    .avatar-wrap{
+      width:100%;
+      border-radius:12px;
+      overflow:hidden;
+      position:relative;
+      height:160px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      margin-bottom:12px;
+      border:3px solid transparent;
+      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    }
+    .avatar-wrap::after{
+      content:'';
+      position:absolute; inset:-3px;
+      border-radius:14px;
+      background:linear-gradient(90deg,var(--accent),var(--accent-2));
+      opacity:0;
+      transition:opacity .28s;
+      z-index:0;
+    }
+    .member-card:hover .avatar-wrap::after,
+    .member-card:focus .avatar-wrap::after { opacity:0.14; }
+
+    .avatar-wrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      z-index:1;
+      border-radius:9px;
+    }
+
+    .member-body{display:flex;flex-direction:column;gap:10px}
+    .member-name{font-weight:700}
+    .member-role{color:rgba(255,255,255,0.65);font-size:13px}
+    .skill-list{display:flex;gap:8px;flex-wrap:wrap}
+    .skill{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted)}
+
+    .member-actions{display:flex;align-items:center;justify-content:space-between}
+    .link-btn{background:transparent;border:0;color:var(--accent-2);font-weight:700;padding:8px 10px;border-radius:10px;cursor:pointer}
+    .link-btn:hover{opacity:0.95}
+    .socials a{color:rgba(255,255,255,0.65);margin-left:8px}
+    .member-card:hover{transform:translateY(-8px); box-shadow: 0 18px 40px rgba(2,6,23,0.6)}
+
+    /* Modal */
+    .team-modal{
+      position:fixed; inset:0; align-items:center; justify-content:center;
+      background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));
+      z-index:80; padding:20px;
+    }
+    .team-modal[aria-hidden="true"]{ display:none; }
+    .team-modal[aria-hidden="false"]{ display:flex; }
+
+    .modal-content{
+      width:100%; max-width:920px; border-radius:14px; overflow:hidden;
+      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+      border:1px solid rgba(255,255,255,0.06); padding:18px;
+      box-shadow: 0 30px 80px rgba(2,6,23,0.7);
+      position:relative;
+    }
+    .modal-close{
+      position:absolute; right:18px; top:18px; background:transparent;border:0;color:var(--muted);font-size:22px;cursor:pointer;
+    }
+    .modal-grid{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
+    .modal-left img{width:100%;height:100%;object-fit:cover;border-radius:8px}
+    @media (max-width:780px){
+      .modal-grid{grid-template-columns:1fr; }
+    }
 
     /* ===== Responsive ===== */
     @media (max-width:980px){
@@ -469,37 +556,101 @@
       </div>
     </section>
 
-    <!-- Team -->
+    <!-- Team (Polished) -->
     <section id="team" class="team" aria-labelledby="team-heading">
       <div class="section-title">
         <h2 id="team-heading">Core Team</h2>
         <div class="muted">Small, focused and cross-functional</div>
       </div>
 
-      <div class="grid team-grid">
-        <div class="member">
-          <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=aaa" alt="Member 1">
-          <div style="font-weight:700">Daria K.</div>
-          <div class="muted">Design Lead</div>
-        </div>
+      <div class="grid team-grid polished-team">
+        <article class="member-card" data-member="daria" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Daria K.">
+          <div class="avatar-wrap">
+            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=aaa" alt="Daria K. — Design Lead">
+          </div>
+          <div class="member-body">
+            <div class="member-name">Daria K.</div>
+            <div class="member-role">Design Lead</div>
+            <div class="skill-list">
+              <span class="skill">Product Design</span>
+              <span class="skill">Design Systems</span>
+              <span class="skill">Figma</span>
+            </div>
+            <div class="member-actions">
+              <button class="link-btn view-profile" data-member="daria" aria-label="View Daria's profile">View profile</button>
+              <div class="socials">
+                <a href="#" aria-label="Daria on LinkedIn"><i class="fa fa-linkedin"></i></a>
+                <a href="#" aria-label="Daria on Twitter"><i class="fa fa-twitter"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
 
-        <div class="member">
-          <img src="https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=bbb" alt="Member 2">
-          <div style="font-weight:700">Liam O.</div>
-          <div class="muted">Frontend Engineer</div>
-        </div>
+        <article class="member-card" data-member="liam" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Liam O.">
+          <div class="avatar-wrap">
+            <img src="https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=bbb" alt="Liam O. — Frontend Engineer">
+          </div>
+          <div class="member-body">
+            <div class="member-name">Liam O.</div>
+            <div class="member-role">Frontend Engineer</div>
+            <div class="skill-list">
+              <span class="skill">React</span>
+              <span class="skill">TypeScript</span>
+              <span class="skill">Performance</span>
+            </div>
+            <div class="member-actions">
+              <button class="link-btn view-profile" data-member="liam" aria-label="View Liam's profile">View profile</button>
+              <div class="socials">
+                <a href="#" aria-label="Liam on GitHub"><i class="fa fa-github"></i></a>
+                <a href="#" aria-label="Liam on LinkedIn"><i class="fa fa-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
 
-        <div class="member">
-          <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ccc" alt="Member 3">
-          <div style="font-weight:700">Nina R.</div>
-          <div class="muted">Backend & Cloud</div>
-        </div>
+        <article class="member-card" data-member="nina" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Nina R.">
+          <div class="avatar-wrap">
+            <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ccc" alt="Nina R. — Backend & Cloud">
+          </div>
+          <div class="member-body">
+            <div class="member-name">Nina R.</div>
+            <div class="member-role">Backend & Cloud</div>
+            <div class="skill-list">
+              <span class="skill">Serverless</span>
+              <span class="skill">APIs</span>
+              <span class="skill">AWS</span>
+            </div>
+            <div class="member-actions">
+              <button class="link-btn view-profile" data-member="nina" aria-label="View Nina's profile">View profile</button>
+              <div class="socials">
+                <a href="#" aria-label="Nina on GitHub"><i class="fa fa-github"></i></a>
+                <a href="#" aria-label="Nina on LinkedIn"><i class="fa fa-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
 
-        <div class="member">
-          <img src="https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ddd" alt="Member 4">
-          <div style="font-weight:700">Oleg P.</div>
-          <div class="muted">Growth</div>
-        </div>
+        <article class="member-card" data-member="oleg" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Oleg P.">
+          <div class="avatar-wrap">
+            <img src="https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ddd" alt="Oleg P. — Growth">
+          </div>
+          <div class="member-body">
+            <div class="member-name">Oleg P.</div>
+            <div class="member-role">Growth</div>
+            <div class="skill-list">
+              <span class="skill">Acquisition</span>
+              <span class="skill">Analytics</span>
+              <span class="skill">Experimentation</span>
+            </div>
+            <div class="member-actions">
+              <button class="link-btn view-profile" data-member="oleg" aria-label="View Oleg's profile">View profile</button>
+              <div class="socials">
+                <a href="#" aria-label="Oleg on Twitter"><i class="fa fa-twitter"></i></a>
+                <a href="#" aria-label="Oleg on LinkedIn"><i class="fa fa-linkedin"></i></a>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
     </section>
 
@@ -549,6 +700,33 @@
     </section>
 
   </main>
+
+  <!-- Team Modal (single instance) -->
+  <div id="teamModal" class="team-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
+    <div class="modal-content" role="document">
+      <button class="modal-close" aria-label="Close profile">&times;</button>
+      <div class="modal-grid">
+        <div class="modal-left">
+          <img id="modalAvatar" src="" alt="">
+        </div>
+        <div class="modal-right">
+          <h3 id="modalTitle"></h3>
+          <div id="modalRole" class="muted"></div>
+          <p id="modalBio" class="muted" style="margin-top:12px"></p>
+
+          <div style="margin-top:12px">
+            <strong>Skills</strong>
+            <div id="modalSkills" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
+          </div>
+
+          <div style="margin-top:18px;display:flex;gap:8px;align-items:center">
+            <a id="modalLinkedIn" class="btn" href="#" target="_blank" rel="noopener">LinkedIn</a>
+            <a id="modalEmail" class="btn" href="#">Email</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
   <!-- Footer -->
   <footer class="container" role="contentinfo">
@@ -639,6 +817,137 @@
         nav.style.display = 'none';
       }
     });
+
+    /* ---------------------
+       Team modal logic & data
+       --------------------- */
+    const TEAM = {
+      daria: {
+        name: 'Daria K.',
+        role: 'Design Lead',
+        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=aaa',
+        bio: 'Design lead focused on product strategy, interaction design and coherent design systems. She drives usability research and high-fidelity prototypes.',
+        skills: ['Product Design','Design Systems','Figma','Prototyping'],
+        linkedin: '#',
+        email: 'mailto:daria@virtup.example'
+      },
+      liam: {
+        name: 'Liam O.',
+        role: 'Frontend Engineer',
+        avatar: 'https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=bbb',
+        bio: 'Frontend engineer specialized in accessible, high-performance interfaces and component-driven development.',
+        skills: ['React','TypeScript','Performance','Accessibility'],
+        linkedin: '#',
+        email: 'mailto:liam@virtup.example'
+      },
+      nina: {
+        name: 'Nina R.',
+        role: 'Backend & Cloud',
+        avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ccc',
+        bio: 'Backend and cloud engineer building resilient APIs and scalable serverless systems for rapid growth.',
+        skills: ['Serverless','APIs','AWS','Security'],
+        linkedin: '#',
+        email: 'mailto:nina@virtup.example'
+      },
+      oleg: {
+        name: 'Oleg P.',
+        role: 'Growth',
+        avatar: 'https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ddd',
+        bio: 'Growth lead optimizing acquisition funnels, experimentation and analytics to drive measurable user growth.',
+        skills: ['Acquisition','Analytics','Experimentation','CRO'],
+        linkedin: '#',
+        email: 'mailto:oleg@virtup.example'
+      }
+    };
+
+    const modal = document.getElementById('teamModal');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalRole = document.getElementById('modalRole');
+    const modalBio = document.getElementById('modalBio');
+    const modalAvatar = document.getElementById('modalAvatar');
+    const modalSkills = document.getElementById('modalSkills');
+    const modalLinkedIn = document.getElementById('modalLinkedIn');
+    const modalEmail = document.getElementById('modalEmail');
+    const modalClose = document.querySelector('.modal-close');
+
+    function openMember(memberKey){
+      const data = TEAM[memberKey];
+      if(!data) return;
+      modal.setAttribute('aria-hidden','false');
+      modalTitle.textContent = data.name;
+      modalRole.textContent = data.role;
+      modalBio.textContent = data.bio;
+      modalAvatar.src = data.avatar;
+      modalAvatar.alt = data.name + ' — ' + data.role;
+      modalLinkedIn.href = data.linkedin;
+      modalEmail.href = data.email;
+
+      modalSkills.innerHTML = '';
+      data.skills.forEach(s => {
+        const sp = document.createElement('span');
+        sp.className = 'skill';
+        sp.textContent = s;
+        modalSkills.appendChild(sp);
+      });
+
+      // move focus into modal
+      modalClose.focus();
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal(){
+      modal.setAttribute('aria-hidden','true');
+      document.body.style.overflow = '';
+      // return focus to last focused element if possible
+      const last = document.querySelector('.member-card[aria-pressed="true"]') || document.querySelector('.member-card');
+      if(last) {
+        last.focus();
+        last.setAttribute('aria-pressed','false');
+      }
+    }
+
+    // attach handlers for profile buttons
+    document.querySelectorAll('.view-profile').forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        const key = btn.dataset.member;
+        document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
+        const card = document.querySelector(`.member-card[data-member="${key}"]`);
+        if(card) card.setAttribute('aria-pressed','true');
+        openMember(key);
+      });
+    });
+
+    // allow clicking the whole card and keyboard activation
+    document.querySelectorAll('.member-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        // ignore clicks if target was interactive element handled elsewhere
+        if(e.target.closest('.view-profile')) return;
+        const key = card.dataset.member;
+        document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
+        card.setAttribute('aria-pressed','true');
+        openMember(key);
+      });
+      card.addEventListener('keydown', (e) => {
+        if(e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          card.click();
+        }
+      });
+    });
+
+    // close modal handlers
+    modalClose.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+      if(e.target === modal) closeModal(); // backdrop click
+    });
+    document.addEventListener('keydown', (e) => {
+      if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
+    });
+
+    // ensure initial mobile nav state
+    if(window.innerWidth < 980){
+      nav.style.display = 'none';
+    }
   </script>
 </body>
 </html>
