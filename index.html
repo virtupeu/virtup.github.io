@@ -3,37 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Virtup+ — Modern Responsive UI</title>
+  <title>Virtup+ — Refined Single File</title>
 
-  <!-- Google Font + icons -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-  <meta name="theme-color" content="#0b1020">
-
   <style>
-    /* ===== Variables ===== */
     :root{
       --bg: linear-gradient(180deg,#0b1020 0%, #071226 60%, #071526 100%);
-      --card: rgba(255,255,255,0.06);
-      --glass: rgba(255,255,255,0.06);
       --accent: #6ee7b7;
       --accent-2: #7dd3fc;
-      --muted: rgba(255,255,255,0.7);
-      --glass-border: rgba(255,255,255,0.08);
-      --radius: 14px;
-      --max-width: 1200px;
-      --shadow-lg: 0 10px 30px rgba(2,6,23,0.6), inset 0 1px 0 rgba(255,255,255,0.02);
-      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+      --muted: rgba(255,255,255,0.75);
+      --glass-border: rgba(255,255,255,0.06);
+      --max-w: 1200px;
+      font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
-
-    /* ===== Base ===== */
     *{box-sizing:border-box}
     html,body{height:100%}
     body{
       margin:0;
-      background: var(--bg);
-      color: #e8eef8;
+      background:var(--bg);
+      color:#e9f2ff;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
       line-height:1.45;
@@ -41,338 +31,106 @@
       padding-bottom:60px;
     }
     a{color:inherit;text-decoration:none}
-    img{max-width:100%;height:auto;display:block;border-radius:inherit}
+    .container{width:100%;max-width:var(--max-w);margin:0 auto;padding:0 20px}
 
-    .container{
-      width:100%;
-      max-width:var(--max-width);
-      margin:0 auto;
-      padding:0 20px;
-    }
+    /* Header */
+    header{position:sticky;top:14px;z-index:50;display:flex;justify-content:center;padding:12px 0}
+    .nav-wrap{display:flex;align-items:center;gap:16px;width:100%;max-width:var(--max-w);padding:10px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 8px 28px rgba(0,0,0,0.5)}
+    .logo{display:flex;align-items:center;gap:12px;font-weight:800}
+    .logo .mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#04232b;font-weight:800}
+    nav{margin-left:auto;display:flex;gap:12px;align-items:center}
+    nav a{padding:8px 12px;border-radius:10px;color:var(--muted);font-weight:600}
+    nav a:hover{background:rgba(255,255,255,0.03);color:#fff}
+    .cta{margin-left:12px;padding:10px 16px;border-radius:12px;background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#04232b;font-weight:700;border:0;cursor:pointer}
 
-    /* ===== Header ===== */
-    header{
-      position:sticky;
-      top:12px;
-      z-index:40;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:10px 0;
-    }
-    .nav-wrap{
-      width:100%;
-      max-width:var(--max-width);
-      display:flex;
-      align-items:center;
-      gap:20px;
-      padding:10px;
-      border-radius:24px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      box-shadow: var(--shadow-lg);
-      border: 1px solid var(--glass-border);
-    }
-    .logo{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      font-weight:800;
-      font-size:18px;
-      color:white;
-    }
-    .logo .mark{
-      width:44px;height:44px;border-radius:10px;
-      background: linear-gradient(135deg,var(--accent),var(--accent-2));
-      display:flex;align-items:center;justify-content:center;
-      color:#07212b;font-weight:800;
-      box-shadow:0 6px 18px rgba(111,201,173,0.12);
-    }
+    .hamburger{display:none;background:transparent;border:0;color:var(--muted);font-size:20px;padding:8px;border-radius:10px;margin-left:8px}
 
-    nav{margin-left:auto; display:flex; align-items:center; gap:20px;}
-    nav a{padding:8px 12px; border-radius:10px; color:var(--muted); font-weight:600}
-    nav a:hover{background:rgba(255,255,255,0.03); color:white}
+    /* Layout */
+    .hero{display:flex;gap:32px;align-items:center;padding:52px 0 30px}
+    .hero-left{flex:1;min-width:260px}
+    .eyebrow{display:inline-block;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.03);color:var(--accent-2);font-weight:700;font-size:13px;margin-bottom:18px}
+    h1{font-size:clamp(28px,4.5vw,44px);margin:0 0 14px;line-height:1.02}
+    p.lead{color:rgba(255,255,255,0.85);max-width:56ch;margin:0 0 20px}
+    .hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+    .btn{padding:11px 18px;border-radius:12px;border:0;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:700;cursor:pointer}
+    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#04232b}
+    .sub-visual{flex:1;min-width:300px;display:flex;align-items:center;justify-content:center}
+    .glass{width:100%;max-width:520px;padding:16px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.05);box-shadow:0 18px 40px rgba(0,0,0,0.6)}
 
-    .cta{
-      margin-left:12px;
-      background: linear-gradient(90deg,var(--accent),var(--accent-2));
-      padding:10px 16px;border-radius:12px;color:#04232b;font-weight:700;
-      box-shadow: 0 8px 20px rgba(125,211,252,0.08);
-    }
-
-    /* Mobile menu */
-    .hamburger{
-      display:none;
-      margin-left:12px;
-      background:transparent;border:0;color:var(--muted);
-      font-size:20px;padding:8px;border-radius:10px;
-    }
-
-    /* ===== Hero ===== */
-    .hero{
-      padding:60px 0 40px;
-      display:flex;
-      align-items:center;
-      gap:40px;
-    }
-    .hero-left{
-      flex:1;
-      min-width:270px;
-    }
-    .eyebrow{
-      display:inline-block;
-      padding:6px 10px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.04);
-      color:var(--accent-2);
-      font-weight:700;
-      margin-bottom:20px;
-      font-size:13px;
-    }
-    .hero h1{
-      font-size:clamp(28px,5vw,48px);
-      margin:0 0 18px;
-      line-height:1.02;
-      letter-spacing:-0.02em;
-    }
-    .hero p{color:rgba(255,255,255,0.8); margin:0 0 24px; max-width:56ch;}
-
-    .hero-cta{display:flex; gap:12px; flex-wrap:wrap;}
-    .btn{
-      padding:12px 18px;border-radius:12px;font-weight:700;border:0;cursor:pointer;
-      background:rgba(255,255,255,0.03); color:var(--muted);
-    }
-    .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2)); color:#04232b}
-    .sub-visual{
-      flex:1;
-      min-width:280px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .glass-card{
-      width:100%;
-      max-width:520px;
-      border-radius:18px;
-      padding:18px;
-      background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));
-      border: 1px solid rgba(255,255,255,0.06);
-      box-shadow: 0 20px 50px rgba(2,8,23,0.6);
-    }
-    .hero-mock{
-      display:grid;
-      grid-template-columns:1fr 120px;
-      gap:12px;
-      align-items:center;
-    }
-    .mock-main{
-      border-radius:12px;
-      height:170px;
-      background:linear-gradient(135deg,#071829 0%, rgba(10,20,30,0.6) 100%);
-      padding:12px;
-      position:relative;
-      overflow:hidden;
-    }
-    .mock-main .chip{position:absolute; top:12px; right:12px; font-weight:700; padding:6px 8px; border-radius:10px; background:rgba(255,255,255,0.04); color:var(--muted); font-size:12px}
-    .mock-list{display:flex;flex-direction:column;gap:10px}
-    .mock-item{height:44px;border-radius:10px;background:linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));display:flex;align-items:center;gap:12px;padding:8px 10px}
-
-    /* ===== Sections ===== */
-    section{padding:60px 0}
-    .section-title{display:flex; align-items:center; gap:12px; margin-bottom:26px}
-    .section-title h2{margin:0; font-size:20px}
-    .grid{
-      display:grid;
-      gap:20px;
-    }
+    /* Sections */
+    section{padding:56px 0}
+    .section-title{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+    .section-title h2{margin:0;font-size:20px}
+    .grid{display:grid;gap:18px}
 
     /* Services */
-    .services .grid{
-      grid-template-columns: repeat(auto-fit,minmax(220px,1fr));
-    }
-    .service{
-      background:var(--glass);
-      border-radius:14px;
-      padding:18px;
-      border:1px solid var(--glass-border);
-      transition:transform .28s ease, box-shadow .28s ease;
-    }
-    .service:hover{transform:translateY(-8px); box-shadow:0 12px 40px rgba(2,6,23,0.6)}
-    .service .icon{
-      width:56px;height:56px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:20px;
-      background:linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01)); color:var(--accent-2);
-      margin-bottom:12px;
-    }
+    .services .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .service{padding:16px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);transition:transform .22s ease,box-shadow .22s}
+    .service:hover{transform:translateY(-8px);box-shadow:0 14px 36px rgba(0,0,0,0.6)}
 
-    /* Portfolio */
-    .portfolio-grid{
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-    }
-    .work{
-      position:relative; overflow:hidden; border-radius:12px; min-height:160px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid var(--glass-border);
-    }
-    .work img{height:200px; width:100%; object-fit:cover;}
-    .overlay{
-      position:absolute; inset:0; display:flex; flex-direction:column; justify-content:flex-end; padding:16px;
-      background:linear-gradient(180deg, rgba(2,6,23,0) 30%, rgba(2,6,23,0.6) 100%);
-      transition:transform .28s ease;
-      transform:translateY(28px);
-    }
+    /* Portfolio: use SVG placeholders */
+    .portfolio-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .work{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--glass-border);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
+    .work svg{display:block;width:100%;height:200px}
+    .overlay{position:absolute;inset:0;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%);transform:translateY(28px);transition:transform .22s}
     .work:hover .overlay{transform:translateY(0)}
-    .work h3{margin:0;font-size:16px}
-    .tags{display:flex;gap:8px;margin-top:8px}
-    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03)}
+    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);margin-right:8px}
 
     /* Testimonials */
-    .testimonials .grid{grid-template-columns: repeat(auto-fit,minmax(220px,1fr))}
-    .testimonial{padding:18px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid var(--glass-border)}
-    .testim-meta{display:flex;align-items:center;gap:12px;margin-bottom:8px}
-    .avatar{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#07212b;font-weight:700}
+    .testimonials .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+    .testimonial{padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border)}
+    .testim-meta{display:flex;gap:12px;align-items:center}
+    .avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#04232b;font-weight:800}
 
-    /* Team - polished baseline (some rules later override) */
-    .team-grid{grid-template-columns: repeat(auto-fit,minmax(160px,1fr))}
-    .member{padding:14px;border-radius:12px;background:linear-gradient(180deg,rgba(255,255,255,0.02),rgba(255,255,255,0.01));border:1px solid var(--glass-border);text-align:center}
-    .member img{border-radius:10px; height:120px; object-fit:cover; margin-bottom:12px}
-
-    /* Contact */
-    .contact-grid{grid-template-columns: 1fr 420px}
-    form{display:flex;flex-direction:column;gap:12px}
-    input,textarea,select{
-      padding:12px;border-radius:12px;border:1px solid rgba(255,255,255,0.06); background:rgba(255,255,255,0.02); color:inherit;
-      resize:vertical;
-    }
-    .form-footer{display:flex;align-items:center;justify-content:space-between;gap:12px}
-    .map-placeholder{
-      border-radius:12px;height:100%;min-height:360px;background:linear-gradient(135deg, rgba(125,211,252,0.05), rgba(110,231,183,0.03));
-      display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,0.8); border:1px solid var(--glass-border);
-    }
-
-    /* Footer */
-    footer{padding:28px 0 60px;color:rgba(255,255,255,0.6)}
-    .footer-grid{display:flex;flex-wrap:wrap;gap:20px;align-items:center;justify-content:space-between}
-
-    /* ===== Polished team styles (override baseline) ===== */
-    .polished-team { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap:18px; }
-
-    .member-card{
-      display:flex;
-      flex-direction:column;
-      align-items:stretch;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border: 1px solid rgba(255,255,255,0.06);
-      border-radius:14px;
-      padding:12px;
-      transition:transform .28s cubic-bezier(.2,.9,.3,1), box-shadow .28s;
-      cursor:pointer;
-      outline: none;
-    }
-    .member-card:focus { box-shadow: 0 8px 30px rgba(110,231,183,0.06); transform:translateY(-6px); }
-
-    .avatar-wrap{
-      width:100%;
-      border-radius:12px;
-      overflow:hidden;
-      position:relative;
-      height:160px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      margin-bottom:12px;
-      border:3px solid transparent;
-      background: linear-gradient(135deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    }
-    .avatar-wrap::after{
-      content:'';
-      position:absolute; inset:-3px;
-      border-radius:14px;
-      background:linear-gradient(90deg,var(--accent),var(--accent-2));
-      opacity:0;
-      transition:opacity .28s;
-      z-index:0;
-    }
-    .member-card:hover .avatar-wrap::after,
-    .member-card:focus .avatar-wrap::after { opacity:0.14; }
-
-    .avatar-wrap img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-      z-index:1;
-      border-radius:9px;
-    }
-
-    .member-body{display:flex;flex-direction:column;gap:10px}
+    /* Team polished */
+    .polished-team{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+    .member-card{display:flex;flex-direction:column;padding:12px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:transform .22s,box-shadow .22s;outline:none}
+    .member-card:focus{box-shadow:0 12px 36px rgba(0,0,0,0.6);transform:translateY(-6px)}
+    .avatar-wrap{height:160px;border-radius:12px;overflow:hidden;position:relative;border:3px solid transparent;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01))}
+    .avatar-wrap::after{content:'';position:absolute;inset:-3px;border-radius:14px;background:linear-gradient(90deg,var(--accent),var(--accent-2));opacity:0;transition:opacity .22s}
+    .member-card:hover .avatar-wrap::after{opacity:.12}
+    .avatar-wrap svg{width:100%;height:100%;display:block}
+    .member-body{display:flex;flex-direction:column;padding-top:10px;gap:8px}
     .member-name{font-weight:700}
     .member-role{color:rgba(255,255,255,0.65);font-size:13px}
-    .skill-list{display:flex;gap:8px;flex-wrap:wrap}
-    .skill{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted)}
+    .skill{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);margin-right:6px}
 
-    .member-actions{display:flex;align-items:center;justify-content:space-between}
-    .link-btn{background:transparent;border:0;color:var(--accent-2);font-weight:700;padding:8px 10px;border-radius:10px;cursor:pointer}
-    .link-btn:hover{opacity:0.95}
-    .socials a{color:rgba(255,255,255,0.65);margin-left:8px}
-    .member-card:hover{transform:translateY(-8px); box-shadow: 0 18px 40px rgba(2,6,23,0.6)}
+    .member-actions{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
+    .link-btn{background:transparent;border:0;color:var(--accent-2);font-weight:700;cursor:pointer;padding:8px;border-radius:8px}
 
     /* Modal */
-    .team-modal{
-      position:fixed; inset:0; align-items:center; justify-content:center;
-      background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));
-      z-index:80; padding:20px;
-    }
-    .team-modal[aria-hidden="true"]{ display:none; }
-    .team-modal[aria-hidden="false"]{ display:flex; }
+    .team-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));z-index:999;visibility:hidden;opacity:0;transition:opacity .18s,visibility .18s}
+    .team-modal.open{visibility:visible;opacity:1}
+    .modal-card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;border:1px solid var(--glass-border);box-shadow:0 30px 80px rgba(0,0,0,0.6);display:grid;grid-template-columns:320px 1fr;gap:18px;position:relative}
+    .modal-close{position:absolute;right:14px;top:12px;background:transparent;border:0;color:var(--muted);font-size:22px;cursor:pointer}
+    .modal-left svg{width:100%;height:100%;border-radius:8px;display:block}
+    .modal-right h3{margin:0 0 6px}
+    .modal-skill{font-size:13px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);margin-right:8px;margin-top:8px;display:inline-block}
 
-    .modal-content{
-      width:100%; max-width:920px; border-radius:14px; overflow:hidden;
-      background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-      border:1px solid rgba(255,255,255,0.06); padding:18px;
-      box-shadow: 0 30px 80px rgba(2,6,23,0.7);
-      position:relative;
-    }
-    .modal-close{
-      position:absolute; right:18px; top:18px; background:transparent;border:0;color:var(--muted);font-size:22px;cursor:pointer;
-    }
-    .modal-grid{display:grid;grid-template-columns:320px 1fr;gap:18px;align-items:start}
-    .modal-left img{width:100%;height:100%;object-fit:cover;border-radius:8px}
-    @media (max-width:780px){
-      .modal-grid{grid-template-columns:1fr; }
-    }
+    /* Contact */
+    .contact-grid{grid-template-columns:1fr 420px}
+    input,textarea{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit;width:100%}
+    .map-placeholder{border-radius:12px;min-height:320px;display:flex;align-items:center;justify-content:center;border:1px solid var(--glass-border);background:linear-gradient(135deg, rgba(125,211,252,0.03), rgba(110,231,183,0.02))}
 
-    /* ===== Responsive ===== */
     @media (max-width:980px){
-      .hero{flex-direction:column;align-items:flex-start;padding-top:30px}
       nav{display:none}
       .hamburger{display:inline-block}
-      .sub-visual{width:100%}
+      .hero{flex-direction:column;align-items:flex-start}
       .contact-grid{grid-template-columns:1fr}
+      .modal-card{grid-template-columns:1fr}
     }
     @media (max-width:540px){
-      .nav-wrap{padding:10px 12px;border-radius:14px}
-      .logo{font-size:16px}
-      .hero-left{width:100%}
-      .glass-card{padding:12px}
-      header{top:8px}
+      .nav-wrap{padding:8px;border-radius:12px}
+      .logo{font-size:15px}
     }
 
-    /* small helper utilities */
     .muted{color:rgba(255,255,255,0.6)}
-    .center{text-align:center}
-    .mb-8{margin-bottom:8px}
-    .mb-16{margin-bottom:16px}
   </style>
 </head>
 <body>
-
-  <!-- Header -->
   <header>
     <div class="nav-wrap container" role="navigation" aria-label="Main navigation">
-      <div class="logo" aria-hidden="false">
-        <div class="mark">VP</div>
-        Virtup+
-      </div>
-
+      <div class="logo" aria-hidden="false"><div class="mark">VP</div>Virtup+</div>
       <nav id="mainNav" aria-hidden="false">
         <a href="#services">Services</a>
         <a href="#portfolio">Portfolio</a>
@@ -380,386 +138,270 @@
         <a href="#team">Team</a>
         <a href="#contact">Contact</a>
       </nav>
-
       <button class="cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button>
-
-      <button class="hamburger" id="hamburger" aria-label="Open menu">
-        <i class="fa fa-bars"></i>
-      </button>
+      <button class="hamburger" id="hamburger" aria-label="Open menu"><i class="fa fa-bars"></i></button>
     </div>
   </header>
 
   <main class="container">
-
-    <!-- Hero -->
-    <section class="hero" aria-label="Hero section">
+    <section class="hero" aria-label="Hero">
       <div class="hero-left">
         <span class="eyebrow">Digital Innovation</span>
         <h1>Design-driven software and digital experiences that accelerate growth.</h1>
-        <p>We build bespoke web & cloud products with delightful UX, performant front-ends, and rock-solid engineering. Trusted by startups and enterprises worldwide.</p>
-
+        <p class="lead">We deliver elegant product experiences, performant frontends and resilient cloud engineering. Focused teams, measurable results.</p>
         <div class="hero-cta">
-          <button class="btn btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start a Project</button>
-          <a class="btn" href="#portfolio">View Work</a>
-        </div>
-
-        <div class="mb-16" style="margin-top:18px;">
-          <small class="muted">Trusted by teams at:</small>
-          <div style="display:flex;gap:10px;margin-top:10px;flex-wrap:wrap">
-            <div style="padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02);font-weight:700">Acme</div>
-            <div style="padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02)">Nova</div>
-            <div style="padding:8px 12px;border-radius:999px;background:rgba(255,255,255,0.02)">Orbit</div>
-          </div>
+          <button class="btn btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start a project</button>
+          <a class="btn" href="#portfolio">View work</a>
         </div>
       </div>
 
       <div class="sub-visual">
-        <div class="glass-card" aria-hidden="true">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
-            <div style="font-weight:700">Product Analytics</div>
-            <div style="font-size:12px;color:var(--muted)">Live</div>
+        <div class="glass" aria-hidden="true">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+            <strong>Product Analytics</strong>
+            <small class="muted">Live</small>
           </div>
-
-          <div class="hero-mock">
-            <div class="mock-main">
-              <div class="chip">v2.4</div>
-              <div style="position:absolute;left:12px;bottom:12px;color:var(--muted);font-size:13px">Revenue +38% MoM</div>
+          <div style="display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center">
+            <div style="border-radius:10px;height:140px;background:linear-gradient(135deg,#071829,#0b2840);position:relative;padding:12px;color:var(--muted)">
+              <div style="position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px;font-weight:700">v2.4</div>
+              <div style="position:absolute;left:12px;bottom:12px;font-size:13px">Revenue +38% MoM</div>
             </div>
-
-            <div class="mock-list">
-              <div class="mock-item"><div style="width:8px;height:8px;background:linear-gradient(90deg,var(--accent),var(--accent-2));border-radius:6px"></div><div style="flex:1;margin-left:8px;color:var(--muted)">Q3 Roadmap</div></div>
-              <div class="mock-item"><div style="width:8px;height:8px;background:linear-gradient(90deg,var(--accent-2),var(--accent));border-radius:6px"></div><div style="flex:1;margin-left:8px;color:var(--muted)">Design System</div></div>
-              <div class="mock-item"><div style="width:8px;height:8px;background:linear-gradient(90deg,#ffd166,#ffb3b3);border-radius:6px"></div><div style="flex:1;margin-left:8px;color:var(--muted)">Performance</div></div>
+            <div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="height:40px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;padding:8px 10px">Q3 Roadmap</div>
+                <div style="height:40px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;padding:8px 10px">Design system</div>
+                <div style="height:40px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;padding:8px 10px">Performance</div>
+              </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
 
-    <!-- Services -->
     <section id="services" class="services" aria-labelledby="services-heading">
-      <div class="section-title">
-        <h2 id="services-heading">Services</h2>
-        <div class="muted">We help with end-to-end product building</div>
-      </div>
-
+      <div class="section-title"><h2 id="services-heading">Services</h2><div class="muted">End-to-end product & engineering</div></div>
       <div class="grid">
-        <div class="service">
-          <div class="icon"><i class="fa fa-paint-brush"></i></div>
-          <h3 class="mb-8">Design & Product</h3>
-          <p class="muted">User-centered interfaces, prototypes, product strategy and design systems that scale.</p>
-        </div>
-
-        <div class="service">
-          <div class="icon"><i class="fa fa-code"></i></div>
-          <h3 class="mb-8">Web & Frontend</h3>
-          <p class="muted">Modern frameworks, pixel-perfect frontends and component libraries for high-performance apps.</p>
-        </div>
-
-        <div class="service">
-          <div class="icon"><i class="fa fa-server"></i></div>
-          <h3 class="mb-8">Cloud & Backend</h3>
-          <p class="muted">Secure APIs, scalable infrastructure, and serverless architectures tailored to your needs.</p>
-        </div>
-
-        <div class="service">
-          <div class="icon"><i class="fa fa-chart-line"></i></div>
-          <h3 class="mb-8">Growth & Analytics</h3>
-          <p class="muted">Data-driven growth, instrumentation and analytics to optimize conversion and retention.</p>
-        </div>
+        <div class="service"><strong>Design & Product</strong><p class="muted">Product strategy, UX and scalable design systems.</p></div>
+        <div class="service"><strong>Frontend</strong><p class="muted">React, Next.js, performant component-driven interfaces.</p></div>
+        <div class="service"><strong>Cloud & Backend</strong><p class="muted">APIs, serverless, infra as code and observability.</p></div>
+        <div class="service"><strong>Growth & Analytics</strong><p class="muted">Measurement, experimentation, and data pipelines.</p></div>
       </div>
     </section>
 
-    <!-- Portfolio -->
-    <section id="portfolio" class="portfolio" aria-labelledby="portfolio-heading">
-      <div class="section-title">
-        <h2 id="portfolio-heading">Selected Work</h2>
-        <div class="muted">Beautiful, performant, and measurable</div>
-      </div>
-
+    <section id="portfolio" aria-labelledby="portfolio-heading">
+      <div class="section-title"><h2 id="portfolio-heading">Selected work</h2><div class="muted">Representative projects</div></div>
       <div class="grid portfolio-grid">
-        <article class="work" style="background-image:linear-gradient(180deg,rgba(255,255,255,0.01),rgba(255,255,255,0.02))">
-          <img src="https://images.unsplash.com/photo-1503387762-592deb58ef4e?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=123" alt="Project 1">
-          <div class="overlay">
-            <h3>Fintech Dashboard</h3>
-            <div class="tags"><span class="tag">React</span><span class="tag">Design</span></div>
-          </div>
+        <article class="work" aria-label="Fintech dashboard">
+          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="false">
+            <defs>
+              <linearGradient id="p1" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#6ee7b7"/></linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#p1)"/>
+            <g fill="#04232b" font-family="Inter, Arial" font-weight="700">
+              <text x="60" y="130" font-size="36">Accounts</text>
+              <rect x="60" y="150" width="360" height="18" rx="9" fill="#04232b" opacity="0.08"/>
+              <text x="60" y="240" font-size="28">Revenue</text>
+            </g>
+          </svg>
+          <div class="overlay"><h3>Fintech Dashboard</h3><div><span class="tag">React</span><span class="tag">Design</span></div></div>
         </article>
 
-        <article class="work">
-          <img src="https://images.unsplash.com/photo-1519389950473-47ba0277781c?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=abc" alt="Project 2">
-          <div class="overlay">
-            <h3>Healthcare Platform</h3>
-            <div class="tags"><span class="tag">Next.js</span><span class="tag">API</span></div>
-          </div>
+        <article class="work" aria-label="Healthcare Platform">
+          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img">
+            <defs>
+              <linearGradient id="p2" x1="0" x2="1"><stop offset="0" stop-color="#ffd166"/><stop offset="1" stop-color="#ffb3b3"/></linearGradient>
+            </defs>
+            <rect width="100%" height="100%" fill="url(#p2)"/>
+            <text x="60" y="120" font-family="Inter, Arial" font-size="36" fill="#071829">Care Portal</text>
+          </svg>
+          <div class="overlay"><h3>Healthcare Platform</h3><div><span class="tag">Next.js</span><span class="tag">API</span></div></div>
         </article>
 
-        <article class="work">
-          <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=def" alt="Project 3">
-          <div class="overlay">
-            <h3>eCommerce Rebuild</h3>
-            <div class="tags"><span class="tag">Performance</span><span class="tag">UX</span></div>
-          </div>
+        <article class="work" aria-label="eCommerce Rebuild">
+          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img">
+            <defs><linearGradient id="p3" x1="0" x2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
+            <rect width="100%" height="100%" fill="url(#p3)"/>
+            <text x="60" y="120" font-family="Inter, Arial" font-size="36" fill="#071829">Shopfront</text>
+          </svg>
+          <div class="overlay"><h3>eCommerce Rebuild</h3><div><span class="tag">Performance</span><span class="tag">UX</span></div></div>
         </article>
 
-        <article class="work">
-          <img src="https://images.unsplash.com/photo-1526378722463-e1ad8b4e7c06?q=80&w=1400&auto=format&fit=crop&ixlib=rb-4.0.3&s=ghi" alt="Project 4">
-          <div class="overlay">
-            <h3>Analytics Hub</h3>
-            <div class="tags"><span class="tag">Data</span><span class="tag">SaaS</span></div>
-          </div>
+        <article class="work" aria-label="Analytics Hub">
+          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img">
+            <defs><linearGradient id="p4" x1="0" x2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs>
+            <rect width="100%" height="100%" fill="url(#p4)"/>
+            <text x="60" y="120" font-family="Inter, Arial" font-size="36" fill="#071829">Analytics Hub</text>
+          </svg>
+          <div class="overlay"><h3>Analytics Hub</h3><div><span class="tag">Data</span><span class="tag">SaaS</span></div></div>
         </article>
       </div>
     </section>
 
-    <!-- Testimonials -->
-    <section id="testimonials" class="testimonials" aria-labelledby="testim-heading">
-      <div class="section-title">
-        <h2 id="testim-heading">What clients say</h2>
-        <div class="muted">Proof of impact</div>
-      </div>
-
+    <section id="testimonials" aria-labelledby="testim-heading">
+      <div class="section-title"><h2 id="testim-heading">What clients say</h2><div class="muted">Feedback & results</div></div>
       <div class="grid">
-        <div class="testimonial">
-          <div class="testim-meta">
-            <div class="avatar">AB</div>
-            <div>
-              <div style="font-weight:700">Alicia Brown</div>
-              <div class="muted">Head of Product, Orbit</div>
-            </div>
-          </div>
-          <p class="muted">"Virtup+ redesigned our user flows and increased conversion by 24% in the first month. The team delivered on time and communicated clearly."</p>
-        </div>
-
-        <div class="testimonial">
-          <div class="testim-meta">
-            <div class="avatar">JS</div>
-            <div>
-              <div style="font-weight:700">Jonas Silva</div>
-              <div class="muted">CTO, Nova</div>
-            </div>
-          </div>
-          <p class="muted">"Fast, design-first engineers who understand product. Our app is now faster and far easier to maintain."</p>
-        </div>
-
-        <div class="testimonial">
-          <div class="testim-meta">
-            <div class="avatar">MP</div>
-            <div>
-              <div style="font-weight:700">Maya Patel</div>
-              <div class="muted">Founder, Acme</div>
-            </div>
-          </div>
-          <p class="muted">"They helped us launch a polished MVP in weeks, not months. Highly recommended."</p>
-        </div>
+        <div class="testimonial"><div class="testim-meta"><div class="avatar">AB</div><div><strong>Alicia Brown</strong><div class="muted">Head of Product, Orbit</div></div></div><p class="muted">"Virtup+ redesigned our flows and increased conversion by 24%."</p></div>
+        <div class="testimonial"><div class="testim-meta"><div class="avatar">JS</div><div><strong>Jonas Silva</strong><div class="muted">CTO, Nova</div></div></div><p class="muted">"Great engineers and designers — fast, thoughtful, and pragmatic."</p></div>
+        <div class="testimonial"><div class="testim-meta"><div class="avatar">MP</div><div><strong>Maya Patel</strong><div class="muted">Founder, Acme</div></div></div><p class="muted">"We shipped a polished MVP in weeks with their team."</p></div>
       </div>
     </section>
 
-    <!-- Team (Polished) -->
-    <section id="team" class="team" aria-labelledby="team-heading">
-      <div class="section-title">
-        <h2 id="team-heading">Core Team</h2>
-        <div class="muted">Small, focused and cross-functional</div>
-      </div>
+    <!-- Polished Core Team -->
+    <section id="team" aria-labelledby="team-heading">
+      <div class="section-title"><h2 id="team-heading">Core Team</h2><div class="muted">Small, focused & cross-functional</div></div>
 
-      <div class="grid team-grid polished-team">
-        <article class="member-card" data-member="daria" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Daria K.">
-          <div class="avatar-wrap">
-            <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=aaa" alt="Daria K. — Design Lead">
+      <div class="grid polished-team" role="list">
+        <!-- member: Daria -->
+        <article class="member-card" role="listitem" data-member="daria" tabindex="0" aria-pressed="false" aria-label="Open Daria profile">
+          <div class="avatar-wrap" aria-hidden="true">
+            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Daria avatar">
+              <defs><linearGradient id="a1" x1="0" x2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs>
+              <rect width="100%" height="100%" fill="url(#a1)"/>
+              <text x="50%" y="56%" font-size="72" fill="#04232b" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">DK</text>
+            </svg>
           </div>
           <div class="member-body">
             <div class="member-name">Daria K.</div>
             <div class="member-role">Design Lead</div>
-            <div class="skill-list">
-              <span class="skill">Product Design</span>
-              <span class="skill">Design Systems</span>
-              <span class="skill">Figma</span>
-            </div>
+            <div><span class="skill">Product</span><span class="skill">Design systems</span><span class="skill">Figma</span></div>
             <div class="member-actions">
-              <button class="link-btn view-profile" data-member="daria" aria-label="View Daria's profile">View profile</button>
-              <div class="socials">
-                <a href="#" aria-label="Daria on LinkedIn"><i class="fa fa-linkedin"></i></a>
-                <a href="#" aria-label="Daria on Twitter"><i class="fa fa-twitter"></i></a>
-              </div>
+              <button class="link-btn view-profile" data-member="daria" aria-label="View Daria profile">View profile</button>
+              <div class="socials"><a href="#" aria-label="Daria LinkedIn"><i class="fa fa-linkedin"></i></a></div>
             </div>
           </div>
         </article>
 
-        <article class="member-card" data-member="liam" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Liam O.">
+        <!-- member: Liam -->
+        <article class="member-card" role="listitem" data-member="liam" tabindex="0" aria-pressed="false" aria-label="Open Liam profile">
           <div class="avatar-wrap">
-            <img src="https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=bbb" alt="Liam O. — Frontend Engineer">
+            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Liam avatar">
+              <defs><linearGradient id="a2" x1="0" x2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
+              <rect width="100%" height="100%" fill="url(#a2)"/>
+              <text x="50%" y="56%" font-size="72" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">LO</text>
+            </svg>
           </div>
           <div class="member-body">
             <div class="member-name">Liam O.</div>
             <div class="member-role">Frontend Engineer</div>
-            <div class="skill-list">
-              <span class="skill">React</span>
-              <span class="skill">TypeScript</span>
-              <span class="skill">Performance</span>
-            </div>
+            <div><span class="skill">React</span><span class="skill">TypeScript</span><span class="skill">Perf</span></div>
             <div class="member-actions">
-              <button class="link-btn view-profile" data-member="liam" aria-label="View Liam's profile">View profile</button>
-              <div class="socials">
-                <a href="#" aria-label="Liam on GitHub"><i class="fa fa-github"></i></a>
-                <a href="#" aria-label="Liam on LinkedIn"><i class="fa fa-linkedin"></i></a>
-              </div>
+              <button class="link-btn view-profile" data-member="liam" aria-label="View Liam profile">View profile</button>
+              <div class="socials"><a href="#" aria-label="Liam GitHub"><i class="fa fa-github"></i></a></div>
             </div>
           </div>
         </article>
 
-        <article class="member-card" data-member="nina" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Nina R.">
+        <!-- member: Nina -->
+        <article class="member-card" role="listitem" data-member="nina" tabindex="0" aria-pressed="false" aria-label="Open Nina profile">
           <div class="avatar-wrap">
-            <img src="https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ccc" alt="Nina R. — Backend & Cloud">
+            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nina avatar">
+              <defs><linearGradient id="a3" x1="0" x2="1"><stop offset="0" stop-color="#ffb3b3"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs>
+              <rect width="100%" height="100%" fill="url(#a3)"/>
+              <text x="50%" y="56%" font-size="72" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">NR</text>
+            </svg>
           </div>
           <div class="member-body">
             <div class="member-name">Nina R.</div>
             <div class="member-role">Backend & Cloud</div>
-            <div class="skill-list">
-              <span class="skill">Serverless</span>
-              <span class="skill">APIs</span>
-              <span class="skill">AWS</span>
-            </div>
+            <div><span class="skill">Serverless</span><span class="skill">APIs</span><span class="skill">AWS</span></div>
             <div class="member-actions">
-              <button class="link-btn view-profile" data-member="nina" aria-label="View Nina's profile">View profile</button>
-              <div class="socials">
-                <a href="#" aria-label="Nina on GitHub"><i class="fa fa-github"></i></a>
-                <a href="#" aria-label="Nina on LinkedIn"><i class="fa fa-linkedin"></i></a>
-              </div>
+              <button class="link-btn view-profile" data-member="nina" aria-label="View Nina profile">View profile</button>
+              <div class="socials"><a href="#" aria-label="Nina GitHub"><i class="fa fa-github"></i></a></div>
             </div>
           </div>
         </article>
 
-        <article class="member-card" data-member="oleg" tabindex="0" role="button" aria-pressed="false" aria-label="Open profile Oleg P.">
+        <!-- member: Oleg -->
+        <article class="member-card" role="listitem" data-member="oleg" tabindex="0" aria-pressed="false" aria-label="Open Oleg profile">
           <div class="avatar-wrap">
-            <img src="https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ddd" alt="Oleg P. — Growth">
+            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Oleg avatar">
+              <defs><linearGradient id="a4" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
+              <rect width="100%" height="100%" fill="url(#a4)"/>
+              <text x="50%" y="56%" font-size="72" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">OP</text>
+            </svg>
           </div>
           <div class="member-body">
             <div class="member-name">Oleg P.</div>
             <div class="member-role">Growth</div>
-            <div class="skill-list">
-              <span class="skill">Acquisition</span>
-              <span class="skill">Analytics</span>
-              <span class="skill">Experimentation</span>
-            </div>
+            <div><span class="skill">Acq.</span><span class="skill">Analytics</span><span class="skill">Experiment</span></div>
             <div class="member-actions">
-              <button class="link-btn view-profile" data-member="oleg" aria-label="View Oleg's profile">View profile</button>
-              <div class="socials">
-                <a href="#" aria-label="Oleg on Twitter"><i class="fa fa-twitter"></i></a>
-                <a href="#" aria-label="Oleg on LinkedIn"><i class="fa fa-linkedin"></i></a>
-              </div>
+              <button class="link-btn view-profile" data-member="oleg" aria-label="View Oleg profile">View profile</button>
+              <div class="socials"><a href="#" aria-label="Oleg Twitter"><i class="fa fa-twitter"></i></a></div>
             </div>
           </div>
         </article>
       </div>
     </section>
 
-    <!-- Contact -->
-    <section id="contact" class="contact" aria-labelledby="contact-heading">
-      <div class="section-title">
-        <h2 id="contact-heading">Let’s build something</h2>
-        <div class="muted">Tell us about your project</div>
-      </div>
-
+    <section id="contact" aria-labelledby="contact-heading">
+      <div class="section-title"><h2 id="contact-heading">Let’s build something</h2><div class="muted">Tell us about your project</div></div>
       <div class="grid contact-grid">
         <div>
           <form id="contactForm" novalidate>
-            <div style="display:flex;gap:12px">
-              <input name="name" type="text" placeholder="Your name" required style="flex:1">
-              <input name="company" type="text" placeholder="Company" style="flex:1">
+            <div style="display:flex;gap:10px">
+              <input name="name" placeholder="Your name" required>
+              <input name="company" placeholder="Company">
             </div>
-
-            <div style="display:flex;gap:12px">
-              <input name="email" type="email" placeholder="Email" required style="flex:1">
-              <input name="budget" type="text" placeholder="Budget (optional)" style="flex:1">
+            <div style="display:flex;gap:10px;margin-top:8px">
+              <input name="email" type="email" placeholder="Email" required>
+              <input name="budget" placeholder="Budget (optional)">
             </div>
-
-            <textarea name="message" rows="6" placeholder="Project details, timeline, goals..." required></textarea>
-
-            <div class="form-footer">
-              <small class="muted">We will respond within 48 hours</small>
+            <textarea name="message" rows="6" placeholder="Project details, timeline..." required style="margin-top:8px"></textarea>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
+              <small class="muted">We respond within 48 hours</small>
               <div style="display:flex;gap:8px">
-                <button type="submit" class="btn btn-primary">Send Request</button>
-                <button type="reset" class="btn">Reset</button>
+                <button class="btn btn-primary" type="submit">Send request</button>
+                <button class="btn" type="reset">Reset</button>
               </div>
             </div>
-
-            <div id="formStatus" aria-live="polite" style="margin-top:10px;"></div>
+            <div id="formStatus" aria-live="polite" style="margin-top:10px"></div>
           </form>
         </div>
-
-        <div>
-          <div class="map-placeholder">
-            <div>
-              <div style="font-weight:700;font-size:18px;margin-bottom:8px">Office</div>
-              <div class="muted">Amsterdam · Remote</div>
-            </div>
-          </div>
-        </div>
+        <div><div class="map-placeholder"><div><strong>Office</strong><div class="muted" style="margin-top:6px">Amsterdam · Remote</div></div></div></div>
       </div>
     </section>
-
   </main>
 
-  <!-- Team Modal (single instance) -->
+  <!-- Modal -->
   <div id="teamModal" class="team-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
-    <div class="modal-content" role="document">
-      <button class="modal-close" aria-label="Close profile">&times;</button>
-      <div class="modal-grid">
-        <div class="modal-left">
-          <img id="modalAvatar" src="" alt="">
-        </div>
-        <div class="modal-right">
-          <h3 id="modalTitle"></h3>
-          <div id="modalRole" class="muted"></div>
-          <p id="modalBio" class="muted" style="margin-top:12px"></p>
-
-          <div style="margin-top:12px">
-            <strong>Skills</strong>
-            <div id="modalSkills" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px"></div>
-          </div>
-
-          <div style="margin-top:18px;display:flex;gap:8px;align-items:center">
-            <a id="modalLinkedIn" class="btn" href="#" target="_blank" rel="noopener">LinkedIn</a>
-            <a id="modalEmail" class="btn" href="#">Email</a>
-          </div>
+    <div class="modal-card" role="document">
+      <button class="modal-close" aria-label="Close modal">&times;</button>
+      <div class="modal-left" id="modalAvatarContainer"></div>
+      <div class="modal-right">
+        <h3 id="modalTitle"></h3>
+        <div id="modalRole" class="muted"></div>
+        <p id="modalBio" class="muted" style="margin-top:12px"></p>
+        <div id="modalSkills" style="margin-top:12px"></div>
+        <div style="margin-top:16px;display:flex;gap:8px">
+          <a id="modalLinkedIn" class="btn" target="_blank" rel="noopener">LinkedIn</a>
+          <a id="modalEmail" class="btn">Email</a>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- Footer -->
-  <footer class="container" role="contentinfo">
-    <div class="footer-grid">
-      <div>
-        <div style="font-weight:800">Virtup+</div>
-        <div class="muted">Design & engineering studio</div>
-      </div>
-
-      <div class="muted" style="display:flex;gap:12px;align-items:center">
-        <a href="#" class="muted"><i class="fa fa-twitter"></i></a>
-        <a href="#" class="muted"><i class="fa fa-linkedin"></i></a>
-        <a href="#" class="muted"><i class="fa fa-github"></i></a>
-      </div>
+  <footer class="container" role="contentinfo" style="padding:28px 0 60px">
+    <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
+      <div><strong>Virtup+</strong><div class="muted">Design & engineering studio</div></div>
+      <div style="display:flex;gap:12px" class="muted"><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-github"></i></a></div>
     </div>
   </footer>
 
-  <!-- Minimal JS -->
   <script>
-    // Mobile hamburger
+    /* Mobile nav */
     const hamburger = document.getElementById('hamburger');
     const nav = document.getElementById('mainNav');
     let navOpen = false;
     hamburger.addEventListener('click', () => {
       navOpen = !navOpen;
-      if(navOpen){
+      if (navOpen) {
         nav.style.display = 'flex';
         nav.style.position = 'absolute';
         nav.style.right = '20px';
-        nav.style.top = '68px';
-        nav.style.background = 'linear-gradient(180deg, rgba(2,6,23,0.96), rgba(2,6,23,0.98))';
+        nav.style.top = '70px';
+        nav.style.background = 'linear-gradient(180deg, rgba(2,6,23,0.95), rgba(2,6,23,0.98))';
         nav.style.padding = '12px';
-        nav.style.borderRadius = '12px';
+        nav.style.borderRadius = '10px';
       } else {
         nav.style.display = '';
         nav.style.position = '';
@@ -770,184 +412,136 @@
         nav.style.borderRadius = '';
       }
     });
-
-    // Smooth anchor scroll (if user clicks links)
-    document.querySelectorAll('a[href^="#"]').forEach(a => {
-      a.addEventListener('click', function(e){
-        const target = document.querySelector(this.getAttribute('href'));
-        if(target){
-          e.preventDefault();
-          target.scrollIntoView({behavior:'smooth', block:'start'});
-          // close mobile nav after click
-          if(window.innerWidth < 980 && navOpen){ hamburger.click(); }
-        }
-      });
+    if (window.innerWidth < 980) nav.style.display = 'none';
+    window.addEventListener('resize', () => {
+      if (window.innerWidth >= 980) { nav.style.display = ''; nav.style.position = ''; }
+      else if (!navOpen) nav.style.display = 'none';
     });
 
-    // Simple form handling demo
+    /* Form (demo) */
     const form = document.getElementById('contactForm');
-    const status = document.getElementById('formStatus');
-    form.addEventListener('submit', function(e){
+    const formStatus = document.getElementById('formStatus');
+    form.addEventListener('submit', (e) => {
       e.preventDefault();
-      // Basic validation
       const fd = new FormData(form);
-      if(!fd.get('name') || !fd.get('email') || !fd.get('message')) {
-        status.textContent = 'Please fill required fields.';
-        status.style.color = '#ffb3b3';
+      if (!fd.get('name') || !fd.get('email') || !fd.get('message')) {
+        formStatus.textContent = 'Please complete required fields.';
+        formStatus.style.color = '#ff9b9b';
         return;
       }
-      // Simulated submit
-      status.textContent = 'Sending...';
-      status.style.color = 'var(--muted)';
-
+      formStatus.textContent = 'Sending…';
+      formStatus.style.color = 'var(--muted)';
       setTimeout(() => {
-        status.textContent = 'Thanks! Your request has been received. We will reply shortly.';
-        status.style.color = 'var(--accent-2)';
+        formStatus.textContent = 'Thanks — we received your request.';
+        formStatus.style.color = 'var(--accent-2)';
         form.reset();
       }, 1000);
     });
 
-    // Ensure nav hidden on resize desktop -> mobile and vice versa
-    window.addEventListener('resize', () => {
-      if(window.innerWidth >= 980){
-        nav.style.display = '';
-        nav.style.position = '';
-        nav.style.background = '';
-      } else if(!navOpen){
-        nav.style.display = 'none';
-      }
-    });
-
-    /* ---------------------
-       Team modal logic & data
-       --------------------- */
+    /* Team modal data */
     const TEAM = {
       daria: {
         name: 'Daria K.',
         role: 'Design Lead',
-        avatar: 'https://images.unsplash.com/photo-1544005313-94ddf0286df2?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=aaa',
-        bio: 'Design lead focused on product strategy, interaction design and coherent design systems. She drives usability research and high-fidelity prototypes.',
-        skills: ['Product Design','Design Systems','Figma','Prototyping'],
+        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md1" x1="0" x2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md1)"/><text x="50%" y="55%" font-size="220" fill="#04232b" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">DK</text></svg>`,
+        bio: 'Design lead focused on product strategy, interaction design and scalable design systems.',
+        skills: ['Product design','Design systems','Prototyping'],
         linkedin: '#',
         email: 'mailto:daria@virtup.example'
       },
       liam: {
         name: 'Liam O.',
         role: 'Frontend Engineer',
-        avatar: 'https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=bbb',
-        bio: 'Frontend engineer specialized in accessible, high-performance interfaces and component-driven development.',
-        skills: ['React','TypeScript','Performance','Accessibility'],
+        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md2" x1="0" x2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md2)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">LO</text></svg>`,
+        bio: 'Frontend engineer specialized in fast, accessible, component-driven interfaces.',
+        skills: ['React','TypeScript','Performance'],
         linkedin: '#',
         email: 'mailto:liam@virtup.example'
       },
       nina: {
         name: 'Nina R.',
         role: 'Backend & Cloud',
-        avatar: 'https://images.unsplash.com/photo-1544723795-3fb6469f5b39?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ccc',
-        bio: 'Backend and cloud engineer building resilient APIs and scalable serverless systems for rapid growth.',
-        skills: ['Serverless','APIs','AWS','Security'],
+        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md3" x1="0" x2="1"><stop offset="0" stop-color="#ffb3b3"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md3)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">NR</text></svg>`,
+        bio: 'Backend and cloud engineer building resilient APIs and scalable serverless systems.',
+        skills: ['Serverless','APIs','AWS'],
         linkedin: '#',
         email: 'mailto:nina@virtup.example'
       },
       oleg: {
         name: 'Oleg P.',
         role: 'Growth',
-        avatar: 'https://images.unsplash.com/photo-1545996124-0d6f36a7c1e3?q=80&w=800&auto=format&fit=crop&ixlib=rb-4.0.3&s=ddd',
-        bio: 'Growth lead optimizing acquisition funnels, experimentation and analytics to drive measurable user growth.',
-        skills: ['Acquisition','Analytics','Experimentation','CRO'],
+        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md4" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md4)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">OP</text></svg>`,
+        bio: 'Growth lead focused on acquisition funnels, experiments and analytics.',
+        skills: ['Acquisition','Analytics','Experimentation'],
         linkedin: '#',
         email: 'mailto:oleg@virtup.example'
       }
     };
 
+    /* Modal controls */
     const modal = document.getElementById('teamModal');
+    const modalAvatar = document.getElementById('modalAvatarContainer');
     const modalTitle = document.getElementById('modalTitle');
     const modalRole = document.getElementById('modalRole');
     const modalBio = document.getElementById('modalBio');
-    const modalAvatar = document.getElementById('modalAvatar');
     const modalSkills = document.getElementById('modalSkills');
     const modalLinkedIn = document.getElementById('modalLinkedIn');
     const modalEmail = document.getElementById('modalEmail');
     const modalClose = document.querySelector('.modal-close');
 
-    function openMember(memberKey){
-      const data = TEAM[memberKey];
+    function openModal(key){
+      const data = TEAM[key];
       if(!data) return;
+      modal.classList.add('open');
       modal.setAttribute('aria-hidden','false');
+      modalAvatar.innerHTML = data.svg;
       modalTitle.textContent = data.name;
       modalRole.textContent = data.role;
       modalBio.textContent = data.bio;
-      modalAvatar.src = data.avatar;
-      modalAvatar.alt = data.name + ' — ' + data.role;
+      modalSkills.innerHTML = '';
+      data.skills.forEach(s => { const el = document.createElement('span'); el.className='modal-skill'; el.textContent = s; modalSkills.appendChild(el); });
       modalLinkedIn.href = data.linkedin;
       modalEmail.href = data.email;
-
-      modalSkills.innerHTML = '';
-      data.skills.forEach(s => {
-        const sp = document.createElement('span');
-        sp.className = 'skill';
-        sp.textContent = s;
-        modalSkills.appendChild(sp);
-      });
-
-      // move focus into modal
       modalClose.focus();
       document.body.style.overflow = 'hidden';
     }
 
     function closeModal(){
+      modal.classList.remove('open');
       modal.setAttribute('aria-hidden','true');
       document.body.style.overflow = '';
-      // return focus to last focused element if possible
+      // restore focus to first member
       const last = document.querySelector('.member-card[aria-pressed="true"]') || document.querySelector('.member-card');
-      if(last) {
-        last.focus();
-        last.setAttribute('aria-pressed','false');
-      }
+      if(last){ last.focus(); last.setAttribute('aria-pressed','false'); }
     }
 
-    // attach handlers for profile buttons
+    // clicks & keyboard on member cards
+    document.querySelectorAll('.member-card').forEach(card => {
+      card.addEventListener('click', (e) => {
+        if (e.target.closest('.view-profile')) return; // profile btn handles too
+        const key = card.dataset.member;
+        document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
+        card.setAttribute('aria-pressed','true');
+        openModal(key);
+      });
+      card.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
+      });
+    });
+
     document.querySelectorAll('.view-profile').forEach(btn => {
       btn.addEventListener('click', (e) => {
         const key = btn.dataset.member;
         document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
         const card = document.querySelector(`.member-card[data-member="${key}"]`);
         if(card) card.setAttribute('aria-pressed','true');
-        openMember(key);
+        openModal(key);
       });
     });
 
-    // allow clicking the whole card and keyboard activation
-    document.querySelectorAll('.member-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        // ignore clicks if target was interactive element handled elsewhere
-        if(e.target.closest('.view-profile')) return;
-        const key = card.dataset.member;
-        document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
-        card.setAttribute('aria-pressed','true');
-        openMember(key);
-      });
-      card.addEventListener('keydown', (e) => {
-        if(e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          card.click();
-        }
-      });
-    });
-
-    // close modal handlers
     modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-      if(e.target === modal) closeModal(); // backdrop click
-    });
-    document.addEventListener('keydown', (e) => {
-      if(e.key === 'Escape' && modal.getAttribute('aria-hidden') === 'false') closeModal();
-    });
-
-    // ensure initial mobile nav state
-    if(window.innerWidth < 980){
-      nav.style.display = 'none';
-    }
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
   </script>
 </body>
 </html>
