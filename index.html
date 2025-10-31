@@ -362,7 +362,7 @@
     </section>
   </main>
 
-  <!-- Modal -->
+  <!-- Modal (no LinkedIn / Email buttons) -->
   <div id="teamModal" class="team-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
     <div class="modal-card" role="document">
       <button class="modal-close" aria-label="Close modal">&times;</button>
@@ -372,10 +372,6 @@
         <div id="modalRole" class="muted"></div>
         <p id="modalBio" class="muted" style="margin-top:12px"></p>
         <div id="modalSkills" style="margin-top:12px"></div>
-        <div style="margin-top:16px;display:flex;gap:8px">
-          <a id="modalLinkedIn" class="btn" target="_blank" rel="noopener">LinkedIn</a>
-          <a id="modalEmail" class="btn">Email</a>
-        </div>
       </div>
     </div>
   </div>
@@ -383,7 +379,7 @@
   <footer class="container" role="contentinfo" style="padding:28px 0 60px">
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
       <div><strong>Virtup+</strong><div class="muted">Design & engineering studio</div></div>
-      <div style="display:flex;gap:12px" class="muted"><a href="#"><i class="fa fa-twitter"></i></a><a href="#"><i class="fa fa-linkedin"></i></a><a href="#"><i class="fa fa-github"></i></a></div>
+      <!-- Bottom-right social links removed as requested -->
     </div>
   </footer>
 
@@ -438,55 +434,45 @@
       }, 1000);
     });
 
-    /* Team modal data */
+    /* Team modal data (kept, modal no link buttons) */
     const TEAM = {
       daria: {
         name: 'Daria K.',
         role: 'Design Lead',
         svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md1" x1="0" x2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md1)"/><text x="50%" y="55%" font-size="220" fill="#04232b" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">DK</text></svg>`,
         bio: 'Design lead focused on product strategy, interaction design and scalable design systems.',
-        skills: ['Product design','Design systems','Prototyping'],
-        linkedin: '#',
-        email: 'mailto:daria@virtup.example'
+        skills: ['Product design','Design systems','Prototyping']
       },
       liam: {
         name: 'Liam O.',
         role: 'Frontend Engineer',
         svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md2" x1="0" x2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md2)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">LO</text></svg>`,
         bio: 'Frontend engineer specialized in fast, accessible, component-driven interfaces.',
-        skills: ['React','TypeScript','Performance'],
-        linkedin: '#',
-        email: 'mailto:liam@virtup.example'
+        skills: ['React','TypeScript','Performance']
       },
       nina: {
         name: 'Nina R.',
         role: 'Backend & Cloud',
         svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md3" x1="0" x2="1"><stop offset="0" stop-color="#ffb3b3"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md3)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">NR</text></svg>`,
         bio: 'Backend and cloud engineer building resilient APIs and scalable serverless systems.',
-        skills: ['Serverless','APIs','AWS'],
-        linkedin: '#',
-        email: 'mailto:nina@virtup.example'
+        skills: ['Serverless','APIs','AWS']
       },
       oleg: {
         name: 'Oleg P.',
         role: 'Growth',
         svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md4" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md4)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">OP</text></svg>`,
         bio: 'Growth lead focused on acquisition funnels, experiments and analytics.',
-        skills: ['Acquisition','Analytics','Experimentation'],
-        linkedin: '#',
-        email: 'mailto:oleg@virtup.example'
+        skills: ['Acquisition','Analytics','Experimentation']
       }
     };
 
-    /* Modal controls */
+    /* Modal controls (LinkedIn & Email removed) */
     const modal = document.getElementById('teamModal');
     const modalAvatar = document.getElementById('modalAvatarContainer');
     const modalTitle = document.getElementById('modalTitle');
     const modalRole = document.getElementById('modalRole');
     const modalBio = document.getElementById('modalBio');
     const modalSkills = document.getElementById('modalSkills');
-    const modalLinkedIn = document.getElementById('modalLinkedIn');
-    const modalEmail = document.getElementById('modalEmail');
     const modalClose = document.querySelector('.modal-close');
 
     function openModal(key){
@@ -499,9 +485,12 @@
       modalRole.textContent = data.role;
       modalBio.textContent = data.bio;
       modalSkills.innerHTML = '';
-      data.skills.forEach(s => { const el = document.createElement('span'); el.className='modal-skill'; el.textContent = s; modalSkills.appendChild(el); });
-      modalLinkedIn.href = data.linkedin;
-      modalEmail.href = data.email;
+      data.skills.forEach(s => {
+        const el = document.createElement('span');
+        el.className='modal-skill';
+        el.textContent = s;
+        modalSkills.appendChild(el);
+      });
       modalClose.focus();
       document.body.style.overflow = 'hidden';
     }
@@ -510,15 +499,14 @@
       modal.classList.remove('open');
       modal.setAttribute('aria-hidden','true');
       document.body.style.overflow = '';
-      // restore focus to first member
       const last = document.querySelector('.member-card[aria-pressed="true"]') || document.querySelector('.member-card');
       if(last){ last.focus(); last.setAttribute('aria-pressed','false'); }
     }
 
-    // clicks & keyboard on member cards
+    // member card interactions
     document.querySelectorAll('.member-card').forEach(card => {
       card.addEventListener('click', (e) => {
-        if (e.target.closest('.view-profile')) return; // profile btn handles too
+        if (e.target.closest('.view-profile')) return;
         const key = card.dataset.member;
         document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
         card.setAttribute('aria-pressed','true');
