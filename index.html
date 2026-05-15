@@ -473,8 +473,8 @@
       .why-num          { background: none; -webkit-background-clip: unset; background-clip: unset; -webkit-text-fill-color: var(--accent); }
       p.lead            { font-size: 15px; }
       .eyebrow          { font-size: 12px; margin-bottom: 16px; }
-      .hero-btns        { gap: 10px; justify-content: space-between; }
-      .hero-btns .btn   { padding: 11px 16px; font-size: 14px; }
+      .hero-btns        { gap: 10px; }
+      .hero-btns .btn   { flex: 1; justify-content: center; padding: 11px 16px; font-size: 14px; }
       .services-grid    { grid-template-columns: 1fr; gap: 8px; }
       .service          { padding: 20px; }
       .why-grid         { grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -492,8 +492,8 @@
       .section-head h2  { font-size: 22px; }
       .info-item        { padding: 16px; }
       section           { padding: 36px 0; }
-      .t-out            { display: flex; }
-      .t-out .t-ok:last-child { margin-left: auto; }
+      .t-out            { display: flex; align-items: baseline; }
+      .t-out-l          { min-width: 22ch; }
     }
     @media (max-width: 380px) {
       .why-grid { grid-template-columns: 1fr; }
@@ -548,12 +548,12 @@
           </div>
           <div class="t-body">
             <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">check services --all</span></div>
-            <div class="t-out"><span class="t-ok">✔</span> Cloud infrastructure &nbsp;<span class="t-ok">online</span></div>
-            <div class="t-out"><span class="t-ok">✔</span> Monitoring &amp; alerts &nbsp;&nbsp;<span class="t-ok">active</span></div>
-            <div class="t-out"><span class="t-ok">✔</span> Security scans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-ok">clean</span></div>
-            <div class="t-out"><span class="t-ok">✔</span> Backup systems &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="t-ok">synced</span></div>
+            <div class="t-out"><span class="t-out-l"><span class="t-ok">✔</span> Cloud infrastructure &nbsp;</span><span class="t-ok">online</span></div>
+            <div class="t-out"><span class="t-out-l"><span class="t-ok">✔</span> Monitoring &amp; alerts &nbsp;&nbsp;</span><span class="t-ok">active</span></div>
+            <div class="t-out"><span class="t-out-l"><span class="t-ok">✔</span> Security scans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-ok">clean</span></div>
+            <div class="t-out"><span class="t-out-l"><span class="t-ok">✔</span> Backup systems &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-ok">synced</span></div>
             <div class="t-line" style="margin-top:6px"><span class="t-prompt">$</span><span class="t-cmd">uptime</span></div>
-            <div class="t-out">99.9% availability <span class="cursor"></span></div>
+            <div class="t-out">99.9% availability &nbsp;<span class="cursor"></span></div>
           </div>
         </div>
       </div>
