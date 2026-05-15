@@ -364,16 +364,17 @@
       border-color: rgba(110,231,183,.38);
       background: rgba(110,231,183,.03);
     }
-    .form-row { display: flex; gap: 10px; }
-    .form-stack { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+    .form-row { display: flex; gap: 12px; }
+    .form-stack { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
     .form-actions {
       display: flex;
       align-items: center;
       justify-content: space-between;
-      margin-top: 12px;
+      margin-top: 20px;
       gap: 12px;
       flex-wrap: wrap;
     }
+    .form-actions > div { display: flex; gap: 8px; }
     .contact-info { display: flex; flex-direction: column; gap: 12px; }
     .info-item {
       display: flex; gap: 14px; align-items: flex-start;
@@ -492,8 +493,9 @@
       .section-head h2  { font-size: 22px; }
       .info-item        { padding: 16px; }
       section           { padding: 36px 0; }
-      .t-out            { display: flex; align-items: baseline; }
+      .t-out            { display: flex; align-items: center; gap: 6px; }
       .t-out-l          { min-width: 22ch; }
+      .cursor           { height: 0.8em; width: 6px; }
     }
     @media (max-width: 380px) {
       .why-grid { grid-template-columns: 1fr; }
@@ -553,7 +555,7 @@
             <div class="t-out"><span class="t-out-l"><span class="t-ok">✔</span> Security scans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-ok">clean</span></div>
             <div class="t-out"><span class="t-out-l"><span class="t-ok">✔</span> Backup systems &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span><span class="t-ok">synced</span></div>
             <div class="t-line" style="margin-top:6px"><span class="t-prompt">$</span><span class="t-cmd">uptime</span></div>
-            <div class="t-out">99.9% availability &nbsp;<span class="cursor"></span></div>
+            <div class="t-out">99.9% availability <span class="cursor"></span></div>
           </div>
         </div>
       </div>
@@ -659,7 +661,7 @@
                 <small class="muted">We typically respond within one business day.</small>
                 <div>
                   <button class="btn btn-primary" type="submit">Send message</button>
-                  <button class="btn" type="reset" style="margin-left:8px">Reset</button>
+                  <button class="btn" type="reset">Reset</button>
                 </div>
               </div>
               <div id="formStatus" aria-live="polite" style="margin-top:12px;font-size:14px"></div>
