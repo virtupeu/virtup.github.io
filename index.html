@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Virtup+ — Refined Single File</title>
+  <title>Virtup+ — IT Services</title>
 
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -19,6 +19,7 @@
       font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
     *{box-sizing:border-box}
+    html{scroll-padding-top:100px}
     html,body{height:100%}
     body{
       margin:0;
@@ -35,7 +36,7 @@
 
     /* Header */
     header{position:sticky;top:14px;z-index:50;display:flex;justify-content:center;padding:12px 0}
-    .nav-wrap{display:flex;align-items:center;gap:16px;width:100%;max-width:var(--max-w);padding:10px;border-radius:20px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border);box-shadow:0 8px 28px rgba(0,0,0,0.5)}
+    .nav-wrap{display:flex;align-items:center;gap:16px;width:100%;max-width:var(--max-w);padding:10px;border-radius:20px;background:rgba(10,16,36,0.88);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--glass-border);box-shadow:0 8px 28px rgba(0,0,0,0.5)}
     .logo{display:flex;align-items:center;gap:12px;font-weight:800}
     .logo .mark{width:44px;height:44px;border-radius:10px;background:linear-gradient(135deg,var(--accent),var(--accent-2));display:flex;align-items:center;justify-content:center;color:#04232b;font-weight:800}
     nav{margin-left:auto;display:flex;gap:12px;align-items:center}
@@ -55,69 +56,53 @@
     .btn{padding:11px 18px;border-radius:12px;border:0;background:rgba(255,255,255,0.03);color:var(--muted);font-weight:700;cursor:pointer}
     .btn-primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#04232b}
     .sub-visual{flex:1;min-width:300px;display:flex;align-items:center;justify-content:center}
-    .glass{width:100%;max-width:520px;padding:16px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.05);box-shadow:0 18px 40px rgba(0,0,0,0.6)}
+    .glass{width:100%;max-width:520px;padding:20px;border-radius:16px;background:linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02));border:1px solid rgba(255,255,255,0.05);box-shadow:0 18px 40px rgba(0,0,0,0.6)}
+
+    /* Terminal widget */
+    .terminal{font-family:'Courier New',monospace;font-size:13px}
+    .terminal-bar{display:flex;gap:6px;align-items:center;margin-bottom:14px}
+    .dot{width:12px;height:12px;border-radius:50%}
+    .terminal-body{display:flex;flex-direction:column;gap:8px}
+    .line{display:flex;gap:8px;align-items:flex-start}
+    .prompt{color:var(--accent);font-weight:700;flex-shrink:0}
+    .cmd{color:#e9f2ff}
+    .out{color:rgba(255,255,255,0.55);padding-left:16px}
+    .blink{display:inline-block;width:8px;height:14px;background:var(--accent);animation:blink 1.1s step-end infinite;vertical-align:text-bottom}
+    @keyframes blink{0%,100%{opacity:1}50%{opacity:0}}
 
     /* Sections */
     section{padding:56px 0}
-    .section-title{display:flex;flex-direction:column;gap:6px;margin-bottom:20px}
+    .section-title{display:flex;flex-direction:column;gap:6px;margin-bottom:28px}
     .section-title h2{margin:0;font-size:20px}
     .grid{display:grid;gap:18px}
 
     /* Services */
-    .services .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    .service{padding:16px;border-radius:12px;background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);transition:transform .22s ease,box-shadow .22s}
-    .service:hover{transform:translateY(-8px);box-shadow:0 14px 36px rgba(0,0,0,0.6)}
+    .services-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr))}
+    .service{padding:20px;border-radius:14px;background:rgba(255,255,255,0.03);border:1px solid var(--glass-border);transition:transform .22s ease,box-shadow .22s}
+    .service:hover{transform:translateY(-6px);box-shadow:0 14px 36px rgba(0,0,0,0.6)}
+    .service-icon{font-size:22px;margin-bottom:10px;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
+    .service strong{display:block;margin-bottom:6px;font-size:15px}
 
-    /* Portfolio: use SVG placeholders */
-    .portfolio-grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    .work{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--glass-border);background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01))}
-    .work svg{display:block;width:100%;height:200px}
-    .overlay{position:absolute;inset:0;padding:16px;display:flex;flex-direction:column;justify-content:flex-end;background:linear-gradient(180deg, rgba(0,0,0,0) 30%, rgba(0,0,0,0.55) 100%);transform:translateY(28px);transition:transform .22s}
-    .work:hover .overlay{transform:translateY(0)}
-    .tag{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.03);margin-right:8px}
-
-    /* Testimonials */
-    .testimonials .grid{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
-    .testimonial{padding:14px;border-radius:12px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid var(--glass-border)}
-    .testim-meta{display:flex;gap:12px;align-items:center}
-    .avatar{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#04232b;font-weight:800}
-
-    /* Team polished */
-    .polished-team{grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
-    .member-card{display:flex;flex-direction:column;padding:12px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border:1px solid rgba(255,255,255,0.05);cursor:pointer;transition:transform .22s,box-shadow .22s;outline:none}
-    .member-card:focus{box-shadow:0 12px 36px rgba(0,0,0,0.6);transform:translateY(-6px)}
-    .avatar-wrap{height:160px;border-radius:12px;overflow:hidden;position:relative;border:3px solid transparent;background:linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.01))}
-    .avatar-wrap::after{content:'';position:absolute;inset:-3px;border-radius:14px;background:linear-gradient(90deg,var(--accent),var(--accent-2));opacity:0;transition:opacity .22s}
-    .member-card:hover .avatar-wrap::after{opacity:.12}
-    .avatar-wrap svg{width:100%;height:100%;display:block}
-    .member-body{display:flex;flex-direction:column;padding-top:10px;gap:8px}
-    .member-name{font-weight:700}
-    .member-role{color:rgba(255,255,255,0.65);font-size:13px}
-    .skill{font-size:12px;padding:6px 8px;border-radius:999px;background:rgba(255,255,255,0.02);color:var(--muted);margin-right:6px}
-
-    .member-actions{display:flex;align-items:center;justify-content:space-between;margin-top:6px}
-    .link-btn{background:transparent;border:0;color:var(--accent-2);font-weight:700;cursor:pointer;padding:8px;border-radius:8px}
-
-    /* Modal */
-    .team-modal{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(180deg, rgba(2,6,23,0.6), rgba(2,6,23,0.85));z-index:999;visibility:hidden;opacity:0;transition:opacity .18s,visibility .18s}
-    .team-modal.open{visibility:visible;opacity:1}
-    .modal-card{width:100%;max-width:920px;background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));border-radius:12px;padding:18px;border:1px solid var(--glass-border);box-shadow:0 30px 80px rgba(0,0,0,0.6);display:grid;grid-template-columns:320px 1fr;gap:18px;position:relative}
-    .modal-close{position:absolute;right:14px;top:12px;background:transparent;border:0;color:var(--muted);font-size:22px;cursor:pointer}
-    .modal-left svg{width:100%;height:100%;border-radius:8px;display:block}
-    .modal-right h3{margin:0 0 6px}
-    .modal-skill{font-size:13px;padding:6px 10px;border-radius:999px;background:rgba(255,255,255,0.02);margin-right:8px;margin-top:8px;display:inline-block}
+    /* Why us */
+    .why-grid{grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}
+    .why-card{padding:20px;border-radius:14px;background:linear-gradient(180deg, rgba(255,255,255,0.025), rgba(255,255,255,0.01));border:1px solid var(--glass-border);text-align:center}
+    .why-num{font-size:32px;font-weight:800;background:linear-gradient(90deg,var(--accent),var(--accent-2));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;display:block;margin-bottom:6px}
 
     /* Contact */
-    .contact-grid{grid-template-columns:1fr 420px}
     input,textarea{padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,0.06);background:rgba(255,255,255,0.02);color:inherit;width:100%}
-    .map-placeholder{border-radius:12px;min-height:320px;display:flex;align-items:center;justify-content:center;border:1px solid var(--glass-border);background:linear-gradient(135deg, rgba(125,211,252,0.03), rgba(110,231,183,0.02))}
+    input::placeholder,textarea::placeholder{color:rgba(255,255,255,0.35)}
+    input:focus,textarea:focus{outline:none;border-color:rgba(110,231,183,0.3)}
+
+    .contact-inner{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
+    .contact-info{display:flex;flex-direction:column;gap:16px}
+    .info-item{display:flex;gap:14px;align-items:flex-start;padding:16px;border-radius:12px;background:rgba(255,255,255,0.02);border:1px solid var(--glass-border)}
+    .info-icon{font-size:18px;color:var(--accent);flex-shrink:0;margin-top:2px}
 
     @media (max-width:980px){
       nav{display:none}
       .hamburger{display:inline-block}
       .hero{flex-direction:column;align-items:flex-start}
-      .contact-grid{grid-template-columns:1fr}
-      .modal-card{grid-template-columns:1fr}
+      .contact-inner{grid-template-columns:1fr}
     }
     @media (max-width:540px){
       .nav-wrap{padding:8px;border-radius:12px}
@@ -125,6 +110,7 @@
     }
 
     .muted{color:rgba(255,255,255,0.6)}
+    .divider{height:1px;background:var(--glass-border);margin:0}
   </style>
 </head>
 <body>
@@ -133,12 +119,10 @@
       <div class="logo" aria-hidden="false"><div class="mark">VP</div>Virtup+</div>
       <nav id="mainNav" aria-hidden="false">
         <a href="#services">Services</a>
-        <a href="#portfolio">Portfolio</a>
-        <a href="#testimonials">Testimonials</a>
-        <a href="#team">Team</a>
+        <a href="#why">Why us</a>
         <a href="#contact">Contact</a>
       </nav>
-      <button class="cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get Started</button>
+      <button class="cta" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in touch</button>
       <button class="hamburger" id="hamburger" aria-label="Open menu"><i class="fa fa-bars"></i></button>
     </div>
   </header>
@@ -146,240 +130,180 @@
   <main class="container">
     <section class="hero" aria-label="Hero">
       <div class="hero-left">
-        <span class="eyebrow">Digital Innovation</span>
-        <h1>Design-driven software and digital experiences that accelerate growth.</h1>
-        <p class="lead">We deliver elegant product experiences, performant frontends and resilient cloud engineering. Focused teams, measurable results.</p>
+        <span class="eyebrow">IT Services</span>
+        <h1>Reliable IT solutions for businesses of every size.</h1>
+        <p class="lead">From infrastructure and cloud to software development and support — we handle the technology so you can focus on what matters.</p>
         <div class="hero-cta">
-          <button class="btn btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Start a project</button>
-          <a class="btn" href="#portfolio">View work</a>
+          <button class="btn btn-primary" onclick="document.getElementById('contact').scrollIntoView({behavior:'smooth'})">Get in touch</button>
+          <a class="btn" href="#services">Our services</a>
         </div>
       </div>
 
       <div class="sub-visual">
         <div class="glass" aria-hidden="true">
-          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
-            <strong>Product Analytics</strong>
-            <small class="muted">Live</small>
-          </div>
-          <div style="display:grid;grid-template-columns:1fr 120px;gap:10px;align-items:center">
-            <div style="border-radius:10px;height:140px;background:linear-gradient(135deg,#071829,#0b2840);position:relative;padding:12px;color:var(--muted)">
-              <div style="position:absolute;right:12px;top:12px;background:rgba(255,255,255,0.03);padding:6px 8px;border-radius:8px;font-weight:700">v2.4</div>
-              <div style="position:absolute;left:12px;bottom:12px;font-size:13px">Revenue +38% MoM</div>
+          <div class="terminal">
+            <div class="terminal-bar">
+              <div class="dot" style="background:#ff5f56"></div>
+              <div class="dot" style="background:#ffbd2e"></div>
+              <div class="dot" style="background:#27c93f"></div>
+              <span class="muted" style="font-size:12px;margin-left:6px">virtup — system status</span>
             </div>
-            <div>
-              <div style="display:flex;flex-direction:column;gap:10px">
-                <div style="height:40px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;padding:8px 10px">Q3 Roadmap</div>
-                <div style="height:40px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;padding:8px 10px">Design system</div>
-                <div style="height:40px;border-radius:8px;background:rgba(255,255,255,0.03);display:flex;align-items:center;padding:8px 10px">Performance</div>
-              </div>
+            <div class="terminal-body">
+              <div class="line"><span class="prompt">$</span><span class="cmd">checking services...</span></div>
+              <div class="out">&#x2714; Cloud infrastructure &nbsp;&nbsp;<span style="color:var(--accent)">online</span></div>
+              <div class="out">&#x2714; Monitoring &amp; alerts &nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--accent)">active</span></div>
+              <div class="out">&#x2714; Security scans &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--accent)">clean</span></div>
+              <div class="out">&#x2714; Backup systems &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:var(--accent)">synced</span></div>
+              <div class="line" style="margin-top:4px"><span class="prompt">$</span><span class="cmd">uptime</span></div>
+              <div class="out">99.9% availability <span class="blink"></span></div>
             </div>
           </div>
         </div>
       </div>
     </section>
 
+    <div class="divider"></div>
+
     <section id="services" class="services" aria-labelledby="services-heading">
-      <div class="section-title"><h2 id="services-heading">Services</h2><div class="muted">End-to-end product & engineering</div></div>
-      <div class="grid">
-        <div class="service"><strong>Design & Product</strong><p class="muted">Product strategy, UX and scalable design systems.</p></div>
-        <div class="service"><strong>Frontend</strong><p class="muted">React, Next.js, performant component-driven interfaces.</p></div>
-        <div class="service"><strong>Cloud & Backend</strong><p class="muted">APIs, serverless, infra as code and observability.</p></div>
-        <div class="service"><strong>Growth & Analytics</strong><p class="muted">Measurement, experimentation, and data pipelines.</p></div>
+      <div class="section-title">
+        <h2 id="services-heading">Services</h2>
+        <div class="muted">What we can do for you</div>
+      </div>
+      <div class="grid services-grid">
+        <div class="service">
+          <div class="service-icon"><i class="fa fa-server"></i></div>
+          <strong>Infrastructure & Cloud</strong>
+          <p class="muted">Setup, migration, and management of cloud environments. Scalable, secure, and cost-efficient.</p>
+        </div>
+        <div class="service">
+          <div class="service-icon"><i class="fa fa-code"></i></div>
+          <strong>Software Development</strong>
+          <p class="muted">Custom web and software solutions tailored to your business processes and workflows.</p>
+        </div>
+        <div class="service">
+          <div class="service-icon"><i class="fa fa-headset"></i></div>
+          <strong>IT Support</strong>
+          <p class="muted">Responsive helpdesk and on-demand technical support to keep your team running smoothly.</p>
+        </div>
+        <div class="service">
+          <div class="service-icon"><i class="fa fa-shield-halved"></i></div>
+          <strong>Cybersecurity</strong>
+          <p class="muted">Risk assessments, security audits, and continuous monitoring to protect your business.</p>
+        </div>
+        <div class="service">
+          <div class="service-icon"><i class="fa fa-network-wired"></i></div>
+          <strong>Network & Systems</strong>
+          <p class="muted">Design and maintenance of reliable, high-performance network infrastructure.</p>
+        </div>
+        <div class="service">
+          <div class="service-icon"><i class="fa fa-chart-line"></i></div>
+          <strong>IT Consulting</strong>
+          <p class="muted">Strategic advice to align your technology investments with your business goals.</p>
+        </div>
       </div>
     </section>
 
-    <section id="portfolio" aria-labelledby="portfolio-heading">
-      <div class="section-title"><h2 id="portfolio-heading">Selected work</h2><div class="muted">Representative projects</div></div>
-      <div class="grid portfolio-grid">
-        <article class="work" aria-label="Fintech dashboard">
-          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img" aria-hidden="false">
-            <defs>
-              <linearGradient id="p1" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#6ee7b7"/></linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#p1)"/>
-            <g fill="#04232b" font-family="Inter, Arial" font-weight="700">
-              <text x="60" y="130" font-size="36">Accounts</text>
-              <rect x="60" y="150" width="360" height="18" rx="9" fill="#04232b" opacity="0.08"/>
-              <text x="60" y="240" font-size="28">Revenue</text>
-            </g>
-          </svg>
-          <div class="overlay"><h3>Fintech Dashboard</h3><div><span class="tag">React</span><span class="tag">Design</span></div></div>
-        </article>
+    <div class="divider"></div>
 
-        <article class="work" aria-label="Healthcare Platform">
-          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img">
-            <defs>
-              <linearGradient id="p2" x1="0" x2="1"><stop offset="0" stop-color="#ffd166"/><stop offset="1" stop-color="#ffb3b3"/></linearGradient>
-            </defs>
-            <rect width="100%" height="100%" fill="url(#p2)"/>
-            <text x="60" y="120" font-family="Inter, Arial" font-size="36" fill="#071829">Care Portal</text>
-          </svg>
-          <div class="overlay"><h3>Healthcare Platform</h3><div><span class="tag">Next.js</span><span class="tag">API</span></div></div>
-        </article>
-
-        <article class="work" aria-label="eCommerce Rebuild">
-          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img">
-            <defs><linearGradient id="p3" x1="0" x2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#f472b6"/></linearGradient></defs>
-            <rect width="100%" height="100%" fill="url(#p3)"/>
-            <text x="60" y="120" font-family="Inter, Arial" font-size="36" fill="#071829">Shopfront</text>
-          </svg>
-          <div class="overlay"><h3>eCommerce Rebuild</h3><div><span class="tag">Performance</span><span class="tag">UX</span></div></div>
-        </article>
-
-        <article class="work" aria-label="Analytics Hub">
-          <svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg" role="img">
-            <defs><linearGradient id="p4" x1="0" x2="1"><stop offset="0" stop-color="#60a5fa"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs>
-            <rect width="100%" height="100%" fill="url(#p4)"/>
-            <text x="60" y="120" font-family="Inter, Arial" font-size="36" fill="#071829">Analytics Hub</text>
-          </svg>
-          <div class="overlay"><h3>Analytics Hub</h3><div><span class="tag">Data</span><span class="tag">SaaS</span></div></div>
-        </article>
+    <section id="why" aria-labelledby="why-heading">
+      <div class="section-title">
+        <h2 id="why-heading">Why Virtup+</h2>
+        <div class="muted">What sets us apart</div>
+      </div>
+      <div class="grid why-grid">
+        <div class="why-card">
+          <span class="why-num">99.9%</span>
+          <strong>Uptime</strong>
+          <p class="muted" style="margin:6px 0 0;font-size:14px">Infrastructure built for reliability, with proactive monitoring around the clock.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-num">&lt;4h</span>
+          <strong>Response time</strong>
+          <p class="muted" style="margin:6px 0 0;font-size:14px">Fast, efficient support with clear SLAs so you're never left waiting.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-num">100%</span>
+          <strong>Tailored</strong>
+          <p class="muted" style="margin:6px 0 0;font-size:14px">No templates or one-size-fits-all — every solution is built around your needs.</p>
+        </div>
+        <div class="why-card">
+          <span class="why-num">&#x221E;</span>
+          <strong>Scalable</strong>
+          <p class="muted" style="margin:6px 0 0;font-size:14px">Solutions that grow with your business, from startup to enterprise.</p>
+        </div>
       </div>
     </section>
 
-    <section id="testimonials" aria-labelledby="testim-heading">
-      <div class="section-title"><h2 id="testim-heading">What clients say</h2><div class="muted">Feedback & results</div></div>
-      <div class="grid">
-        <div class="testimonial"><div class="testim-meta"><div class="avatar">AB</div><div><strong>Alicia Brown</strong><div class="muted">Head of Product, Orbit</div></div></div><p class="muted">"Virtup+ redesigned our flows and increased conversion by 24%."</p></div>
-        <div class="testimonial"><div class="testim-meta"><div class="avatar">JS</div><div><strong>Jonas Silva</strong><div class="muted">CTO, Nova</div></div></div><p class="muted">"Great engineers and designers — fast, thoughtful, and pragmatic."</p></div>
-        <div class="testimonial"><div class="testim-meta"><div class="avatar">MP</div><div><strong>Maya Patel</strong><div class="muted">Founder, Acme</div></div></div><p class="muted">"We shipped a polished MVP in weeks with their team."</p></div>
+    <div class="divider"></div>
+
+    <section id="contact" aria-labelledby="contact-heading" style="padding-top:140px">
+      <div class="section-title">
+        <h2 id="contact-heading">Get in touch</h2>
+        <div class="muted">Tell us about your IT needs</div>
       </div>
-    </section>
-
-    <!-- Polished Core Team -->
-    <section id="team" aria-labelledby="team-heading">
-      <div class="section-title"><h2 id="team-heading">Core Team</h2><div class="muted">Small, focused & cross-functional</div></div>
-
-      <div class="grid polished-team" role="list">
-        <!-- member: Daria -->
-        <article class="member-card" role="listitem" data-member="daria" tabindex="0" aria-pressed="false" aria-label="Open Daria profile">
-          <div class="avatar-wrap" aria-hidden="true">
-            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Daria avatar">
-              <defs><linearGradient id="a1" x1="0" x2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs>
-              <rect width="100%" height="100%" fill="url(#a1)"/>
-              <text x="50%" y="56%" font-size="72" fill="#04232b" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">DK</text>
-            </svg>
-          </div>
-          <div class="member-body">
-            <div class="member-name">Daria K.</div>
-            <div class="member-role">Design Lead</div>
-            <div><span class="skill">Product</span><span class="skill">Design systems</span><span class="skill">Figma</span></div>
-            <div class="member-actions">
-              <button class="link-btn view-profile" data-member="daria" aria-label="View Daria profile">View profile</button>
-              <div class="socials"><a href="#" aria-label="Daria LinkedIn"><i class="fa fa-linkedin"></i></a></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- member: Liam -->
-        <article class="member-card" role="listitem" data-member="liam" tabindex="0" aria-pressed="false" aria-label="Open Liam profile">
-          <div class="avatar-wrap">
-            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Liam avatar">
-              <defs><linearGradient id="a2" x1="0" x2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
-              <rect width="100%" height="100%" fill="url(#a2)"/>
-              <text x="50%" y="56%" font-size="72" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">LO</text>
-            </svg>
-          </div>
-          <div class="member-body">
-            <div class="member-name">Liam O.</div>
-            <div class="member-role">Frontend Engineer</div>
-            <div><span class="skill">React</span><span class="skill">TypeScript</span><span class="skill">Perf</span></div>
-            <div class="member-actions">
-              <button class="link-btn view-profile" data-member="liam" aria-label="View Liam profile">View profile</button>
-              <div class="socials"><a href="#" aria-label="Liam GitHub"><i class="fa fa-github"></i></a></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- member: Nina -->
-        <article class="member-card" role="listitem" data-member="nina" tabindex="0" aria-pressed="false" aria-label="Open Nina profile">
-          <div class="avatar-wrap">
-            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Nina avatar">
-              <defs><linearGradient id="a3" x1="0" x2="1"><stop offset="0" stop-color="#ffb3b3"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs>
-              <rect width="100%" height="100%" fill="url(#a3)"/>
-              <text x="50%" y="56%" font-size="72" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">NR</text>
-            </svg>
-          </div>
-          <div class="member-body">
-            <div class="member-name">Nina R.</div>
-            <div class="member-role">Backend & Cloud</div>
-            <div><span class="skill">Serverless</span><span class="skill">APIs</span><span class="skill">AWS</span></div>
-            <div class="member-actions">
-              <button class="link-btn view-profile" data-member="nina" aria-label="View Nina profile">View profile</button>
-              <div class="socials"><a href="#" aria-label="Nina GitHub"><i class="fa fa-github"></i></a></div>
-            </div>
-          </div>
-        </article>
-
-        <!-- member: Oleg -->
-        <article class="member-card" role="listitem" data-member="oleg" tabindex="0" aria-pressed="false" aria-label="Open Oleg profile">
-          <div class="avatar-wrap">
-            <svg viewBox="0 0 320 320" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Oleg avatar">
-              <defs><linearGradient id="a4" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs>
-              <rect width="100%" height="100%" fill="url(#a4)"/>
-              <text x="50%" y="56%" font-size="72" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">OP</text>
-            </svg>
-          </div>
-          <div class="member-body">
-            <div class="member-name">Oleg P.</div>
-            <div class="member-role">Growth</div>
-            <div><span class="skill">Acq.</span><span class="skill">Analytics</span><span class="skill">Experiment</span></div>
-            <div class="member-actions">
-              <button class="link-btn view-profile" data-member="oleg" aria-label="View Oleg profile">View profile</button>
-              <div class="socials"><a href="#" aria-label="Oleg Twitter"><i class="fa fa-twitter"></i></a></div>
-            </div>
-          </div>
-        </article>
-      </div>
-    </section>
-
-    <section id="contact" aria-labelledby="contact-heading">
-      <div class="section-title"><h2 id="contact-heading">Let’s build something</h2><div class="muted">Tell us about your project</div></div>
-      <div class="grid contact-grid">
+      <div class="contact-inner">
         <div>
           <form id="contactForm" novalidate>
             <div style="display:flex;gap:10px">
               <input name="name" placeholder="Your name" required>
               <input name="company" placeholder="Company">
             </div>
-            <div style="display:flex;gap:10px;margin-top:8px">
-              <input name="email" type="email" placeholder="Email" required>
-              <input name="budget" placeholder="Budget (optional)">
+            <div style="margin-top:10px">
+              <input name="email" type="email" placeholder="Email address" required>
             </div>
-            <textarea name="message" rows="6" placeholder="Project details, timeline..." required style="margin-top:8px"></textarea>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:8px">
-              <small class="muted">We respond within 48 hours</small>
+            <div style="margin-top:10px">
+              <input name="subject" placeholder="Subject (e.g. Cloud migration, IT support)">
+            </div>
+            <textarea name="message" rows="5" placeholder="Describe your situation or what you're looking for..." required style="margin-top:10px"></textarea>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-top:10px;flex-wrap:wrap;gap:10px">
+              <small class="muted">We typically respond within one business day.</small>
               <div style="display:flex;gap:8px">
-                <button class="btn btn-primary" type="submit">Send request</button>
+                <button class="btn btn-primary" type="submit">Send message</button>
                 <button class="btn" type="reset">Reset</button>
               </div>
             </div>
             <div id="formStatus" aria-live="polite" style="margin-top:10px"></div>
           </form>
         </div>
-        <div><div class="map-placeholder"><div><strong>Office</strong><div class="muted" style="margin-top:6px">Amsterdam · Remote</div></div></div></div>
+        <div class="contact-info">
+          <div class="info-item">
+            <i class="fa fa-envelope info-icon"></i>
+            <div>
+              <strong>Email us</strong>
+              <div class="muted" style="margin-top:4px;font-size:14px">Send us a message anytime and we'll get back to you promptly.</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fa fa-clock info-icon"></i>
+            <div>
+              <strong>Availability</strong>
+              <div class="muted" style="margin-top:4px;font-size:14px">Support available Monday–Friday. Emergency response for critical systems.</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fa fa-globe info-icon"></i>
+            <div>
+              <strong>Remote & on-site</strong>
+              <div class="muted" style="margin-top:4px;font-size:14px">We work with clients remotely and can arrange on-site visits when needed.</div>
+            </div>
+          </div>
+          <div class="info-item">
+            <i class="fa fa-handshake info-icon"></i>
+            <div>
+              <strong>Free initial consultation</strong>
+              <div class="muted" style="margin-top:4px;font-size:14px">Not sure where to start? We'll assess your situation at no cost.</div>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   </main>
 
-  <!-- Modal (no LinkedIn / Email buttons) -->
-  <div id="teamModal" class="team-modal" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="modalTitle">
-    <div class="modal-card" role="document">
-      <button class="modal-close" aria-label="Close modal">&times;</button>
-      <div class="modal-left" id="modalAvatarContainer"></div>
-      <div class="modal-right">
-        <h3 id="modalTitle"></h3>
-        <div id="modalRole" class="muted"></div>
-        <p id="modalBio" class="muted" style="margin-top:12px"></p>
-        <div id="modalSkills" style="margin-top:12px"></div>
-      </div>
-    </div>
-  </div>
-
   <footer class="container" role="contentinfo" style="padding:28px 0 60px">
+    <div class="divider" style="margin-bottom:28px"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap">
-      <div><strong>Virtup+</strong><div class="muted">Design & engineering studio</div></div>
-      <!-- Bottom-right social links removed as requested -->
+      <div><strong>Virtup+</strong><div class="muted" style="font-size:14px;margin-top:4px">IT Services</div></div>
+      <div class="muted" style="font-size:13px">&copy; 2025 Virtup+. All rights reserved.</div>
     </div>
   </footer>
 
@@ -414,122 +338,25 @@
       else if (!navOpen) nav.style.display = 'none';
     });
 
-    /* Form (demo) */
+    /* Contact form */
     const form = document.getElementById('contactForm');
     const formStatus = document.getElementById('formStatus');
     form.addEventListener('submit', (e) => {
       e.preventDefault();
       const fd = new FormData(form);
       if (!fd.get('name') || !fd.get('email') || !fd.get('message')) {
-        formStatus.textContent = 'Please complete required fields.';
+        formStatus.textContent = 'Please fill in the required fields.';
         formStatus.style.color = '#ff9b9b';
         return;
       }
       formStatus.textContent = 'Sending…';
       formStatus.style.color = 'var(--muted)';
       setTimeout(() => {
-        formStatus.textContent = 'Thanks — we received your request.';
+        formStatus.textContent = 'Message received — we\'ll be in touch soon.';
         formStatus.style.color = 'var(--accent-2)';
         form.reset();
-      }, 1000);
+      }, 900);
     });
-
-    /* Team modal data (kept, modal no link buttons) */
-    const TEAM = {
-      daria: {
-        name: 'Daria K.',
-        role: 'Design Lead',
-        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md1" x1="0" x2="1"><stop offset="0" stop-color="#6ee7b7"/><stop offset="1" stop-color="#7dd3fc"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md1)"/><text x="50%" y="55%" font-size="220" fill="#04232b" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">DK</text></svg>`,
-        bio: 'Design lead focused on product strategy, interaction design and scalable design systems.',
-        skills: ['Product design','Design systems','Prototyping']
-      },
-      liam: {
-        name: 'Liam O.',
-        role: 'Frontend Engineer',
-        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md2" x1="0" x2="1"><stop offset="0" stop-color="#c084fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md2)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">LO</text></svg>`,
-        bio: 'Frontend engineer specialized in fast, accessible, component-driven interfaces.',
-        skills: ['React','TypeScript','Performance']
-      },
-      nina: {
-        name: 'Nina R.',
-        role: 'Backend & Cloud',
-        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md3" x1="0" x2="1"><stop offset="0" stop-color="#ffb3b3"/><stop offset="1" stop-color="#ffd166"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md3)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">NR</text></svg>`,
-        bio: 'Backend and cloud engineer building resilient APIs and scalable serverless systems.',
-        skills: ['Serverless','APIs','AWS']
-      },
-      oleg: {
-        name: 'Oleg P.',
-        role: 'Growth',
-        svg: `<svg viewBox="0 0 800 800" xmlns="http://www.w3.org/2000/svg"><defs><linearGradient id="md4" x1="0" x2="1"><stop offset="0" stop-color="#7dd3fc"/><stop offset="1" stop-color="#60a5fa"/></linearGradient></defs><rect width="100%" height="100%" fill="url(#md4)"/><text x="50%" y="55%" font-size="200" fill="#071829" font-family="Inter, Arial" text-anchor="middle" dominant-baseline="middle">OP</text></svg>`,
-        bio: 'Growth lead focused on acquisition funnels, experiments and analytics.',
-        skills: ['Acquisition','Analytics','Experimentation']
-      }
-    };
-
-    /* Modal controls (LinkedIn & Email removed) */
-    const modal = document.getElementById('teamModal');
-    const modalAvatar = document.getElementById('modalAvatarContainer');
-    const modalTitle = document.getElementById('modalTitle');
-    const modalRole = document.getElementById('modalRole');
-    const modalBio = document.getElementById('modalBio');
-    const modalSkills = document.getElementById('modalSkills');
-    const modalClose = document.querySelector('.modal-close');
-
-    function openModal(key){
-      const data = TEAM[key];
-      if(!data) return;
-      modal.classList.add('open');
-      modal.setAttribute('aria-hidden','false');
-      modalAvatar.innerHTML = data.svg;
-      modalTitle.textContent = data.name;
-      modalRole.textContent = data.role;
-      modalBio.textContent = data.bio;
-      modalSkills.innerHTML = '';
-      data.skills.forEach(s => {
-        const el = document.createElement('span');
-        el.className='modal-skill';
-        el.textContent = s;
-        modalSkills.appendChild(el);
-      });
-      modalClose.focus();
-      document.body.style.overflow = 'hidden';
-    }
-
-    function closeModal(){
-      modal.classList.remove('open');
-      modal.setAttribute('aria-hidden','true');
-      document.body.style.overflow = '';
-      const last = document.querySelector('.member-card[aria-pressed="true"]') || document.querySelector('.member-card');
-      if(last){ last.focus(); last.setAttribute('aria-pressed','false'); }
-    }
-
-    // member card interactions
-    document.querySelectorAll('.member-card').forEach(card => {
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('.view-profile')) return;
-        const key = card.dataset.member;
-        document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
-        card.setAttribute('aria-pressed','true');
-        openModal(key);
-      });
-      card.addEventListener('keydown', (e) => {
-        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); card.click(); }
-      });
-    });
-
-    document.querySelectorAll('.view-profile').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        const key = btn.dataset.member;
-        document.querySelectorAll('.member-card').forEach(c => c.setAttribute('aria-pressed','false'));
-        const card = document.querySelector(`.member-card[data-member="${key}"]`);
-        if(card) card.setAttribute('aria-pressed','true');
-        openModal(key);
-      });
-    });
-
-    modalClose.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
-    document.addEventListener('keydown', (e) => { if (e.key === 'Escape' && modal.classList.contains('open')) closeModal(); });
   </script>
 </body>
 </html>
