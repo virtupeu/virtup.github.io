@@ -457,7 +457,9 @@
     @media (max-width: 820px) {
       nav, .hdr-cta  { display: none; }
       .hamburger     { display: inline-flex; }
+      .nav-row       { padding: 0; }
       .hero          { flex-direction: column; padding: 36px 24px 32px; gap: 28px; }
+      .hero-left     { width: 100%; }
       .sub-visual    { width: 100%; }
       .glass         { max-width: 100%; }
       section        { padding: 48px 0; }
@@ -471,9 +473,9 @@
       .why-num          { background: none; -webkit-background-clip: unset; background-clip: unset; -webkit-text-fill-color: var(--accent); }
       p.lead            { font-size: 15px; }
       .eyebrow          { font-size: 12px; margin-bottom: 16px; }
-      .hero-btns        { gap: 10px; }
+      .hero-btns        { gap: 10px; justify-content: space-between; }
       .hero-btns .btn   { padding: 11px 16px; font-size: 14px; }
-      .services-grid    { grid-template-columns: 1fr; gap: 12px; }
+      .services-grid    { grid-template-columns: 1fr; gap: 8px; }
       .service          { padding: 20px; }
       .why-grid         { grid-template-columns: 1fr 1fr; gap: 12px; }
       .why-card         { padding: 22px 18px; }
@@ -489,6 +491,9 @@
       .footer-inner     { padding: 40px 24px 28px; }
       .section-head h2  { font-size: 22px; }
       .info-item        { padding: 16px; }
+      section           { padding: 36px 0; }
+      .t-out            { display: flex; }
+      .t-out .t-ok:last-child { margin-left: auto; }
     }
     @media (max-width: 380px) {
       .why-grid { grid-template-columns: 1fr; }
