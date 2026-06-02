@@ -1,0 +1,7 @@
+# Design/agent skill tooling — local only, not part of the published site
+.agents/
+.claude/
+impeccable/
+skill/
+skills-lock.json
+.DS_Store
