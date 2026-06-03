@@ -18,6 +18,7 @@
   <!-- Geist: a precise modern grotesk + its mono companion for technical labels -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -257,12 +258,32 @@
     }
 
     /* ── HERO ───────────────────────────────────────────────── */
+    .hero-section { position: relative; overflow: hidden; z-index: var(--z-base); }
+    /* Earth-at-night backdrop: global networks, always on. Darkened + masked
+       so it carries depth without fighting the headline. */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(102deg, var(--bg) 6%, rgba(10,12,16,.78) 40%, rgba(10,12,16,.22) 100%),
+        linear-gradient(to top, var(--bg) 1%, transparent 52%),
+        url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1700&q=70");
+      background-size: cover;
+      background-position: center, center, 60% 42%;
+      background-repeat: no-repeat;
+      -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+    }
     .hero {
+      position: relative;
+      z-index: 1;
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
       gap: clamp(32px, 5vw, 60px);
       align-items: center;
-      padding-block: clamp(48px, 7vw, 88px) clamp(40px, 6vw, 72px);
+      padding-block: clamp(56px, 8vw, 104px) clamp(48px, 7vw, 84px);
     }
     /* right column stacks the operations panel + terminal */
     .hero-right { display: flex; flex-direction: column; gap: 16px; }
@@ -342,8 +363,8 @@
       justify-content: space-between;
       gap: 16px;
     }
-    .spark svg { width: 100%; height: 54px; overflow: visible; }
-    .spark .uptime { text-align: right; flex-shrink: 0; }
+    .spark svg { flex: 1 1 0; min-width: 0; width: 100%; height: 54px; overflow: visible; }
+    .spark .uptime { text-align: right; flex-shrink: 0; white-space: nowrap; }
     .spark .uptime b { display: block; font-size: 23px; font-weight: 700; letter-spacing: -.02em; }
     .spark .uptime span { font-family: var(--mono); font-size: 11px; color: var(--faint); }
     /* live endpoint marker on the sparkline */
@@ -424,23 +445,52 @@
     }
     @media (prefers-reduced-motion: no-preference) {
       .cursor { animation: blink 1.05s step-end infinite; }
-
-      /* Boot sequence: status lines type out in order, then the cursor blinks */
-      .js .term-body > div {
-        opacity: 0;
-        transform: translateY(3px);
-        animation: termIn .36s var(--ease-out) forwards;
-      }
-      .js .term-body > div:nth-child(1) { animation-delay: .50s; }
-      .js .term-body > div:nth-child(2) { animation-delay: .60s; }
-      .js .term-body > div:nth-child(3) { animation-delay: .70s; }
-      .js .term-body > div:nth-child(4) { animation-delay: .80s; }
-      .js .term-body > div:nth-child(5) { animation-delay: .90s; }
-      .js .term-body > div:nth-child(6) { animation-delay: 1.02s; }
-      .js .term-body > div:nth-child(7) { animation-delay: 1.12s; }
     }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-    @keyframes termIn { to { opacity: 1; transform: none; } }
+
+    /* ── STATEMENT BAND — full-bleed image, a second-read moment ── */
+    .band {
+      position: relative;
+      overflow: hidden;
+      border-block: 1px solid var(--border);
+    }
+    .band-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(95deg, var(--bg) 4%, rgba(10,12,16,.86) 42%, rgba(10,12,16,.5) 100%),
+        url("https://images.unsplash.com/photo-1597733336794-12d05021d510?auto=format&fit=crop&w=1700&q=70");
+      background-size: cover;
+      background-position: center, right center;
+      background-repeat: no-repeat;
+    }
+    .band-inner {
+      position: relative;
+      z-index: 1;
+      max-width: var(--max-w);
+      margin-inline: auto;
+      padding: clamp(72px, 11vw, 132px) 24px;
+    }
+    .band h2 {
+      font-size: clamp(1.9rem, 4.2vw, 3.1rem);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      font-weight: 700;
+      max-width: 19ch;
+      text-wrap: balance;
+    }
+    .band h2 b { color: var(--accent); font-weight: 700; }
+    .band p {
+      color: var(--muted);
+      font-size: clamp(1.02rem, 1.5vw, 1.18rem);
+      line-height: 1.62;
+      max-width: 50ch;
+      margin-top: 18px;
+      text-wrap: pretty;
+    }
+    .band .btn { margin-top: 30px; }
 
     /* ── SERVICES — one bordered grid, shared hairlines, not floating cards ── */
     .grid-panel {
@@ -696,7 +746,8 @@
     .mobile-menu {
       position: fixed;
       inset: 0;
-      z-index: var(--z-menu);
+      /* Below the header so the close (X) button stays clickable while open. */
+      z-index: calc(var(--z-header) - 5);
       padding: 92px 24px 32px;
       background: rgba(8,10,14,.96);
       backdrop-filter: blur(20px);
@@ -740,7 +791,7 @@
 
     /* ── RESPONSIVE ─────────────────────────────────────────── */
     @media (max-width: 940px) {
-      .hero { grid-template-columns: 1fr; gap: 40px; }
+      .hero { grid-template-columns: minmax(0, 1fr); gap: 40px; }
       .grid-panel { grid-template-columns: repeat(2, 1fr); }
       .grid-panel .cell:nth-child(3n) { border-right: 1px solid var(--border); }
       .grid-panel .cell:nth-child(2n) { border-right: 0; }
@@ -751,6 +802,8 @@
     }
     @media (max-width: 720px) {
       nav { display: none; }
+      /* hide the header CTA on mobile; it lives in the menu instead */
+      .nav-row > a.btn { display: none; }
       .hamburger { display: inline-flex; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
     }
@@ -802,13 +855,15 @@
 
   <main id="top">
     <!-- ── HERO ── -->
-    <section class="hero wrap" aria-label="Introduction">
+    <section class="hero-section" aria-label="Introduction">
+      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero wrap">
       <div class="hero-left">
-        <h1 class="reveal d1">IT infrastructure that stays <b>out of your way</b>.</h1>
+        <h1 class="reveal d1">The IT team your business <b>runs on</b>.</h1>
         <p class="lead reveal d2">
-          Virtup+ designs, runs, and supports the technology your business depends on:
-          cloud infrastructure, networks, security, and the helpdesk behind them.
-          You focus on the work; we keep it all running.
+          We plan, build, and look after your cloud, networks, and security,
+          then pick up the phone the moment something breaks. One team for all
+          of it, sharpest on the days it matters most.
         </p>
         <div class="hero-btns reveal d3">
           <a class="btn btn-primary" href="#contact"><i class="fa fa-paper-plane" aria-hidden="true"></i> Start a conversation</a>
@@ -861,6 +916,7 @@
           </div>
         </div>
       </div>
+      </div>
     </section>
 
     <!-- ── SERVICES ── -->
@@ -868,42 +924,53 @@
       <div class="wrap">
         <div class="section-head reveal">
           <div class="kicker">What we do</div>
-          <h2 id="svc-h">End-to-end IT, under one roof.</h2>
-          <p>Six disciplines that usually come from six vendors. We run them together, so nothing falls through the gaps between them.</p>
+          <h2 id="svc-h">Everything your IT needs, from one team.</h2>
+          <p>Most companies stitch together a separate vendor for each of these. We cover all six, so the gaps between them stop being your problem.</p>
         </div>
 
         <div class="grid-panel reveal d1">
           <a class="cell" href="#contact">
             <div class="cell-icon"><i class="fa fa-server" aria-hidden="true"></i></div>
             <h3>Infrastructure &amp; Cloud <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
-            <p>Setup, migration, and day-to-day management of cloud environments built to scale with you and stay within budget.</p>
+            <p>We move you to the cloud and run it day to day, sized to what you actually use, so you stop paying for servers sitting idle.</p>
           </a>
           <a class="cell" href="#contact">
             <div class="cell-icon"><i class="fa fa-code" aria-hidden="true"></i></div>
             <h3>Software Development <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
-            <p>Custom web and internal software shaped around how your team actually works, not a template you bend to fit.</p>
+            <p>Web apps and internal tools built around the way your team works, and maintained long after launch instead of handed over and forgotten.</p>
           </a>
           <a class="cell" href="#contact">
             <div class="cell-icon"><i class="fa fa-headset" aria-hidden="true"></i></div>
             <h3>IT Support <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
-            <p>A responsive helpdesk with clear response times, so a stuck laptop never turns into a stuck afternoon.</p>
+            <p>A helpdesk that actually picks up, with response times in writing, so a broken laptop is a ten-minute fix and not a lost morning.</p>
           </a>
           <a class="cell" href="#contact">
             <div class="cell-icon"><i class="fa fa-shield-halved" aria-hidden="true"></i></div>
             <h3>Cybersecurity <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
-            <p>Risk assessments, audits, and continuous monitoring that catch problems before they reach your business.</p>
+            <p>Audits, monitoring, and backups that assume something will go wrong, so when it does you recover in minutes rather than days.</p>
           </a>
           <a class="cell" href="#contact">
             <div class="cell-icon"><i class="fa fa-network-wired" aria-hidden="true"></i></div>
             <h3>Network &amp; Systems <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
-            <p>Reliable, fast networks designed and maintained to handle real load on the days that matter most.</p>
+            <p>Wifi and networks designed to hold up on your busiest day, with the dull maintenance handled before it ever bites.</p>
           </a>
           <a class="cell" href="#contact">
             <div class="cell-icon"><i class="fa fa-compass-drafting" aria-hidden="true"></i></div>
             <h3>IT Consulting <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
-            <p>Straight advice on where to invest and where to hold, so your technology spend tracks your business goals.</p>
+            <p>An honest read on what to fix now, what can wait, and what to stop paying for. No hardware to upsell you.</p>
           </a>
         </div>
+      </div>
+    </section>
+
+    <!-- ── STATEMENT BAND ── -->
+    <!-- Image: long-exposure fiber optics, Unsplash (Compare Fibre) -->
+    <section class="band" aria-label="What keeps your business online">
+      <div class="band-bg" aria-hidden="true"></div>
+      <div class="band-inner">
+        <h2 class="reveal">Quietly keeping <b>thousands of small things</b> working.</h2>
+        <p class="reveal d1">Patches, backups, certificates, monitoring: the unglamorous work that keeps a business online. We handle it in the background so you can forget it exists.</p>
+        <a class="btn reveal d2" href="#approach">How we work <i class="fa fa-arrow-right" aria-hidden="true" style="font-size:12px"></i></a>
       </div>
     </section>
 
@@ -912,8 +979,8 @@
       <div class="wrap">
         <div class="section-head reveal">
           <div class="kicker">How we work</div>
-          <h2 id="app-h">Built to be reliable, and to stay that way.</h2>
-          <p>The point of good IT is that you stop noticing it. Here is what that takes, and the numbers we hold ourselves to.</p>
+          <h2 id="app-h">Reliable, and built to stay that way.</h2>
+          <p>Good IT is the kind you forget you have. Here is how we get there, and the numbers we hold ourselves to.</p>
         </div>
 
         <div class="approach-grid">
@@ -922,21 +989,21 @@
               <span class="pi"><i class="fa fa-gauge-high" aria-hidden="true"></i></span>
               <div>
                 <h4>Proactive, not reactive</h4>
-                <p>We watch systems around the clock and fix the small things before they become outages you have to live through.</p>
+                <p>We watch your systems around the clock and fix small issues before they grow into the outage that ruins a Monday.</p>
               </div>
             </div>
             <div class="principle">
               <span class="pi"><i class="fa fa-comments" aria-hidden="true"></i></span>
               <div>
                 <h4>Plain language</h4>
-                <p>You get clear updates in words your whole team understands, not a ticket full of jargon and no answer.</p>
+                <p>Updates you can actually read. No jargon, no ticket black holes, just a straight answer on what happened and what we did.</p>
               </div>
             </div>
             <div class="principle">
               <span class="pi"><i class="fa fa-unlock" aria-hidden="true"></i></span>
               <div>
                 <h4>No vendor lock-in</h4>
-                <p>Your accounts, your data, your infrastructure. We build so you could walk away, which is exactly why clients stay.</p>
+                <p>Your accounts, your data, your infrastructure, all in your name. We make it easy to leave, which is mostly why nobody does.</p>
               </div>
             </div>
           </div>
@@ -969,7 +1036,7 @@
         <div class="section-head reveal">
           <div class="kicker">Get in touch</div>
           <h2 id="con-h">Tell us what's slowing you down.</h2>
-          <p>Describe your setup and what you need. We reply within one business day, and the first conversation is free.</p>
+          <p>Describe your setup and what isn't working. We reply within one business day, and the first conversation costs nothing.</p>
         </div>
 
         <div class="contact-grid">
@@ -1046,7 +1113,7 @@
       <div class="footer-grid">
         <div>
           <a class="logo" href="#top"><span class="mark">V+</span>Virtup+</a>
-          <p>Reliable IT services for businesses that depend on their technology to get through the day.</p>
+          <p>Reliable IT for businesses that can't afford technology to be the reason a day goes sideways.</p>
         </div>
         <div class="footer-col">
           <div class="footer-heading">Services</div>
