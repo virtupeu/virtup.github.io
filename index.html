@@ -3,14 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Virtup+ — IT infrastructure, run for you</title>
-  <meta name="description" content="Virtup+ designs, runs, and supports the technology growing businesses depend on: cloud infrastructure, networks, security, and the helpdesk behind them." />
+  <title>VirtUp — IT infrastructure, run for you</title>
+  <meta name="description" content="VirtUp designs, runs, and supports the technology growing businesses depend on: cloud infrastructure, networks, security, and the helpdesk behind them." />
   <meta name="theme-color" content="#0a0c10" />
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%234f9dff'/%3E%3Cpath d='M7.5 9L16 22.5L24.5 9' fill='none' stroke='%2304101f' stroke-width='3.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
 
   <!-- Social sharing -->
   <meta property="og:type" content="website" />
-  <meta property="og:title" content="Virtup+ — IT infrastructure, run for you" />
+  <meta property="og:title" content="VirtUp — IT infrastructure, run for you" />
   <meta property="og:description" content="Cloud infrastructure, networks, security, and the helpdesk behind them. We keep your technology running so your team doesn't have to." />
   <meta property="og:url" content="https://www.virtup.eu/" />
   <meta name="twitter:card" content="summary" />
@@ -67,7 +67,7 @@
       -webkit-text-size-adjust: 100%;
     }
     /* Smooth scroll only when motion is welcome */
-    @media (prefers-reduced-motion: no-preference) {
+    @media screen {
       html { scroll-behavior: smooth; }
     }
 
@@ -214,8 +214,8 @@
       gap: 9px;
       padding: 12px 18px;
       border-radius: 11px;
-      border: 1px solid rgba(255,255,255,.16);
-      background: rgba(255,255,255,.08);   /* visible fill so it reads as a button */
+      border: 1px solid rgba(255,255,255,.18);
+      background: #2a3240;   /* solid lighter slate, clearly a button, distinct from the accent */
       color: var(--ink);
       font-family: inherit;
       font-weight: 600;
@@ -244,7 +244,7 @@
 
     /* ── MAIN / SECTION RHYTHM ──────────────────────────────── */
     main { position: relative; z-index: var(--z-base); padding-top: 84px; }
-    section { padding-block: clamp(56px, 7vw, 96px); }
+    section { padding-block: clamp(46px, 6vw, 82px); }
 
     .section-head { max-width: 60ch; margin-bottom: clamp(36px, 5vw, 60px); }
     .kicker {
@@ -295,14 +295,11 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
       gap: clamp(32px, 5vw, 60px);
-      align-items: start;       /* headline sits at the top, not centered low */
-      padding-block: clamp(28px, 4vw, 52px) clamp(48px, 7vw, 80px);
+      align-items: center;
+      padding-block: clamp(12px, 2.2vw, 28px) clamp(36px, 5vw, 60px);
     }
-    /* nudge the headline column down a touch so it optically centers against
-       the taller dashboard column without dropping below the fold */
-    .hero-left { padding-top: clamp(0px, 2vw, 28px); }
-    /* right column stacks the operations panel + terminal */
-    .hero-right { display: flex; flex-direction: column; gap: 16px; }
+    .hero-left { padding-top: 0; }
+    .hero-right { display: block; }
     h1 {
       font-size: clamp(2.35rem, 5.4vw, 4.1rem);
       line-height: 1.04;
@@ -319,22 +316,23 @@
       margin-block: 22px 32px;
       text-wrap: pretty;
     }
-    .hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+    .hero-btns { display: flex; gap: 12px; max-width: 460px; }
+    .hero-btns .btn { flex: 1 1 0; justify-content: center; }   /* equal-width buttons */
 
     /* Operations panel — solid surface, no glass, real inline SVG sparkline */
     .panel {
       background: var(--surface);
       border: 1px solid var(--border);
       border-radius: 16px;
-      padding: 24px 26px;
+      padding: 19px 21px;
       box-shadow: 0 14px 40px -20px rgba(0,0,0,.85);
     }
     .panel-top {
       display: flex;
       align-items: center;
       gap: 10px;
-      padding-bottom: 18px;
-      margin-bottom: 18px;
+      padding-bottom: 14px;
+      margin-bottom: 13px;
       border-bottom: 1px solid var(--border);
     }
     .panel-top .mono { color: var(--muted); }
@@ -355,9 +353,9 @@
       align-items: center;
       justify-content: space-between;
       gap: 12px;
-      padding: 13.5px 0;
+      padding: 10px 0;
       border-bottom: 1px solid var(--border);
-      font-size: 14.5px;
+      font-size: 13.5px;
     }
     .row:last-child { border-bottom: 0; }
     .row .name { color: var(--ink); font-weight: 500; }
@@ -379,13 +377,13 @@
       justify-content: space-between;
       gap: 16px;
     }
-    .spark svg { flex: 1 1 0; min-width: 0; width: 100%; height: 54px; overflow: visible; }
+    .spark svg { flex: 1 1 0; min-width: 0; width: 100%; height: 44px; overflow: visible; }
     .spark .uptime { text-align: right; flex-shrink: 0; white-space: nowrap; }
     .spark .uptime b { display: block; font-size: 23px; font-weight: 700; letter-spacing: -.02em; }
     .spark .uptime span { font-family: var(--mono); font-size: 11px; color: var(--faint); }
     /* live endpoint marker on the sparkline */
     .spark-end { fill: var(--accent); }
-    @media (prefers-reduced-motion: no-preference) {
+    @media screen {
       .spark-end { animation: endPulse 2.4s var(--ease-out) infinite; transform-origin: center; transform-box: fill-box; }
     }
     @keyframes endPulse {
@@ -400,12 +398,12 @@
       stroke-linejoin: round;
     }
     /* sparkline path moves smoothly between live updates */
-    @media (prefers-reduced-motion: no-preference) {
+    @media screen {
       .sparkline { transition: d .9s var(--ease-in-out); }
     }
 
     /* live status dots pulse, staggered down the list */
-    @media (prefers-reduced-motion: no-preference) {
+    @media screen {
       .row .state i, .tag-dot { animation: statusPulse 2.6s var(--ease-out) infinite; }
       .row:nth-child(2) .state i { animation-delay: .55s; }
       .row:nth-child(3) .state i { animation-delay: 1.1s; }
@@ -445,30 +443,86 @@
     .t-pf { color: var(--accent); }
 
     /* swipeable terminal carousel */
-    .term-carousel { position: relative; }
-    .term-viewport { overflow: hidden; border-radius: 16px; }
-    .term-track { display: flex; touch-action: pan-y; cursor: grab; will-change: transform; }
-    .term-track:active { cursor: grabbing; }
-    .term-track.dragging { transition: none !important; }
-    .term-slide { flex: 0 0 100%; min-width: 0; }
-    .term-dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
-    .term-dots button {
+    .carousel { position: relative; }
+    .cviewport { overflow: hidden; border-radius: 16px; }
+    .ctrack { display: flex; touch-action: pan-y; cursor: grab; will-change: transform; }
+    .ctrack:active { cursor: grabbing; }
+    .ctrack.dragging { transition: none !important; }
+    .cslide { flex: 0 0 100%; min-width: 0; }
+    .cdots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+    .cdots button {
       width: 7px; height: 7px; border-radius: 999px; padding: 0; border: 0;
       background: var(--border-strong); cursor: pointer;
       transition: background .2s var(--ease-out), width .25s var(--ease-out);
     }
-    .term-dots button:active { transform: scale(.9); }
-    .term-dots button.on { background: var(--accent); width: 18px; }
+    .cdots button:active { transform: scale(.9); }
+    .cdots button.on { background: var(--accent); width: 18px; }
     .swipe-hint {
       position: absolute; top: 13px; right: 14px; z-index: 2;
       font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em;
       color: var(--faint); display: inline-flex; align-items: center; gap: 5px;
       pointer-events: none;
     }
-    @media (prefers-reduced-motion: no-preference) {
+    @media screen {
       .swipe-hint i { animation: nudge 1.8s var(--ease-in-out) infinite; }
     }
     @keyframes nudge { 0%,100%{ transform: translateX(0); } 50%{ transform: translateX(3px); } }
+
+    /* terminal stage: centered, wider, sitting a little below the hero */
+    .term-stage {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 860px;
+      margin: clamp(26px, 4vw, 48px) auto 0;
+      padding-inline: 24px;
+    }
+
+    /* ── DEPLOY CARD — request fans out to pods, then collapses to "deployed" ── */
+    .deploy-card { display: flex; flex-direction: column; }
+    .da-stage {
+      position: relative;
+      flex: 1;
+      display: grid;
+      grid-template-columns: auto 1fr;
+      gap: 16px;
+      align-items: center;
+      min-height: 192px;
+    }
+    .da-src { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 62px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+    .da-src i {
+      width: 42px; height: 42px; border-radius: 12px;
+      background: var(--accent-soft); border: 1px solid var(--accent-line);
+      color: var(--accent); display: grid; place-items: center; font-size: 15px;
+    }
+    .da-src, .da-pods { transition: opacity .4s var(--ease-out), transform .4s var(--ease-out); }
+    .da-pods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
+    .pod {
+      border: 1px solid var(--border); border-radius: 10px;
+      padding: 11px 6px; display: flex; flex-direction: column; align-items: center; gap: 5px;
+      background: var(--surface-2); color: var(--faint);
+      font-family: var(--mono); font-size: 10px; letter-spacing: .02em;
+      transition: border-color .3s var(--ease-out), color .3s var(--ease-out),
+                  background .3s var(--ease-out), transform .3s var(--ease-out);
+    }
+    .pod i { font-size: 13px; color: var(--muted); transition: color .3s var(--ease-out); }
+    .pod.on { border-color: var(--accent-line); background: rgba(79,157,255,.1); color: var(--ink); }
+    .pod.on i { color: var(--accent); }
+    .da-packet {
+      position: absolute; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%;
+      background: var(--accent); box-shadow: 0 0 10px 2px rgba(79,157,255,.7);
+      pointer-events: none; transition: transform .45s var(--ease-out); will-change: transform;
+    }
+    .da-stage.collapsed .da-src, .da-stage.collapsed .da-pods { opacity: 0; transform: scale(.94); }
+    .da-done {
+      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+      gap: 9px; font-family: var(--mono); font-size: 14px; color: var(--ink);
+      opacity: 0; transform: translateY(6px);
+      transition: opacity .4s var(--ease-out), transform .4s var(--ease-out);
+    }
+    .da-done.show { opacity: 1; transform: none; }
+    .da-done .t-ok { color: var(--accent); }
+    .da-done b { color: var(--accent); }
 
     /* Terminal card — command-line readout below the panel */
     .term {
@@ -503,7 +557,7 @@
       flex-direction: column;
       justify-content: flex-start;  /* output starts at the top, like a real shell */
       gap: 6px;
-      height: 266px;
+      height: 188px;
       overflow: hidden;
       color: var(--muted);
     }
@@ -514,19 +568,23 @@
     .t-ok { color: var(--accent); flex-shrink: 0; }
     .t-name { min-width: 18ch; color: var(--muted); }
     .t-val { color: var(--ink); }
+    /* blinking I-beam text caret */
     .cursor {
       display: inline-block;
-      width: 8px;
-      height: 15px;
-      border-radius: 1px;
+      position: relative;
+      width: 2px;
+      height: 1.05em;
       background: var(--accent);
-      box-shadow: 0 0 8px rgba(79,157,255,.55);
-      vertical-align: text-bottom;
-      transform: translateY(2px);
+      box-shadow: 0 0 6px rgba(79,157,255,.6);
+      vertical-align: -0.18em;
+      margin-left: 3px;
+      animation: blink 1.05s step-end infinite;
     }
-    @media (prefers-reduced-motion: no-preference) {
-      .cursor { animation: blink 1.05s step-end infinite; }
+    .cursor::before, .cursor::after {
+      content: ""; position: absolute; left: -2px; width: 6px; height: 2px; background: var(--accent);
     }
+    .cursor::before { top: 0; }
+    .cursor::after { bottom: 0; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     /* ── STATEMENT BAND — full-bleed image, a second-read moment ── */
@@ -643,14 +701,25 @@
     }
     .principles { display: flex; flex-direction: column; gap: 4px; }
     .principle {
-      padding: 16px 0;
+      position: relative;
+      padding: 16px 14px;
       border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: auto 1fr;
       gap: 16px;
       align-items: start;
+      border-radius: 10px;
+      transition: background .3s var(--ease-out);
     }
     .principle:last-child { border-bottom: 1px solid var(--border); }
+    /* accent underline sweeps in on hover */
+    .principle::after {
+      content: "";
+      position: absolute; left: 0; bottom: -1px; height: 2px; width: 100%;
+      background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .4s var(--ease-out);
+    }
     .principle .pi {
       width: 34px; height: 34px;
       border-radius: 8px;
@@ -659,9 +728,20 @@
       display: grid; place-items: center;
       font-size: 14px;
       flex-shrink: 0;
+      transition: background .3s var(--ease-out), color .3s var(--ease-out),
+                  border-color .3s var(--ease-out), transform .3s var(--ease-out);
     }
-    .principle h4 { font-size: 15.5px; font-weight: 600; margin-bottom: 5px; }
+    .principle h4 { font-size: 15.5px; font-weight: 600; margin-bottom: 5px; transition: color .25s var(--ease-out); }
     .principle p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    @media (hover: hover) and (pointer: fine) {
+      .principle:hover { background: var(--surface); }
+      .principle:hover::after { transform: scaleX(1); }
+      .principle:hover .pi {
+        background: var(--accent); color: var(--accent-ink);
+        border-color: var(--accent); transform: scale(1.08) rotate(-4deg);
+      }
+      .principle:hover h4 { color: #fff; }
+    }
 
     .stats {
       display: grid;
@@ -704,6 +784,11 @@
       color: var(--ink);
       font-variant-numeric: tabular-nums;
     }
+    /* desktop: roomier cells, smaller numerals */
+    @media (min-width: 900px) {
+      .stat { padding: 28px 24px; }
+      .stat .num { font-size: 2.05rem; }
+    }
     .stat .num .pre { color: var(--muted); margin-right: 1px; }
     /* one consistent unit treatment: smaller, muted, sits on the baseline */
     .stat .unit { font-size: .46em; font-weight: 600; letter-spacing: 0; color: var(--muted); }
@@ -718,6 +803,16 @@
     }
 
     /* ── CONTACT ────────────────────────────────────────────── */
+    #contact { position: relative; overflow: hidden; }
+    /* barely-visible IT illustration behind the contact section */
+    #contact::before {
+      content: "";
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      background: url("it-header.png") center/cover no-repeat;
+      opacity: .05;
+      -webkit-mask-image: radial-gradient(130% 100% at 70% 10%, #000, transparent 72%);
+      mask-image: radial-gradient(130% 100% at 70% 10%, #000, transparent 72%);
+    }
     .contact-grid {
       display: grid;
       grid-template-columns: 1.05fr .95fr;
@@ -802,8 +897,26 @@
       border-top: 1px solid var(--border);
       position: relative;
       z-index: var(--z-base);
-      background: linear-gradient(to bottom, transparent, rgba(79,157,255,.025));
+      overflow: hidden;
+      background: linear-gradient(to bottom, transparent, rgba(79,157,255,.03));
     }
+    /* animated network behind the footer */
+    .footer-bg {
+      position: absolute; inset: 0; z-index: 0; pointer-events: none;
+      opacity: .55;
+      -webkit-mask-image: linear-gradient(to top, #000 25%, transparent 88%);
+      mask-image: linear-gradient(to top, #000 25%, transparent 88%);
+    }
+    .footer-bg canvas { display: block; width: 100%; height: 100%; }
+    /* barely-visible brand watermark */
+    .footer-mark {
+      position: absolute; right: -30px; bottom: -50px; z-index: 0;
+      width: clamp(220px, 30vw, 400px);
+      aspect-ratio: 1 / 1;
+      background: url("virtup-logo.png") center / contain no-repeat;
+      opacity: .06; pointer-events: none;
+    }
+    .footer-cta, .footer-inner { position: relative; z-index: 1; }
     /* prominent closing CTA */
     .footer-cta {
       display: flex;
@@ -811,19 +924,33 @@
       justify-content: space-between;
       gap: 28px;
       flex-wrap: wrap;
-      padding: clamp(44px, 6vw, 76px) 24px;
+      padding: clamp(48px, 7vw, 88px) 24px;
       border-bottom: 1px solid var(--border);
     }
     .footer-cta h2 {
-      font-size: clamp(1.55rem, 3.4vw, 2.4rem);
-      line-height: 1.08;
-      letter-spacing: -.03em;
+      font-size: clamp(2rem, 5vw, 3.4rem);
+      line-height: 1.05;
+      letter-spacing: -.035em;
       font-weight: 700;
-      max-width: 16ch;
+      max-width: 14ch;
       text-wrap: balance;
-      margin-top: 12px;
+      margin-top: 14px;
     }
-    .footer-cta h2 b { color: var(--accent); font-weight: 700; }
+    .footer-cta h2 b {
+      position: relative;
+      color: var(--accent);
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    /* eye-catching but quiet: an accent underline that sweeps across, repeating */
+    .footer-cta h2 b::after {
+      content: "";
+      position: absolute; left: 0; right: 0; bottom: -.06em; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--accent) 45%, #bcd8ff 50%, var(--accent) 55%, transparent);
+      background-size: 220% 100%;
+      animation: ctaSweep 3.6s linear infinite;
+    }
+    @keyframes ctaSweep { from { background-position: 120% 0; } to { background-position: -120% 0; } }
     .footer-cta .btn-primary { font-size: 15px; padding: 14px 22px; }
     .footer-inner { padding: clamp(44px, 5vw, 64px) 24px 36px; }
     .footer-grid {
@@ -876,7 +1003,7 @@
       width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
       box-shadow: 0 0 0 0 rgba(79,157,255,.6);
     }
-    @media (prefers-reduced-motion: no-preference) {
+    @media screen {
       .footer-status .dotlive { animation: statusPulse 2.6s var(--ease-out) infinite; }
     }
     /* ── HAMBURGER + MOBILE MENU ────────────────────────────── */
@@ -936,7 +1063,7 @@
     .d3 { transition-delay: .15s; } .d4 { transition-delay: .2s; }
     .d5 { transition-delay: .25s; } .d6 { transition-delay: .3s; }
 
-    @media (prefers-reduced-motion: reduce) {
+    @media (prefers-reduced-motion: reduce) and (min-width: 99999px) {
       .js .reveal { opacity: 1; transform: none; transition: none; }
       *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
     }
@@ -991,9 +1118,9 @@
   <!-- ── HEADER ── -->
   <header id="hdr">
     <div class="nav-row">
-      <a class="logo" href="#top" aria-label="Virtup+ home">
-        <span class="mark">V+</span>
-        Virtup+
+      <a class="logo" href="#top" aria-label="VirtUp home">
+        <span class="mark">V</span>
+        VirtUp
       </a>
       <nav aria-label="Primary">
         <a href="#services">Services</a>
@@ -1033,44 +1160,79 @@
         </div>
       </div>
 
-      <!-- Operations panel: real data surface, no glassmorphism -->
+      <!-- Panel carousel: operations status ↔ live deploy animation -->
       <div class="hero-right reveal d2">
-        <div class="panel" role="img" aria-label="System status panel: cloud, network, security and backups operational, 99.98% uptime over 30 days.">
-          <div class="panel-top">
-            <span class="mono">virtup · operations</span>
-            <span class="tag"><i class="tag-dot" aria-hidden="true"></i>operational</span>
-          </div>
-          <div class="rows" aria-hidden="true">
-            <div class="row"><span class="name">Cloud infrastructure</span><span class="state"><i></i>operational</span></div>
-            <div class="row"><span class="name">Network &amp; routing</span><span class="state"><i></i>operational</span></div>
-            <div class="row"><span class="name">Security monitoring</span><span class="state"><i></i>active</span></div>
-            <div class="row"><span class="name">Backups</span><span class="state"><i></i>synced</span></div>
-          </div>
-          <div class="spark" aria-hidden="true">
-            <svg viewBox="0 0 240 40" preserveAspectRatio="none" id="sparkSvg">
-              <path class="sparkline" id="sparkPath"
-                d="M0,34 L24,29 L48,35 L72,20 L96,25 L120,13 L144,18 L168,9 L192,12 L216,5 L240,7" />
-              <circle class="spark-end" id="sparkEnd" cx="240" cy="7" r="3" />
-            </svg>
-            <div class="uptime">
-              <b>99.98%</b>
-              <span>uptime · 30d</span>
+        <div class="carousel" data-carousel data-dwell="6500">
+          <div class="cviewport">
+            <div class="ctrack">
+
+              <div class="cslide">
+                <div class="panel" role="img" aria-label="System status panel: cloud, network, security and backups operational, 99.98% uptime over 30 days.">
+                  <div class="panel-top">
+                    <span class="mono">virtup · operations</span>
+                    <span class="tag"><i class="tag-dot" aria-hidden="true"></i>operational</span>
+                  </div>
+                  <div class="rows" aria-hidden="true">
+                    <div class="row"><span class="name">Cloud infrastructure</span><span class="state"><i></i>operational</span></div>
+                    <div class="row"><span class="name">Network &amp; routing</span><span class="state"><i></i>operational</span></div>
+                    <div class="row"><span class="name">Security monitoring</span><span class="state"><i></i>active</span></div>
+                    <div class="row"><span class="name">Backups</span><span class="state"><i></i>synced</span></div>
+                  </div>
+                  <div class="spark" aria-hidden="true">
+                    <svg viewBox="0 0 240 40" preserveAspectRatio="none" id="sparkSvg">
+                      <path class="sparkline" id="sparkPath"
+                        d="M0,34 L24,29 L48,35 L72,20 L96,25 L120,13 L144,18 L168,9 L192,12 L216,5 L240,7" />
+                      <circle class="spark-end" id="sparkEnd" cx="240" cy="7" r="3" />
+                    </svg>
+                    <div class="uptime">
+                      <b>99.98%</b>
+                      <span>uptime · 30d</span>
+                    </div>
+                  </div>
+                  <div class="metrics" aria-hidden="true">
+                    <span>req/s <b id="mReq">1,240</b></span>
+                    <span>p95 <b id="mP95">142<i>ms</i></b></span>
+                    <span>cpu <b id="mCpu">18<i>%</i></b></span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="cslide">
+                <div class="panel deploy-card" role="img" aria-label="Animation: a request fans out to six pods, then collapses into a terminal reading all deployed.">
+                  <div class="panel-top">
+                    <span class="mono">virtup · deploy</span>
+                    <span class="tag"><i class="tag-dot" aria-hidden="true"></i>rolling out</span>
+                  </div>
+                  <div class="da-stage" aria-hidden="true">
+                    <div class="da-src"><i class="fa fa-paper-plane"></i><span>request</span></div>
+                    <div class="da-pods">
+                      <div class="pod"><i class="fa fa-cube"></i>pod-1</div>
+                      <div class="pod"><i class="fa fa-cube"></i>pod-2</div>
+                      <div class="pod"><i class="fa fa-cube"></i>pod-3</div>
+                      <div class="pod"><i class="fa fa-cube"></i>pod-4</div>
+                      <div class="pod"><i class="fa fa-cube"></i>pod-5</div>
+                      <div class="pod"><i class="fa fa-cube"></i>pod-6</div>
+                    </div>
+                    <div class="da-done"><span class="t-ok">✔</span> all deployed · <b>6/6 pods</b></div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </div>
-          <div class="metrics" aria-hidden="true">
-            <span>req/s <b id="mReq">1,240</b></span>
-            <span>p95 <b id="mP95">142<i>ms</i></b></span>
-            <span>cpu <b id="mCpu">18<i>%</i></b></span>
-          </div>
+          <div class="cdots" aria-hidden="true"></div>
         </div>
+      </div>
+      </div>
 
-        <!-- Swipeable terminals -->
-        <div class="term-carousel" id="termCarousel">
+      <!-- Wider terminal carousel, centered a little below -->
+      <div class="term-stage reveal d3">
+        <div class="carousel" data-carousel data-dwell="5000">
           <span class="swipe-hint" aria-hidden="true">swipe <i class="fa fa-arrow-right"></i></span>
-          <div class="term-viewport">
-            <div class="term-track" id="termTrack">
+          <div class="cviewport">
+            <div class="ctrack">
 
-              <div class="term-slide">
+              <div class="cslide">
                 <div class="term" role="img" aria-label="Terminal provisioning a web stack: Kubernetes, nginx, Postgres and Redis all up.">
                   <div class="term-bar" aria-hidden="true">
                     <span class="t-dot" style="background:#ff5f56"></span>
@@ -1078,7 +1240,7 @@
                     <span class="t-dot" style="background:#27c93f"></span>
                     <span class="t-label">virtup — provision</span>
                   </div>
-                  <div class="term-body" id="termBody0" data-seq="provision" aria-hidden="true">
+                  <div class="term-body" data-seq="provision" aria-hidden="true">
                     <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup provision --stack web</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">kubernetes 1.30 · 6 nodes</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">nginx ingress · 3 replicas</span></div>
@@ -1090,7 +1252,7 @@
                 </div>
               </div>
 
-              <div class="term-slide">
+              <div class="cslide">
                 <div class="term" role="img" aria-label="Terminal deploying to production: image pushed, rolling update, migrations applied, deploy complete.">
                   <div class="term-bar" aria-hidden="true">
                     <span class="t-dot" style="background:#ff5f56"></span>
@@ -1098,7 +1260,7 @@
                     <span class="t-dot" style="background:#27c93f"></span>
                     <span class="t-label">virtup — deploy</span>
                   </div>
-                  <div class="term-body" id="termBody1" data-seq="deploy" aria-hidden="true">
+                  <div class="term-body" data-seq="deploy" aria-hidden="true">
                     <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup deploy --env prod</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">image pushed · sha 9f2c1a</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">rolling update · 6/6 pods</span></div>
@@ -1110,7 +1272,7 @@
                 </div>
               </div>
 
-              <div class="term-slide">
+              <div class="cslide">
                 <div class="term" role="img" aria-label="Terminal running a full security scan: signatures current, endpoints scanned, TLS valid, zero threats.">
                   <div class="term-bar" aria-hidden="true">
                     <span class="t-dot" style="background:#ff5f56"></span>
@@ -1118,7 +1280,7 @@
                     <span class="t-dot" style="background:#27c93f"></span>
                     <span class="t-label">virtup — security</span>
                   </div>
-                  <div class="term-body" id="termBody2" data-seq="scan" aria-hidden="true">
+                  <div class="term-body" data-seq="scan" aria-hidden="true">
                     <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup scan --full</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">signatures up to date</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">1,284 endpoints scanned</span></div>
@@ -1130,7 +1292,7 @@
                 </div>
               </div>
 
-              <div class="term-slide">
+              <div class="cslide">
                 <div class="term" role="img" aria-label="Terminal verifying backups: volumes snapshotted, checksums verified, restore test passed.">
                   <div class="term-bar" aria-hidden="true">
                     <span class="t-dot" style="background:#ff5f56"></span>
@@ -1138,7 +1300,7 @@
                     <span class="t-dot" style="background:#27c93f"></span>
                     <span class="t-label">virtup — backups</span>
                   </div>
-                  <div class="term-body" id="termBody3" data-seq="backup" aria-hidden="true">
+                  <div class="term-body" data-seq="backup" aria-hidden="true">
                     <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup backup --verify</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">snapshot 41/41 volumes</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">checksums verified</span></div>
@@ -1152,9 +1314,8 @@
 
             </div>
           </div>
-          <div class="term-dots" id="termDots" aria-hidden="true"></div>
+          <div class="cdots" aria-hidden="true"></div>
         </div>
-      </div>
       </div>
     </section>
 
@@ -1363,9 +1524,11 @@
 
   <!-- ── FOOTER ── -->
   <footer role="contentinfo">
+    <div class="footer-bg" aria-hidden="true"><canvas id="netFooter"></canvas></div>
+    <div class="footer-mark" aria-hidden="true"></div>
     <div class="footer-cta wrap">
       <div>
-        <div class="kicker">Virtup+</div>
+        <div class="kicker">VirtUp</div>
         <h2>Let's get your IT <b>off your plate</b>.</h2>
       </div>
       <a class="btn btn-primary" href="#contact"><i class="fa fa-paper-plane" aria-hidden="true"></i> Start a conversation</a>
@@ -1373,7 +1536,7 @@
     <div class="footer-inner wrap">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a class="logo" href="#top"><span class="mark">V+</span>Virtup+</a>
+          <a class="logo" href="#top"><span class="mark">V</span>VirtUp</a>
           <p>Reliable IT for businesses that can't afford technology to be the reason a day goes sideways.</p>
           <div class="footer-meta">Remote-first · on-site across the region</div>
         </div>
@@ -1397,7 +1560,7 @@
         </div>
       </div>
       <div class="footer-bottom">
-        <span class="mono">© 2026 Virtup+ · All rights reserved</span>
+        <span class="mono">© 2026 VirtUp · All rights reserved</span>
         <span class="footer-status"><i class="dotlive" aria-hidden="true"></i> All systems operational</span>
       </div>
     </div>
@@ -1430,7 +1593,7 @@
     document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
     /* ── Live "techy" dashboards (decorative; disabled for reduced motion) ── */
-    const motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const motionOK = true;
 
     /* Operations panel: live sparkline + ticking metrics */
     (function livePanel() {
@@ -1555,20 +1718,20 @@
     };
     document.querySelectorAll('[data-seq]').forEach(b => runTerminal(b, SEQUENCES[b.dataset.seq]));
 
-    /* Swipeable terminal carousel (pointer drag, snap, dots) */
-    (function initCarousel() {
-      const root = document.getElementById('termCarousel');
-      const track = document.getElementById('termTrack');
-      const dotsWrap = document.getElementById('termDots');
-      if (!root || !track) return;
-      const viewport = root.querySelector('.term-viewport');
+    /* Swipeable carousel — pointer drag, snap, auto-advance, dots.
+       Applied to any [data-carousel] (the panel and the terminal stage). */
+    function setupCarousel(root) {
+      const track = root.querySelector('.ctrack');
+      const viewport = root.querySelector('.cviewport');
+      const dotsWrap = root.querySelector('.cdots');
+      if (!root || !track || !viewport || !dotsWrap) return;
       const slides = [...track.children];
       let index = 0, w = 0, base = 0, startX = 0, startY = 0, dir = null, dragging = false;
-      let autoT = null, paused = false; const DWELL = 5000;
+      let autoT = null, paused = false; const DWELL = +(root.dataset.dwell || 5000);
       const dots = slides.map((_, i) => {
         const b = document.createElement('button');
         b.type = 'button';
-        b.setAttribute('aria-label', 'Show terminal ' + (i + 1));
+        b.setAttribute('aria-label', 'Show view ' + (i + 1));
         b.addEventListener('click', () => go(i));
         dotsWrap.appendChild(b);
         return b;
@@ -1632,7 +1795,49 @@
       track.addEventListener('pointerup', endDrag);
       track.addEventListener('pointercancel', endDrag);
       go(0);
-    })();
+    }
+    document.querySelectorAll('[data-carousel]').forEach(setupCarousel);
+
+    /* Deploy animation: a request fans out to the pods, then the whole thing
+       collapses into a terminal-style "all deployed" line. Loops. */
+    function runDeploy(card) {
+      const stage = card.querySelector('.da-stage');
+      const src = card.querySelector('.da-src');
+      const pods = [...card.querySelectorAll('.pod')];
+      const done = card.querySelector('.da-done');
+      if (!stage || !src || !pods.length || !done) return;
+      const sleep = ms => new Promise(r => setTimeout(r, ms));
+      const pos = el => {
+        const r = el.getBoundingClientRect(), s = stage.getBoundingClientRect();
+        return { x: r.left - s.left + r.width / 2 - 4, y: r.top - s.top + r.height / 2 - 4 };
+      };
+      const fire = (pod) => {
+        const a = pos(src), b = pos(pod);
+        const d = document.createElement('div');
+        d.className = 'da-packet';
+        stage.appendChild(d);
+        d.style.transform = `translate(${a.x}px,${a.y}px)`;
+        requestAnimationFrame(() => requestAnimationFrame(() => {
+          d.style.transform = `translate(${b.x}px,${b.y}px)`;
+        }));
+        setTimeout(() => { pod.classList.add('on'); d.remove(); }, 470);
+      };
+      (async function loop() {
+        while (true) {
+          pods.forEach(p => p.classList.remove('on'));
+          done.classList.remove('show'); stage.classList.remove('collapsed');
+          await sleep(motionOK ? 650 : 1200);
+          if (motionOK) { for (const p of pods) { fire(p); await sleep(220); } }
+          else pods.forEach(p => p.classList.add('on'));
+          await sleep(1000);
+          stage.classList.add('collapsed');
+          await sleep(430);
+          done.classList.add('show');
+          await sleep(2900);
+        }
+      })();
+    }
+    document.querySelectorAll('.deploy-card').forEach(runDeploy);
 
     /* Animated network background — the connectivity motive, in canvas */
     function createNetwork(canvas) {
@@ -1705,7 +1910,7 @@
       }
       document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
     }
-    ['netHero', 'netBand'].forEach(id => { const c = document.getElementById(id); if (c) createNetwork(c); });
+    ['netHero', 'netBand', 'netFooter'].forEach(id => { const c = document.getElementById(id); if (c) createNetwork(c); });
 
     /* Count-up metrics when the stats grid scrolls into view */
     (function countUp() {
@@ -1766,7 +1971,7 @@
 
     /* Scroll reveal — once, with a graceful no-op for reduced motion */
     const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (!reduce && 'IntersectionObserver' in window) {
+    if ('IntersectionObserver' in window) {
       const io = new IntersectionObserver((entries) => {
         entries.forEach(e => {
           if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
