@@ -63,7 +63,9 @@
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     html {
-      scroll-padding-top: 92px;
+      /* anchored sections land just under the fixed header (the section's own
+         top padding tucks behind it, so headings sit right below the bar) */
+      scroll-padding-top: 30px;
       -webkit-text-size-adjust: 100%;
     }
     /* Smooth scroll only when motion is welcome */
@@ -1079,6 +1081,9 @@
       .nav-row > a.btn { display: none; }
       .hamburger { display: inline-flex; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
+      /* more breathing room between the footer headline and the CTA button
+         once they stack on mobile */
+      .footer-cta { gap: 36px; }
       /* On a narrow, tall hero a top-down scrim reads better than the
          desktop left-to-right one, and keeps the headline legible. */
       .hero-bg::after {
