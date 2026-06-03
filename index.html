@@ -172,20 +172,14 @@
     .logo {
       display: inline-flex;
       align-items: center;
-      gap: 11px;
+      gap: 10px;
       font-weight: 700;
-      font-size: 16px;
+      font-size: 20px;
       letter-spacing: -.02em;
     }
     .mark {
-      width: 30px; height: 30px;
-      border-radius: 8px;
-      background: var(--accent);
-      color: var(--accent-ink);
-      display: grid; place-items: center;
-      font-weight: 800;
-      font-size: 13px;
-      letter-spacing: -.03em;
+      width: 34px; height: 34px;
+      background: url("virtup-mark.png") center / contain no-repeat;
       flex-shrink: 0;
     }
     nav {
@@ -473,56 +467,60 @@
       position: relative;
       z-index: 1;
       width: 100%;
-      max-width: 860px;
-      margin: clamp(26px, 4vw, 48px) auto 0;
+      max-width: 660px;
+      margin: clamp(6px, 1.4vw, 18px) auto 0;
       padding-inline: 24px;
     }
 
     /* ── DEPLOY CARD — request fans out to pods, then collapses to "deployed" ── */
     .deploy-card { display: flex; flex-direction: column; }
-    .da-stage {
-      position: relative;
-      flex: 1;
+    .da-stage { position: relative; flex: 1; padding-top: 10px; }
+    .da-flow {
       display: grid;
       grid-template-columns: auto 1fr;
       gap: 16px;
       align-items: center;
-      min-height: 192px;
     }
-    .da-src { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 62px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
+    .da-src { display: flex; flex-direction: column; align-items: center; gap: 8px; width: 58px; font-family: var(--mono); font-size: 10.5px; color: var(--muted); }
     .da-src i {
       width: 42px; height: 42px; border-radius: 12px;
       background: var(--accent-soft); border: 1px solid var(--accent-line);
       color: var(--accent); display: grid; place-items: center; font-size: 15px;
     }
-    .da-src, .da-pods { transition: opacity .4s var(--ease-out), transform .4s var(--ease-out); }
     .da-pods { display: grid; grid-template-columns: repeat(3, 1fr); gap: 9px; }
     .pod {
       border: 1px solid var(--border); border-radius: 10px;
-      padding: 11px 6px; display: flex; flex-direction: column; align-items: center; gap: 5px;
+      padding: 10px 6px; display: flex; flex-direction: column; align-items: center; gap: 5px;
       background: var(--surface-2); color: var(--faint);
       font-family: var(--mono); font-size: 10px; letter-spacing: .02em;
       transition: border-color .3s var(--ease-out), color .3s var(--ease-out),
                   background .3s var(--ease-out), transform .3s var(--ease-out);
     }
     .pod i { font-size: 13px; color: var(--muted); transition: color .3s var(--ease-out); }
-    .pod.on { border-color: var(--accent-line); background: rgba(79,157,255,.1); color: var(--ink); }
+    .pod.starting { border-color: rgba(255,206,106,.45); color: var(--muted); }
+    .pod.starting i { color: #ffce6a; animation: podPulse .7s ease-in-out infinite; }
+    .pod.on { border-color: var(--accent-line); background: rgba(79,157,255,.1); color: var(--ink); transform: translateY(-1px); }
     .pod.on i { color: var(--accent); }
+    @keyframes podPulse { 0%,100%{ opacity: 1; } 50%{ opacity: .4; } }
+    .da-count { margin-top: 14px; text-align: center; font-family: var(--mono); font-size: 11px; color: var(--faint); }
+    .da-count b { color: var(--accent); }
+    .da-flow, .da-count { transition: opacity .4s var(--ease-out), transform .4s var(--ease-out); }
     .da-packet {
       position: absolute; top: 0; left: 0; width: 8px; height: 8px; border-radius: 50%;
       background: var(--accent); box-shadow: 0 0 10px 2px rgba(79,157,255,.7);
       pointer-events: none; transition: transform .45s var(--ease-out); will-change: transform;
     }
-    .da-stage.collapsed .da-src, .da-stage.collapsed .da-pods { opacity: 0; transform: scale(.94); }
+    .da-stage.collapsed .da-flow, .da-stage.collapsed .da-count { opacity: 0; transform: scale(.95); }
     .da-done {
-      position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
-      gap: 9px; font-family: var(--mono); font-size: 14px; color: var(--ink);
+      position: absolute; inset: 0; display: flex; flex-direction: column;
+      justify-content: center; align-items: flex-start; gap: 8px; padding-left: 16px;
+      font-family: var(--mono); font-size: 13px; color: var(--ink);
       opacity: 0; transform: translateY(6px);
       transition: opacity .4s var(--ease-out), transform .4s var(--ease-out);
     }
     .da-done.show { opacity: 1; transform: none; }
+    .da-done div { display: flex; gap: 9px; align-items: baseline; }
     .da-done .t-ok { color: var(--accent); }
-    .da-done b { color: var(--accent); }
 
     /* Terminal card — command-line readout below the panel */
     .term {
@@ -568,10 +566,9 @@
     .t-ok { color: var(--accent); flex-shrink: 0; }
     .t-name { min-width: 18ch; color: var(--muted); }
     .t-val { color: var(--ink); }
-    /* blinking I-beam text caret */
+    /* blinking line caret */
     .cursor {
       display: inline-block;
-      position: relative;
       width: 2px;
       height: 1.05em;
       background: var(--accent);
@@ -580,11 +577,6 @@
       margin-left: 3px;
       animation: blink 1.05s step-end infinite;
     }
-    .cursor::before, .cursor::after {
-      content: ""; position: absolute; left: -2px; width: 6px; height: 2px; background: var(--accent);
-    }
-    .cursor::before { top: 0; }
-    .cursor::after { bottom: 0; }
     @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 
     /* ── STATEMENT BAND — full-bleed image, a second-read moment ── */
@@ -815,7 +807,7 @@
     }
     .contact-grid {
       display: grid;
-      grid-template-columns: 1.05fr .95fr;
+      grid-template-columns: 1.5fr .85fr;
       gap: clamp(36px, 5vw, 60px);
       align-items: start;
     }
@@ -1119,7 +1111,7 @@
   <header id="hdr">
     <div class="nav-row">
       <a class="logo" href="#top" aria-label="VirtUp home">
-        <span class="mark">V</span>
+        <span class="mark" aria-hidden="true"></span>
         VirtUp
       </a>
       <nav aria-label="Primary">
@@ -1204,16 +1196,23 @@
                     <span class="tag"><i class="tag-dot" aria-hidden="true"></i>rolling out</span>
                   </div>
                   <div class="da-stage" aria-hidden="true">
-                    <div class="da-src"><i class="fa fa-paper-plane"></i><span>request</span></div>
-                    <div class="da-pods">
-                      <div class="pod"><i class="fa fa-cube"></i>pod-1</div>
-                      <div class="pod"><i class="fa fa-cube"></i>pod-2</div>
-                      <div class="pod"><i class="fa fa-cube"></i>pod-3</div>
-                      <div class="pod"><i class="fa fa-cube"></i>pod-4</div>
-                      <div class="pod"><i class="fa fa-cube"></i>pod-5</div>
-                      <div class="pod"><i class="fa fa-cube"></i>pod-6</div>
+                    <div class="da-flow">
+                      <div class="da-src"><i class="fa fa-cloud-arrow-up"></i><span>request</span></div>
+                      <div class="da-pods">
+                        <div class="pod"><i class="fa fa-cube"></i>pod-1</div>
+                        <div class="pod"><i class="fa fa-cube"></i>pod-2</div>
+                        <div class="pod"><i class="fa fa-cube"></i>pod-3</div>
+                        <div class="pod"><i class="fa fa-cube"></i>pod-4</div>
+                        <div class="pod"><i class="fa fa-cube"></i>pod-5</div>
+                        <div class="pod"><i class="fa fa-cube"></i>pod-6</div>
+                      </div>
                     </div>
-                    <div class="da-done"><span class="t-ok">✔</span> all deployed · <b>6/6 pods</b></div>
+                    <div class="da-count">deploying · <b>0/6</b> pods ready</div>
+                    <div class="da-done">
+                      <div><span class="t-ok">✔</span> rollout complete</div>
+                      <div><span class="t-ok">✔</span> 6/6 pods healthy · 0 restarts</div>
+                      <div><span class="t-ok">✔</span> live in 9.2s</div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -1536,7 +1535,7 @@
     <div class="footer-inner wrap">
       <div class="footer-grid">
         <div class="footer-brand">
-          <a class="logo" href="#top"><span class="mark">V</span>VirtUp</a>
+          <a class="logo" href="#top"><span class="mark" aria-hidden="true"></span>VirtUp</a>
           <p>Reliable IT for businesses that can't afford technology to be the reason a day goes sideways.</p>
           <div class="footer-meta">Remote-first · on-site across the region</div>
         </div>
@@ -1787,9 +1786,15 @@
         dragging = false; track.classList.remove('dragging');
         if (dir === 'h') {
           const dx = e.clientX - startX;
-          if (dx < -50) go(index + 1);
-          else if (dx > 50) go(index - 1);
+          if (dx < -40) go(index + 1);
+          else if (dx > 40) go(index - 1);
           else go(index);
+        } else if (dir === null) {
+          // a tap/click: left third → previous, right third → next
+          const r = viewport.getBoundingClientRect();
+          const x = e.clientX - r.left;
+          if (x > r.width * 0.62) go(index + 1);
+          else if (x < r.width * 0.38) go(index - 1);
         }
       }
       track.addEventListener('pointerup', endDrag);
@@ -1805,8 +1810,17 @@
       const src = card.querySelector('.da-src');
       const pods = [...card.querySelectorAll('.pod')];
       const done = card.querySelector('.da-done');
+      const count = card.querySelector('.da-count');
       if (!stage || !src || !pods.length || !done) return;
       const sleep = ms => new Promise(r => setTimeout(r, ms));
+      const n = pods.length;
+      let ready = 0;
+      const setCount = () => {
+        if (!count) return;
+        count.innerHTML = ready >= n
+          ? 'all <b>' + n + '/' + n + '</b> pods ready'
+          : 'deploying · <b>' + ready + '/' + n + '</b> pods ready';
+      };
       const pos = el => {
         const r = el.getBoundingClientRect(), s = stage.getBoundingClientRect();
         return { x: r.left - s.left + r.width / 2 - 4, y: r.top - s.top + r.height / 2 - 4 };
@@ -1820,20 +1834,27 @@
         requestAnimationFrame(() => requestAnimationFrame(() => {
           d.style.transform = `translate(${b.x}px,${b.y}px)`;
         }));
-        setTimeout(() => { pod.classList.add('on'); d.remove(); }, 470);
+        // packet lands → pod boots (amber) → pod ready (accent), counter ticks
+        setTimeout(() => { pod.classList.add('starting'); d.remove(); }, 460);
+        setTimeout(() => { pod.classList.remove('starting'); pod.classList.add('on'); ready++; setCount(); }, 460 + 430);
       };
       (async function loop() {
         while (true) {
-          pods.forEach(p => p.classList.remove('on'));
+          pods.forEach(p => p.classList.remove('on', 'starting'));
+          ready = 0; setCount();
           done.classList.remove('show'); stage.classList.remove('collapsed');
-          await sleep(motionOK ? 650 : 1200);
-          if (motionOK) { for (const p of pods) { fire(p); await sleep(220); } }
-          else pods.forEach(p => p.classList.add('on'));
-          await sleep(1000);
+          await sleep(motionOK ? 700 : 1200);
+          if (motionOK) {
+            for (const p of pods) { fire(p); await sleep(230); }
+            await sleep(1100);                 // let the last pods finish booting
+          } else {
+            pods.forEach(p => p.classList.add('on')); ready = n; setCount();
+            await sleep(700);
+          }
           stage.classList.add('collapsed');
-          await sleep(430);
+          await sleep(440);
           done.classList.add('show');
-          await sleep(2900);
+          await sleep(3200);
         }
       })();
     }
