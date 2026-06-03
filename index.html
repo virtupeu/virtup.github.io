@@ -214,8 +214,8 @@
       gap: 9px;
       padding: 12px 18px;
       border-radius: 11px;
-      border: 1px solid var(--border-strong);
-      background: transparent;
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);   /* visible fill so it reads as a button */
       color: var(--ink);
       font-family: inherit;
       font-weight: 600;
@@ -229,7 +229,7 @@
     }
     .btn:active { transform: scale(.97); }      /* Emil: press feedback */
     @media (hover: hover) and (pointer: fine) {
-      .btn:hover { background: rgba(255,255,255,.06); border-color: var(--border-strong); }
+      .btn:hover { background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.26); }
     }
     .btn-primary {
       background: var(--accent);
@@ -244,7 +244,7 @@
 
     /* ── MAIN / SECTION RHYTHM ──────────────────────────────── */
     main { position: relative; z-index: var(--z-base); padding-top: 84px; }
-    section { padding-block: clamp(64px, 9vw, 116px); }
+    section { padding-block: clamp(56px, 7vw, 96px); }
 
     .section-head { max-width: 60ch; margin-bottom: clamp(36px, 5vw, 60px); }
     .kicker {
@@ -295,9 +295,12 @@
       display: grid;
       grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
       gap: clamp(32px, 5vw, 60px);
-      align-items: center;
-      padding-block: clamp(56px, 8vw, 104px) clamp(48px, 7vw, 84px);
+      align-items: start;       /* headline sits at the top, not centered low */
+      padding-block: clamp(28px, 4vw, 52px) clamp(48px, 7vw, 80px);
     }
+    /* nudge the headline column down a touch so it optically centers against
+       the taller dashboard column without dropping below the fold */
+    .hero-left { padding-top: clamp(0px, 2vw, 28px); }
     /* right column stacks the operations panel + terminal */
     .hero-right { display: flex; flex-direction: column; gap: 16px; }
     h1 {
@@ -549,7 +552,7 @@
       z-index: 1;
       max-width: var(--max-w);
       margin-inline: auto;
-      padding: clamp(72px, 11vw, 132px) 24px;
+      padding: clamp(64px, 9vw, 108px) 24px;
     }
     .band h2 {
       font-size: clamp(1.9rem, 4.2vw, 3.1rem);
@@ -635,7 +638,7 @@
     .approach-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: clamp(40px, 6vw, 80px);
+      gap: clamp(36px, 5vw, 72px);
       align-items: center;
     }
     .principles { display: flex; flex-direction: column; gap: 4px; }
@@ -795,26 +798,60 @@
     .info-item p { font-size: 13.5px; color: var(--muted); line-height: 1.55; }
 
     /* ── FOOTER ─────────────────────────────────────────────── */
-    footer { border-top: 1px solid var(--border); position: relative; z-index: var(--z-base); }
-    .footer-inner { padding: clamp(48px, 6vw, 72px) 24px 40px; }
+    footer {
+      border-top: 1px solid var(--border);
+      position: relative;
+      z-index: var(--z-base);
+      background: linear-gradient(to bottom, transparent, rgba(79,157,255,.025));
+    }
+    /* prominent closing CTA */
+    .footer-cta {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 28px;
+      flex-wrap: wrap;
+      padding: clamp(44px, 6vw, 76px) 24px;
+      border-bottom: 1px solid var(--border);
+    }
+    .footer-cta h2 {
+      font-size: clamp(1.55rem, 3.4vw, 2.4rem);
+      line-height: 1.08;
+      letter-spacing: -.03em;
+      font-weight: 700;
+      max-width: 16ch;
+      text-wrap: balance;
+      margin-top: 12px;
+    }
+    .footer-cta h2 b { color: var(--accent); font-weight: 700; }
+    .footer-cta .btn-primary { font-size: 15px; padding: 14px 22px; }
+    .footer-inner { padding: clamp(44px, 5vw, 64px) 24px 36px; }
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr;
+      grid-template-columns: 1.7fr 1fr 1fr;
       gap: clamp(28px, 4vw, 56px);
     }
-    .footer-grid p { color: var(--muted); font-size: 14px; max-width: 30ch; margin-top: 14px; }
+    .footer-brand .logo { margin-bottom: 16px; }
+    .footer-grid p { color: var(--muted); font-size: 14px; max-width: 32ch; line-height: 1.6; }
+    .footer-meta {
+      margin-top: 16px;
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: .04em;
+      color: var(--faint);
+    }
     .footer-heading {
       font-family: var(--mono);
       font-size: 11px;
       letter-spacing: .1em;
       text-transform: uppercase;
-      color: var(--faint);
-      margin-bottom: 14px;
+      color: var(--accent);
+      margin-bottom: 16px;
     }
-    .footer-col { display: flex; flex-direction: column; gap: 3px; }
-    .footer-link { color: var(--muted); font-size: 14px; padding: 5px 0; transition: color .15s var(--ease-out); }
+    .footer-col { display: flex; flex-direction: column; gap: 2px; }
+    .footer-link { color: var(--muted); font-size: 14px; padding: 5px 0; width: fit-content; transition: color .15s var(--ease-out), transform .15s var(--ease-out); }
     @media (hover: hover) and (pointer: fine) {
-      .footer-link:hover { color: var(--ink); }
+      .footer-link:hover { color: var(--ink); transform: translateX(3px); }
     }
     .footer-bottom {
       display: flex;
@@ -822,11 +859,26 @@
       align-items: center;
       gap: 14px;
       flex-wrap: wrap;
-      margin-top: 44px;
-      padding-top: 24px;
+      margin-top: 40px;
+      padding-top: 22px;
       border-top: 1px solid var(--border);
     }
     .footer-bottom .mono { color: var(--faint); }
+    .footer-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--muted);
+    }
+    .footer-status .dotlive {
+      width: 7px; height: 7px; border-radius: 50%; background: var(--accent);
+      box-shadow: 0 0 0 0 rgba(79,157,255,.6);
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .footer-status .dotlive { animation: statusPulse 2.6s var(--ease-out) infinite; }
+    }
     /* ── HAMBURGER + MOBILE MENU ────────────────────────────── */
     .hamburger {
       display: none;
@@ -1278,8 +1330,8 @@
             <div class="info-item">
               <span class="ic"><i class="fa fa-envelope" aria-hidden="true"></i></span>
               <div>
-                <strong>Email us</strong>
-                <p>Write any time at <a href="mailto:info@virtup.eu" style="color:var(--accent)">info@virtup.eu</a> and we'll get back to you promptly.</p>
+                <strong>Quick to reply</strong>
+                <p>Send a message through the form and we'll get back to you within one business day.</p>
               </div>
             </div>
             <div class="info-item">
@@ -1311,11 +1363,19 @@
 
   <!-- ── FOOTER ── -->
   <footer role="contentinfo">
+    <div class="footer-cta wrap">
+      <div>
+        <div class="kicker">Virtup+</div>
+        <h2>Let's get your IT <b>off your plate</b>.</h2>
+      </div>
+      <a class="btn btn-primary" href="#contact"><i class="fa fa-paper-plane" aria-hidden="true"></i> Start a conversation</a>
+    </div>
     <div class="footer-inner wrap">
       <div class="footer-grid">
-        <div>
+        <div class="footer-brand">
           <a class="logo" href="#top"><span class="mark">V+</span>Virtup+</a>
           <p>Reliable IT for businesses that can't afford technology to be the reason a day goes sideways.</p>
+          <div class="footer-meta">Remote-first · on-site across the region</div>
         </div>
         <div class="footer-col">
           <div class="footer-heading">Services</div>
@@ -1324,22 +1384,21 @@
           <a href="#services" class="footer-link">IT Support</a>
           <a href="#services" class="footer-link">Cybersecurity</a>
           <a href="#services" class="footer-link">Network &amp; Systems</a>
-          <a href="#services" class="footer-link">IT Consulting</a>
           <a href="#services" class="footer-link">AI Agents</a>
           <a href="#services" class="footer-link">Automation &amp; Integration</a>
           <a href="#services" class="footer-link">Data &amp; Analytics</a>
         </div>
         <div class="footer-col">
           <div class="footer-heading">Company</div>
+          <a href="#services" class="footer-link">Services</a>
           <a href="#approach" class="footer-link">Approach</a>
           <a href="#contact" class="footer-link">Contact</a>
           <a href="#contact" class="footer-link">Free consultation</a>
-          <a href="mailto:info@virtup.eu" class="footer-link">info@virtup.eu</a>
         </div>
       </div>
       <div class="footer-bottom">
         <span class="mono">© 2026 Virtup+ · All rights reserved</span>
-        <a class="btn btn-sm" href="#contact">Start a conversation <i class="fa fa-arrow-right" aria-hidden="true" style="font-size:11px"></i></a>
+        <span class="footer-status"><i class="dotlive" aria-hidden="true"></i> All systems operational</span>
       </div>
     </div>
   </footer>
@@ -1505,6 +1564,7 @@
       const viewport = root.querySelector('.term-viewport');
       const slides = [...track.children];
       let index = 0, w = 0, base = 0, startX = 0, startY = 0, dir = null, dragging = false;
+      let autoT = null, paused = false; const DWELL = 5000;
       const dots = slides.map((_, i) => {
         const b = document.createElement('button');
         b.type = 'button';
@@ -1524,11 +1584,26 @@
         dots.forEach((d, k) => d.classList.toggle('on', k === index));
         const hint = root.querySelector('.swipe-hint');
         if (hint && index > 0) hint.style.opacity = '0';
+        schedule();
+      }
+      function schedule() {
+        clearTimeout(autoT);
+        if (paused || slides.length < 2 || !motionOK) return;
+        autoT = setTimeout(() => go((index + 1) % slides.length), DWELL);
+      }
+      const pause = () => { paused = true; clearTimeout(autoT); };
+      const resume = () => { paused = false; schedule(); };
+      root.addEventListener('mouseenter', pause);
+      root.addEventListener('mouseleave', resume);
+      document.addEventListener('visibilitychange', () => (document.hidden ? pause() : resume()));
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => (es[0].isIntersecting ? resume() : pause()), { threshold: 0 }).observe(root);
       }
       window.addEventListener('resize', () => { w = viewport.clientWidth; setX(-index * w, false); });
       track.addEventListener('pointerdown', e => {
         dragging = true; dir = null; startX = e.clientX; startY = e.clientY;
         w = viewport.clientWidth; base = -index * w;
+        clearTimeout(autoT);
         track.classList.add('dragging'); track.setPointerCapture(e.pointerId);
       });
       track.addEventListener('pointermove', e => {
@@ -1563,18 +1638,19 @@
     function createNetwork(canvas) {
       const ctx = canvas.getContext('2d');
       if (!ctx) return;
-      const ACC = '79,157,255', DIST = 128, MAXN = 66;
-      let w = 0, h = 0, nodes = [], pulses = [], raf = 0, onscreen = true;
+      const ACC = '110,180,255', DIST = 144, MAXN = 86;
+      let w = 0, h = 0, nodes = [], pulses = [], raf = 0, onscreen = true, ss = 1;
       function resize() {
         const r = canvas.getBoundingClientRect();
         w = Math.max(1, r.width | 0); h = Math.max(1, r.height | 0);
         const dpr = Math.min(window.devicePixelRatio || 1, 2);
         canvas.width = (w * dpr) | 0; canvas.height = (h * dpr) | 0;
         ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-        const n = Math.min(MAXN, Math.max(14, Math.round(w * h * 0.00007)));
+        ss = w < 640 ? 0.45 : 1;            // calmer drift on small screens
+        const n = Math.min(MAXN, Math.max(16, Math.round(w * h * 0.00010)));
         nodes = Array.from({ length: n }, () => ({
           x: Math.random() * w, y: Math.random() * h,
-          vx: (Math.random() - .5) * .22, vy: (Math.random() - .5) * .22,
+          vx: (Math.random() - .5) * .42 * ss, vy: (Math.random() - .5) * .42 * ss,
         }));
         pulses = [];
       }
@@ -1590,7 +1666,7 @@
           for (let j = i + 1; j < nodes.length; j++) {
             const b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
             if (d2 < DIST * DIST) {
-              const o = (1 - Math.sqrt(d2) / DIST) * .45;
+              const o = (1 - Math.sqrt(d2) / DIST) * .6;
               ctx.strokeStyle = `rgba(${ACC},${o.toFixed(3)})`;
               ctx.lineWidth = 1;
               ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
@@ -1598,13 +1674,13 @@
           }
         }
         for (const a of nodes) {
-          ctx.fillStyle = `rgba(${ACC},.6)`;
-          ctx.beginPath(); ctx.arc(a.x, a.y, 1.5, 0, 6.283); ctx.fill();
+          ctx.fillStyle = `rgba(${ACC},.9)`;
+          ctx.beginPath(); ctx.arc(a.x, a.y, 1.9, 0, 6.283); ctx.fill();
         }
         if (animate) {
-          if (pulses.length < 5 && Math.random() < .05 && nodes.length > 2) {
+          if (pulses.length < 7 && Math.random() < .07 && nodes.length > 2) {
             const i = Math.random() * nodes.length | 0; const j = Math.random() * nodes.length | 0;
-            if (j !== i) pulses.push({ a: i, b: j, t: 0, s: .012 + Math.random() * .02 });
+            if (j !== i) pulses.push({ a: i, b: j, t: 0, s: (.004 + Math.random() * .006) * ss });
           }
           for (let k = pulses.length - 1; k >= 0; k--) {
             const p = pulses[k]; p.t += p.s;
@@ -1741,7 +1817,7 @@
         setStatus('Message sent. We\'ll be in touch within one business day.', true);
         form.reset();
       } catch (err) {
-        setStatus('Something went wrong. Please email info@virtup.eu directly.', false);
+        setStatus('Something went wrong. Please try again in a moment.', false);
       }
     });
   </script>
