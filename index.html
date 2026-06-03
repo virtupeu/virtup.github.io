@@ -1626,12 +1626,13 @@
         const upt = document.getElementById('upt');
         let tick = 0;
         setInterval(() => {
-          let n = vals[N - 1] + (Math.random() * 12 - 6);
-          vals.push(Math.max(5, Math.min(33, n))); vals.shift();
-          render();
-          // nudge uptime to 99.99% roughly every 4-5 ticks, otherwise 99.98%
           tick++;
-          if (upt) upt.textContent = (tick % 5 === 0) ? '99.99%' : '99.98%';
+          const high = (tick % 5 === 0);   // roughly every 4-5 ticks
+          // on a 99.99% tick the line peaks, so the endpoint dot sits higher
+          let n = high ? (31 + Math.random() * 3) : vals[N - 1] + (Math.random() * 12 - 6);
+          vals.push(Math.max(5, Math.min(34, n))); vals.shift();
+          render();
+          if (upt) upt.textContent = high ? '99.99%' : '99.98%';
         }, 1500);
       }
       const mReq = document.getElementById('mReq');
