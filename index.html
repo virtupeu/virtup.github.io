@@ -177,6 +177,7 @@
       font-size: 20px;
       letter-spacing: -.02em;
     }
+    header .logo { font-size: 23px; }
     .mark {
       width: 34px; height: 34px;
       background: url("virtup-mark.png") center / contain no-repeat;
@@ -890,6 +891,7 @@
       position: relative;
       z-index: var(--z-base);
       overflow: hidden;
+      margin-top: clamp(40px, 6vw, 88px);   /* sit the footer a bit lower */
       background: linear-gradient(to bottom, transparent, rgba(79,157,255,.03));
     }
     /* animated network behind the footer */
