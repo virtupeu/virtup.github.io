@@ -383,14 +383,50 @@
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+    /* sparkline path moves smoothly between live updates */
     @media (prefers-reduced-motion: no-preference) {
-      .js .sparkline {
-        stroke-dasharray: var(--len, 600);
-        stroke-dashoffset: var(--len, 600);
-        animation: draw 1.4s .35s var(--ease-out) forwards;
-      }
+      .sparkline { transition: d .9s var(--ease-in-out); }
     }
-    @keyframes draw { to { stroke-dashoffset: 0; } }
+
+    /* live status dots pulse, staggered down the list */
+    @media (prefers-reduced-motion: no-preference) {
+      .row .state i, .tag-dot { animation: statusPulse 2.6s var(--ease-out) infinite; }
+      .row:nth-child(2) .state i { animation-delay: .55s; }
+      .row:nth-child(3) .state i { animation-delay: 1.1s; }
+      .row:nth-child(4) .state i { animation-delay: 1.65s; }
+    }
+    @keyframes statusPulse {
+      0%, 100% { box-shadow: 0 0 0 0 rgba(79,157,255,.6); }
+      60%      { box-shadow: 0 0 0 5px rgba(79,157,255,0); }
+    }
+
+    /* live metrics row under the sparkline */
+    .metrics {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px 18px;
+      margin-top: 15px;
+      padding-top: 15px;
+      border-top: 1px solid var(--border);
+      font-family: var(--mono);
+      font-size: 11.5px;
+      color: var(--faint);
+    }
+    .metrics span { display: inline-flex; align-items: baseline; gap: 6px; }
+    .metrics b { color: var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+    .metrics b i { font-style: normal; color: var(--muted); font-size: .85em; margin-left: 1px; }
+
+    .tag-dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent); display: inline-block; margin-right: 6px;
+      box-shadow: 0 0 0 0 rgba(79,157,255,.6);
+    }
+
+    /* terminal command-runner pieces */
+    .t-spin { color: var(--accent); display: inline-block; width: 1.1em; flex-shrink: 0; }
+    .t-dim { color: var(--muted); }
+    .t-bar2 { color: var(--faint); white-space: pre; }
+    .t-pf { color: var(--accent); }
 
     /* Terminal card — command-line readout below the panel */
     .term {
@@ -423,7 +459,10 @@
       padding: 18px;
       display: flex;
       flex-direction: column;
+      justify-content: flex-end;   /* anchor output to the bottom */
       gap: 7px;
+      height: 246px;
+      overflow: hidden;
       color: var(--muted);
     }
     .t-line { display: flex; gap: 9px; }
@@ -591,25 +630,27 @@
       background: var(--surface);
     }
     .stat {
-      padding: 30px 26px;
+      padding: 28px 26px;
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
     .stat:nth-child(2n) { border-right: 0; }
     .stat:nth-last-child(-n+2) { border-bottom: 0; }
     .stat .num {
-      font-size: clamp(2rem, 3.4vw, 2.7rem);
+      font-size: clamp(2.05rem, 3.4vw, 2.65rem);
       font-weight: 700;
       letter-spacing: -.03em;
       line-height: 1;
       color: var(--ink);
     }
-    .stat .num em { font-style: normal; color: var(--accent); }
+    /* one consistent unit treatment: smaller, muted, sits on the baseline */
+    .stat .unit { font-size: .48em; font-weight: 600; letter-spacing: 0; color: var(--muted); }
+    .stat .unit.sp { margin-left: .2em; }
     .stat .lbl {
-      margin-top: 10px;
+      margin-top: 13px;
       font-family: var(--mono);
-      font-size: 11.5px;
-      letter-spacing: .05em;
+      font-size: 11px;
+      letter-spacing: .06em;
       text-transform: uppercase;
       color: var(--faint);
     }
@@ -806,6 +847,16 @@
       .nav-row > a.btn { display: none; }
       .hamburger { display: inline-flex; }
       .footer-grid { grid-template-columns: 1fr 1fr; }
+      /* On a narrow, tall hero a top-down scrim reads better than the
+         desktop left-to-right one, and keeps the headline legible. */
+      .hero-bg {
+        background-image:
+          linear-gradient(to bottom, var(--bg) 14%, rgba(10,12,16,.45) 52%, rgba(10,12,16,.82) 100%),
+          url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1100&q=70");
+        background-position: center, center 32%;
+        -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+      }
     }
     @media (max-width: 560px) {
       main { padding-top: 72px; }
@@ -876,7 +927,7 @@
         <div class="panel" role="img" aria-label="System status panel: cloud, network, security and backups operational, 99.98% uptime over 30 days.">
           <div class="panel-top">
             <span class="mono">virtup · operations</span>
-            <span class="tag">all systems go</span>
+            <span class="tag"><i class="tag-dot" aria-hidden="true"></i>operational</span>
           </div>
           <div class="rows" aria-hidden="true">
             <div class="row"><span class="name">Cloud infrastructure</span><span class="state"><i></i>operational</span></div>
@@ -887,32 +938,36 @@
           <div class="spark" aria-hidden="true">
             <svg viewBox="0 0 240 40" preserveAspectRatio="none" id="sparkSvg">
               <path class="sparkline" id="sparkPath"
-                d="M2,34 L26,29 L50,35 L74,20 L98,25 L122,13 L146,18 L170,9 L194,12 L218,5 L238,7" />
-              <circle class="spark-end" cx="238" cy="7" r="3" />
+                d="M0,34 L24,29 L48,35 L72,20 L96,25 L120,13 L144,18 L168,9 L192,12 L216,5 L240,7" />
+              <circle class="spark-end" id="sparkEnd" cx="240" cy="7" r="3" />
             </svg>
             <div class="uptime">
               <b>99.98%</b>
               <span>uptime · 30d</span>
             </div>
           </div>
+          <div class="metrics" aria-hidden="true">
+            <span>req/s <b id="mReq">1,240</b></span>
+            <span>p95 <b id="mP95">142<i>ms</i></b></span>
+            <span>cpu <b id="mCpu">18<i>%</i></b></span>
+          </div>
         </div>
 
         <!-- Terminal readout -->
-        <div class="term" role="img" aria-label="Terminal: virtup status check showing cloud, network, security and backups all healthy, 99.98% availability.">
+        <div class="term" role="img" aria-label="Terminal running a live monitor: cloud, network, security and backups healthy, with a streaming health-check log.">
           <div class="term-bar" aria-hidden="true">
             <span class="t-dot" style="background:#ff5f56"></span>
             <span class="t-dot" style="background:#ffbd2e"></span>
             <span class="t-dot" style="background:#27c93f"></span>
-            <span class="t-label">virtup — system status</span>
+            <span class="t-label">virtup — live monitor</span>
           </div>
-          <div class="term-body" aria-hidden="true">
-            <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup status --all</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-name">Cloud infrastructure</span><span class="t-val">online</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-name">Network &amp; routing</span><span class="t-val">active</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-name">Security monitoring</span><span class="t-val">clean</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-name">Backups</span><span class="t-val">synced</span></div>
-            <div class="t-line" style="margin-top:5px"><span class="t-prompt">$</span><span class="t-cmd">uptime</span></div>
-            <div class="t-out" style="padding-left:0"><span class="t-val">99.98% availability</span><span class="cursor"></span></div>
+          <div class="term-body" id="termBody" aria-hidden="true">
+            <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup deploy --env prod</span></div>
+            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">provisioned 18/18 nodes</span></div>
+            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">security patches applied</span></div>
+            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">backups synced · 41/41</span></div>
+            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span></div>
+            <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
           </div>
         </div>
       </div>
@@ -1010,20 +1065,20 @@
 
           <div class="stats reveal d2" aria-label="Service metrics">
             <div class="stat">
-              <div class="num">99.9<em>%</em></div>
-              <div class="lbl">Target uptime</div>
+              <div class="num">99.9<span class="unit">%</span></div>
+              <div class="lbl">Uptime</div>
             </div>
             <div class="stat">
-              <div class="num">&lt;4<em>h</em></div>
+              <div class="num">&lt;4<span class="unit">h</span></div>
               <div class="lbl">Response time</div>
             </div>
             <div class="stat">
-              <div class="num">24<em>/7</em></div>
+              <div class="num">24<span class="unit">/7</span></div>
               <div class="lbl">Monitoring</div>
             </div>
             <div class="stat">
-              <div class="num">1<em>day</em></div>
-              <div class="lbl">Reply to enquiries</div>
+              <div class="num">1<span class="unit sp">day</span></div>
+              <div class="lbl">Reply time</div>
             </div>
           </div>
         </div>
@@ -1165,12 +1220,98 @@
     window.addEventListener('resize', () => { if (window.innerWidth > 720) setMenu(false); });
     document.addEventListener('keydown', e => { if (e.key === 'Escape') setMenu(false); });
 
-    /* Sparkline: set exact dash length so the draw covers the whole path */
-    const sparkPath = document.getElementById('sparkPath');
-    if (sparkPath && sparkPath.getTotalLength) {
-      const len = Math.ceil(sparkPath.getTotalLength());
-      sparkPath.style.setProperty('--len', len);
-    }
+    /* ── Live "techy" dashboards (decorative; disabled for reduced motion) ── */
+    const motionOK = !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    /* Operations panel: live sparkline + ticking metrics */
+    (function livePanel() {
+      if (!motionOK) return;
+      const path = document.getElementById('sparkPath');
+      const dot  = document.getElementById('sparkEnd');
+      if (path) {
+        const N = 11, W = 240, H = 40, STEP = W / (N - 1);
+        let vals = Array.from({ length: N }, () => 6 + Math.random() * 26);
+        const render = () => {
+          path.setAttribute('d', vals.map((v, i) =>
+            `${i ? 'L' : 'M'}${(i * STEP).toFixed(1)},${(H - v).toFixed(1)}`).join(' '));
+          if (dot) dot.setAttribute('cy', (H - vals[N - 1]).toFixed(1));
+        };
+        render();
+        setInterval(() => {
+          let n = vals[N - 1] + (Math.random() * 12 - 6);
+          vals.push(Math.max(5, Math.min(33, n))); vals.shift();
+          render();
+        }, 1500);
+      }
+      const mReq = document.getElementById('mReq');
+      const mP95 = document.getElementById('mP95');
+      const mCpu = document.getElementById('mCpu');
+      const setLead = (el, v) => { if (el && el.firstChild) el.firstChild.nodeValue = v; };
+      setInterval(() => {
+        if (mReq) mReq.textContent = (1180 + Math.floor(Math.random() * 180)).toLocaleString('en-US');
+        setLead(mP95, 120 + Math.floor(Math.random() * 70));
+        setLead(mCpu, 12 + Math.floor(Math.random() * 18));
+      }, 1800);
+    })();
+
+    /* Terminal: a looping deploy with typed commands, spinners, a progress
+       bar and sleeps, so it reads like real commands running. */
+    (function liveTerminal() {
+      const body = document.getElementById('termBody');
+      if (!body || !motionOK) return;
+      const SPIN = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
+      const sleep = ms => new Promise(r => setTimeout(r, ms));
+      const add = (html, cls) => {
+        const el = document.createElement('div');
+        el.className = cls || 't-out';
+        el.innerHTML = html;
+        body.appendChild(el);
+        while (body.scrollHeight > body.clientHeight + 2 && body.children.length > 1) {
+          body.removeChild(body.firstChild);
+        }
+        return el;
+      };
+      const typeCmd = async (cmd) => {
+        const line = add(`<span class="t-prompt">$</span> <span class="t-cmd"></span><span class="cursor"></span>`, 't-line');
+        const span = line.querySelector('.t-cmd');
+        for (const ch of cmd) { span.textContent += ch; await sleep(30 + Math.random() * 55); }
+        const c = line.querySelector('.cursor'); if (c) c.remove();
+        return line;
+      };
+      const spin = async (label, ms) => {
+        const line = add(`<span class="t-spin"></span><span class="t-dim">${label}</span>`);
+        const s = line.querySelector('.t-spin');
+        const end = Date.now() + ms; let i = 0;
+        while (Date.now() < end) { s.textContent = SPIN[i++ % SPIN.length]; await sleep(72); }
+        return line;
+      };
+      const done = (line, html) => { line.innerHTML = `<span class="t-ok">✔</span><span>${html}</span>`; };
+      const bar = async (label, ms) => {
+        const line = add(`<span class="t-dim">${label}</span><span class="t-bar2"></span>`);
+        const p = line.querySelector('.t-bar2'); const steps = 16;
+        for (let i = 0; i <= steps; i++) {
+          const f = Math.round(i / steps * 12);
+          p.innerHTML = ` [<span class="t-pf">${'█'.repeat(f)}</span>${'░'.repeat(12 - f)}] ${Math.round(i / steps * 100)}%`;
+          await sleep(ms / steps);
+        }
+        return line;
+      };
+
+      (async function loop() {
+        while (true) {
+          body.innerHTML = '';
+          await typeCmd('virtup deploy --env prod'); await sleep(420);
+          let l = await spin('provisioning cloud nodes', 1500); done(l, 'provisioned <span class="t-val">18/18 nodes</span>'); await sleep(280);
+          await bar('installing security patches', 1700); await sleep(130);
+          add(`<span class="t-ok">✔</span><span>patches applied</span>`); await sleep(360);
+          l = await spin('syncing backups', 1200); done(l, 'backups synced <span class="t-val">41/41</span>'); await sleep(260);
+          l = await spin('running health checks', 1100); done(l, 'all checks passed'); await sleep(340);
+          add(`<span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span>`);
+          add(`<span class="t-prompt">$</span> <span class="cursor"></span>`, 't-line');
+          await sleep(4200);
+        }
+      })();
+    })();
 
     /* Scrollspy — highlight the nav link for the section in view */
     const navLinks = [...document.querySelectorAll('nav a')];
