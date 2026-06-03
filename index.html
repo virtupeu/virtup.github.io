@@ -266,15 +266,15 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      background-image:
-        linear-gradient(102deg, var(--bg) 6%, rgba(10,12,16,.78) 40%, rgba(10,12,16,.22) 100%),
-        linear-gradient(to top, var(--bg) 1%, transparent 52%),
-        url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1700&q=70");
-      background-size: cover;
-      background-position: center, center, 60% 42%;
-      background-repeat: no-repeat;
-      -webkit-mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
-      mask-image: linear-gradient(to bottom, #000 58%, transparent 100%);
+      -webkit-mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+      mask-image: linear-gradient(to bottom, #000 60%, transparent 100%);
+    }
+    .hero-bg canvas { display: block; width: 100%; height: 100%; }
+    /* scrim over the animated network so the headline stays legible */
+    .hero-bg::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(100deg, var(--bg) 3%, rgba(10,12,16,.55) 42%, transparent 100%);
     }
     .hero {
       position: relative;
@@ -428,6 +428,32 @@
     .t-bar2 { color: var(--faint); white-space: pre; }
     .t-pf { color: var(--accent); }
 
+    /* swipeable terminal carousel */
+    .term-carousel { position: relative; }
+    .term-viewport { overflow: hidden; border-radius: 16px; }
+    .term-track { display: flex; touch-action: pan-y; cursor: grab; will-change: transform; }
+    .term-track:active { cursor: grabbing; }
+    .term-track.dragging { transition: none !important; }
+    .term-slide { flex: 0 0 100%; min-width: 0; }
+    .term-dots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
+    .term-dots button {
+      width: 7px; height: 7px; border-radius: 999px; padding: 0; border: 0;
+      background: var(--border-strong); cursor: pointer;
+      transition: background .2s var(--ease-out), width .25s var(--ease-out);
+    }
+    .term-dots button:active { transform: scale(.9); }
+    .term-dots button.on { background: var(--accent); width: 18px; }
+    .swipe-hint {
+      position: absolute; top: 13px; right: 14px; z-index: 2;
+      font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em;
+      color: var(--faint); display: inline-flex; align-items: center; gap: 5px;
+      pointer-events: none;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .swipe-hint i { animation: nudge 1.8s var(--ease-in-out) infinite; }
+    }
+    @keyframes nudge { 0%,100%{ transform: translateX(0); } 50%{ transform: translateX(3px); } }
+
     /* Terminal card — command-line readout below the panel */
     .term {
       background: var(--surface);
@@ -498,12 +524,12 @@
       inset: 0;
       z-index: 0;
       pointer-events: none;
-      background-image:
-        linear-gradient(95deg, var(--bg) 4%, rgba(10,12,16,.86) 42%, rgba(10,12,16,.5) 100%),
-        url("https://images.unsplash.com/photo-1597733336794-12d05021d510?auto=format&fit=crop&w=1700&q=70");
-      background-size: cover;
-      background-position: center, right center;
-      background-repeat: no-repeat;
+    }
+    .band-bg canvas { display: block; width: 100%; height: 100%; }
+    .band-bg::after {
+      content: "";
+      position: absolute; inset: 0;
+      background: linear-gradient(95deg, var(--bg) 3%, rgba(10,12,16,.6) 44%, transparent 100%);
     }
     .band-inner {
       position: relative;
@@ -849,13 +875,12 @@
       .footer-grid { grid-template-columns: 1fr 1fr; }
       /* On a narrow, tall hero a top-down scrim reads better than the
          desktop left-to-right one, and keeps the headline legible. */
+      .hero-bg::after {
+        background: linear-gradient(to bottom, var(--bg) 12%, rgba(10,12,16,.38) 50%, rgba(10,12,16,.72) 100%);
+      }
       .hero-bg {
-        background-image:
-          linear-gradient(to bottom, var(--bg) 14%, rgba(10,12,16,.45) 52%, rgba(10,12,16,.82) 100%),
-          url("https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=1100&q=70");
-        background-position: center, center 32%;
-        -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
-        mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+        -webkit-mask-image: linear-gradient(to bottom, #000 74%, transparent 100%);
+        mask-image: linear-gradient(to bottom, #000 74%, transparent 100%);
       }
     }
     @media (max-width: 560px) {
@@ -907,7 +932,7 @@
   <main id="top">
     <!-- ── HERO ── -->
     <section class="hero-section" aria-label="Introduction">
-      <div class="hero-bg" aria-hidden="true"></div>
+      <div class="hero-bg" aria-hidden="true"><canvas id="netHero"></canvas></div>
       <div class="hero wrap">
       <div class="hero-left">
         <h1 class="reveal d1">The IT team your business <b>runs on</b>.</h1>
@@ -953,22 +978,72 @@
           </div>
         </div>
 
-        <!-- Terminal readout -->
-        <div class="term" role="img" aria-label="Terminal running a live monitor: cloud, network, security and backups healthy, with a streaming health-check log.">
-          <div class="term-bar" aria-hidden="true">
-            <span class="t-dot" style="background:#ff5f56"></span>
-            <span class="t-dot" style="background:#ffbd2e"></span>
-            <span class="t-dot" style="background:#27c93f"></span>
-            <span class="t-label">virtup — live monitor</span>
+        <!-- Swipeable terminals -->
+        <div class="term-carousel" id="termCarousel">
+          <span class="swipe-hint" aria-hidden="true">swipe <i class="fa fa-arrow-right"></i></span>
+          <div class="term-viewport">
+            <div class="term-track" id="termTrack">
+
+              <div class="term-slide">
+                <div class="term" role="img" aria-label="Terminal deploying to production: nodes provisioned, patches applied, backups synced, deploy complete.">
+                  <div class="term-bar" aria-hidden="true">
+                    <span class="t-dot" style="background:#ff5f56"></span>
+                    <span class="t-dot" style="background:#ffbd2e"></span>
+                    <span class="t-dot" style="background:#27c93f"></span>
+                    <span class="t-label">virtup — deploy</span>
+                  </div>
+                  <div class="term-body" id="termBody0" data-seq="deploy" aria-hidden="true">
+                    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup deploy --env prod</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">provisioned 18/18 nodes</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">security patches applied</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">backups synced · 41/41</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span></div>
+                    <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="term-slide">
+                <div class="term" role="img" aria-label="Terminal running a full security scan: signatures current, 1,284 endpoints scanned, zero threats found.">
+                  <div class="term-bar" aria-hidden="true">
+                    <span class="t-dot" style="background:#ff5f56"></span>
+                    <span class="t-dot" style="background:#ffbd2e"></span>
+                    <span class="t-dot" style="background:#27c93f"></span>
+                    <span class="t-label">virtup — security</span>
+                  </div>
+                  <div class="term-body" id="termBody1" data-seq="scan" aria-hidden="true">
+                    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup scan --full</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">signatures up to date</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">1,284 endpoints scanned</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">0 threats · 0 quarantined</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">scan complete in 8.1s</span></div>
+                    <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="term-slide">
+                <div class="term" role="img" aria-label="Terminal verifying backups: 41 volumes snapshotted, checksums verified, restore test passed.">
+                  <div class="term-bar" aria-hidden="true">
+                    <span class="t-dot" style="background:#ff5f56"></span>
+                    <span class="t-dot" style="background:#ffbd2e"></span>
+                    <span class="t-dot" style="background:#27c93f"></span>
+                    <span class="t-label">virtup — backups</span>
+                  </div>
+                  <div class="term-body" id="termBody2" data-seq="backup" aria-hidden="true">
+                    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup backup --verify</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">snapshot 41/41 volumes</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">checksums verified</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">restore test passed</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">verify complete in 6.7s</span></div>
+                    <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
+                  </div>
+                </div>
+              </div>
+
+            </div>
           </div>
-          <div class="term-body" id="termBody" aria-hidden="true">
-            <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup deploy --env prod</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">provisioned 18/18 nodes</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">security patches applied</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">backups synced · 41/41</span></div>
-            <div class="t-out"><span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span></div>
-            <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
-          </div>
+          <div class="term-dots" id="termDots" aria-hidden="true"></div>
         </div>
       </div>
       </div>
@@ -1021,7 +1096,7 @@
     <!-- ── STATEMENT BAND ── -->
     <!-- Image: long-exposure fiber optics, Unsplash (Compare Fibre) -->
     <section class="band" aria-label="What keeps your business online">
-      <div class="band-bg" aria-hidden="true"></div>
+      <div class="band-bg" aria-hidden="true"><canvas id="netBand"></canvas></div>
       <div class="band-inner">
         <h2 class="reveal">Quietly keeping <b>thousands of small things</b> working.</h2>
         <p class="reveal d1">Patches, backups, certificates, monitoring: the unglamorous work that keeps a business online. We handle it in the background so you can forget it exists.</p>
@@ -1254,11 +1329,10 @@
       }, 1800);
     })();
 
-    /* Terminal: a looping deploy with typed commands, spinners, a progress
-       bar and sleeps, so it reads like real commands running. */
-    (function liveTerminal() {
-      const body = document.getElementById('termBody');
-      if (!body || !motionOK) return;
+    /* Terminal runner: typed commands, spinners, a progress bar and sleeps,
+       so each terminal reads like real commands running. */
+    function runTerminal(body, seq) {
+      if (!body || !motionOK || typeof seq !== 'function') return;
       const SPIN = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
       const sleep = ms => new Promise(r => setTimeout(r, ms));
       const add = (html, cls) => {
@@ -1271,47 +1345,205 @@
         }
         return el;
       };
-      const typeCmd = async (cmd) => {
-        const line = add(`<span class="t-prompt">$</span> <span class="t-cmd"></span><span class="cursor"></span>`, 't-line');
-        const span = line.querySelector('.t-cmd');
-        for (const ch of cmd) { span.textContent += ch; await sleep(30 + Math.random() * 55); }
-        const c = line.querySelector('.cursor'); if (c) c.remove();
-        return line;
+      const t = {
+        sleep,
+        clear: () => { body.innerHTML = ''; },
+        print: (html) => add(html),
+        cursor: () => add(`<span class="t-prompt">$</span> <span class="cursor"></span>`, 't-line'),
+        ok: (line, html) => { line.innerHTML = `<span class="t-ok">✔</span><span>${html}</span>`; },
+        type: async (cmd) => {
+          const line = add(`<span class="t-prompt">$</span> <span class="t-cmd"></span><span class="cursor"></span>`, 't-line');
+          const span = line.querySelector('.t-cmd');
+          for (const ch of cmd) { span.textContent += ch; await sleep(30 + Math.random() * 55); }
+          const c = line.querySelector('.cursor'); if (c) c.remove();
+          return line;
+        },
+        spin: async (label, ms) => {
+          const line = add(`<span class="t-spin"></span><span class="t-dim">${label}</span>`);
+          const s = line.querySelector('.t-spin');
+          const end = Date.now() + ms; let i = 0;
+          while (Date.now() < end) { s.textContent = SPIN[i++ % SPIN.length]; await sleep(72); }
+          return line;
+        },
+        bar: async (label, ms) => {
+          const line = add(`<span class="t-dim">${label}</span><span class="t-bar2"></span>`);
+          const p = line.querySelector('.t-bar2'); const steps = 16;
+          for (let i = 0; i <= steps; i++) {
+            const f = Math.round(i / steps * 12);
+            p.innerHTML = ` [<span class="t-pf">${'█'.repeat(f)}</span>${'░'.repeat(12 - f)}] ${Math.round(i / steps * 100)}%`;
+            await sleep(ms / steps);
+          }
+          return line;
+        },
       };
-      const spin = async (label, ms) => {
-        const line = add(`<span class="t-spin"></span><span class="t-dim">${label}</span>`);
-        const s = line.querySelector('.t-spin');
-        const end = Date.now() + ms; let i = 0;
-        while (Date.now() < end) { s.textContent = SPIN[i++ % SPIN.length]; await sleep(72); }
-        return line;
-      };
-      const done = (line, html) => { line.innerHTML = `<span class="t-ok">✔</span><span>${html}</span>`; };
-      const bar = async (label, ms) => {
-        const line = add(`<span class="t-dim">${label}</span><span class="t-bar2"></span>`);
-        const p = line.querySelector('.t-bar2'); const steps = 16;
-        for (let i = 0; i <= steps; i++) {
-          const f = Math.round(i / steps * 12);
-          p.innerHTML = ` [<span class="t-pf">${'█'.repeat(f)}</span>${'░'.repeat(12 - f)}] ${Math.round(i / steps * 100)}%`;
-          await sleep(ms / steps);
-        }
-        return line;
-      };
-
       (async function loop() {
-        while (true) {
-          body.innerHTML = '';
-          await typeCmd('virtup deploy --env prod'); await sleep(420);
-          let l = await spin('provisioning cloud nodes', 1500); done(l, 'provisioned <span class="t-val">18/18 nodes</span>'); await sleep(280);
-          await bar('installing security patches', 1700); await sleep(130);
-          add(`<span class="t-ok">✔</span><span>patches applied</span>`); await sleep(360);
-          l = await spin('syncing backups', 1200); done(l, 'backups synced <span class="t-val">41/41</span>'); await sleep(260);
-          l = await spin('running health checks', 1100); done(l, 'all checks passed'); await sleep(340);
-          add(`<span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span>`);
-          add(`<span class="t-prompt">$</span> <span class="cursor"></span>`, 't-line');
-          await sleep(4200);
-        }
+        while (true) { t.clear(); await seq(t); await sleep(4200); }
       })();
+    }
+
+    const SEQUENCES = {
+      deploy: async (t) => {
+        await t.type('virtup deploy --env prod'); await t.sleep(420);
+        let l = await t.spin('provisioning cloud nodes', 1500); t.ok(l, 'provisioned <span class="t-val">18/18 nodes</span>'); await t.sleep(260);
+        await t.bar('installing security patches', 1700); await t.sleep(120);
+        t.print('<span class="t-ok">✔</span><span>patches applied</span>'); await t.sleep(340);
+        l = await t.spin('syncing backups', 1200); t.ok(l, 'backups synced <span class="t-val">41/41</span>'); await t.sleep(260);
+        l = await t.spin('running health checks', 1000); t.ok(l, 'all checks passed'); await t.sleep(300);
+        t.print('<span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span>'); t.cursor();
+      },
+      scan: async (t) => {
+        await t.type('virtup scan --full'); await t.sleep(420);
+        let l = await t.spin('fetching signature feed', 1100); t.ok(l, 'signatures up to date'); await t.sleep(240);
+        await t.bar('scanning 1,284 endpoints', 2000); await t.sleep(120);
+        t.print('<span class="t-ok">✔</span><span>1,284 endpoints scanned</span>'); await t.sleep(320);
+        l = await t.spin('analyzing anomalies', 1100); t.ok(l, '<span class="t-val">0 threats</span> · 0 quarantined'); await t.sleep(300);
+        t.print('<span class="t-ok">✔</span><span class="t-val">scan complete in 8.1s</span>'); t.cursor();
+      },
+      backup: async (t) => {
+        await t.type('virtup backup --verify'); await t.sleep(420);
+        let l = await t.spin('snapshotting volumes', 1300); t.ok(l, 'snapshot <span class="t-val">41/41 volumes</span>'); await t.sleep(240);
+        await t.bar('verifying checksums', 1800); await t.sleep(120);
+        t.print('<span class="t-ok">✔</span><span>checksums verified</span>'); await t.sleep(320);
+        l = await t.spin('running restore test', 1100); t.ok(l, 'restore test passed'); await t.sleep(300);
+        t.print('<span class="t-ok">✔</span><span class="t-val">verify complete in 6.7s</span>'); t.cursor();
+      },
+    };
+    document.querySelectorAll('[data-seq]').forEach(b => runTerminal(b, SEQUENCES[b.dataset.seq]));
+
+    /* Swipeable terminal carousel (pointer drag, snap, dots) */
+    (function initCarousel() {
+      const root = document.getElementById('termCarousel');
+      const track = document.getElementById('termTrack');
+      const dotsWrap = document.getElementById('termDots');
+      if (!root || !track) return;
+      const viewport = root.querySelector('.term-viewport');
+      const slides = [...track.children];
+      let index = 0, w = 0, base = 0, startX = 0, startY = 0, dir = null, dragging = false;
+      const dots = slides.map((_, i) => {
+        const b = document.createElement('button');
+        b.type = 'button';
+        b.setAttribute('aria-label', 'Show terminal ' + (i + 1));
+        b.addEventListener('click', () => go(i));
+        dotsWrap.appendChild(b);
+        return b;
+      });
+      const setX = (x, anim) => {
+        track.style.transition = anim ? 'transform .42s var(--ease-out)' : 'none';
+        track.style.transform = 'translate3d(' + x + 'px,0,0)';
+      };
+      function go(i) {
+        index = Math.max(0, Math.min(slides.length - 1, i));
+        w = viewport.clientWidth;
+        setX(-index * w, true);
+        dots.forEach((d, k) => d.classList.toggle('on', k === index));
+        const hint = root.querySelector('.swipe-hint');
+        if (hint && index > 0) hint.style.opacity = '0';
+      }
+      window.addEventListener('resize', () => { w = viewport.clientWidth; setX(-index * w, false); });
+      track.addEventListener('pointerdown', e => {
+        dragging = true; dir = null; startX = e.clientX; startY = e.clientY;
+        w = viewport.clientWidth; base = -index * w;
+        track.classList.add('dragging'); track.setPointerCapture(e.pointerId);
+      });
+      track.addEventListener('pointermove', e => {
+        if (!dragging) return;
+        const dx = e.clientX - startX, dy = e.clientY - startY;
+        if (dir === null && (Math.abs(dx) > 6 || Math.abs(dy) > 6)) dir = Math.abs(dx) > Math.abs(dy) ? 'h' : 'v';
+        if (dir === 'h') {
+          e.preventDefault();
+          let x = base + dx;
+          const min = -(slides.length - 1) * w;
+          if (x > 0) x *= .35;                       // rubber-band at edges
+          else if (x < min) x = min + (x - min) * .35;
+          setX(x, false);
+        }
+      });
+      function endDrag(e) {
+        if (!dragging) return;
+        dragging = false; track.classList.remove('dragging');
+        if (dir === 'h') {
+          const dx = e.clientX - startX;
+          if (dx < -50) go(index + 1);
+          else if (dx > 50) go(index - 1);
+          else go(index);
+        }
+      }
+      track.addEventListener('pointerup', endDrag);
+      track.addEventListener('pointercancel', endDrag);
+      go(0);
     })();
+
+    /* Animated network background — the connectivity motive, in canvas */
+    function createNetwork(canvas) {
+      const ctx = canvas.getContext('2d');
+      if (!ctx) return;
+      const ACC = '79,157,255', DIST = 128, MAXN = 66;
+      let w = 0, h = 0, nodes = [], pulses = [], raf = 0, onscreen = true;
+      function resize() {
+        const r = canvas.getBoundingClientRect();
+        w = Math.max(1, r.width | 0); h = Math.max(1, r.height | 0);
+        const dpr = Math.min(window.devicePixelRatio || 1, 2);
+        canvas.width = (w * dpr) | 0; canvas.height = (h * dpr) | 0;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        const n = Math.min(MAXN, Math.max(14, Math.round(w * h * 0.00007)));
+        nodes = Array.from({ length: n }, () => ({
+          x: Math.random() * w, y: Math.random() * h,
+          vx: (Math.random() - .5) * .22, vy: (Math.random() - .5) * .22,
+        }));
+        pulses = [];
+      }
+      function draw(animate) {
+        ctx.clearRect(0, 0, w, h);
+        for (let i = 0; i < nodes.length; i++) {
+          const a = nodes[i];
+          if (animate) {
+            a.x += a.vx; a.y += a.vy;
+            if (a.x < -20) a.x = w + 20; else if (a.x > w + 20) a.x = -20;
+            if (a.y < -20) a.y = h + 20; else if (a.y > h + 20) a.y = -20;
+          }
+          for (let j = i + 1; j < nodes.length; j++) {
+            const b = nodes[j], dx = a.x - b.x, dy = a.y - b.y, d2 = dx * dx + dy * dy;
+            if (d2 < DIST * DIST) {
+              const o = (1 - Math.sqrt(d2) / DIST) * .45;
+              ctx.strokeStyle = `rgba(${ACC},${o.toFixed(3)})`;
+              ctx.lineWidth = 1;
+              ctx.beginPath(); ctx.moveTo(a.x, a.y); ctx.lineTo(b.x, b.y); ctx.stroke();
+            }
+          }
+        }
+        for (const a of nodes) {
+          ctx.fillStyle = `rgba(${ACC},.6)`;
+          ctx.beginPath(); ctx.arc(a.x, a.y, 1.5, 0, 6.283); ctx.fill();
+        }
+        if (animate) {
+          if (pulses.length < 5 && Math.random() < .05 && nodes.length > 2) {
+            const i = Math.random() * nodes.length | 0; const j = Math.random() * nodes.length | 0;
+            if (j !== i) pulses.push({ a: i, b: j, t: 0, s: .012 + Math.random() * .02 });
+          }
+          for (let k = pulses.length - 1; k >= 0; k--) {
+            const p = pulses[k]; p.t += p.s;
+            const a = nodes[p.a], b = nodes[p.b];
+            if (p.t >= 1 || !a || !b) { pulses.splice(k, 1); continue; }
+            const x = a.x + (b.x - a.x) * p.t, y = a.y + (b.y - a.y) * p.t;
+            ctx.fillStyle = `rgba(${ACC},.95)`; ctx.beginPath(); ctx.arc(x, y, 2.3, 0, 6.283); ctx.fill();
+            ctx.fillStyle = `rgba(${ACC},.22)`; ctx.beginPath(); ctx.arc(x, y, 5.5, 0, 6.283); ctx.fill();
+          }
+        }
+      }
+      function loop() { draw(true); raf = requestAnimationFrame(loop); }
+      function start() { if (raf || !motionOK || !onscreen || document.hidden) return; loop(); }
+      function stop() { if (raf) { cancelAnimationFrame(raf); raf = 0; } }
+      resize();
+      draw(false);                       // static frame (also the reduced-motion state)
+      if (motionOK) start();
+      if ('ResizeObserver' in window) new ResizeObserver(() => { resize(); draw(false); if (motionOK) start(); }).observe(canvas);
+      else window.addEventListener('resize', () => { resize(); draw(false); });
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver(es => { onscreen = es[0].isIntersecting; onscreen ? start() : stop(); }, { threshold: 0 }).observe(canvas);
+      }
+      document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
+    }
+    ['netHero', 'netBand'].forEach(id => { const c = document.getElementById(id); if (c) createNetwork(c); });
 
     /* Scrollspy — highlight the nav link for the section in view */
     const navLinks = [...document.querySelectorAll('nav a')];
