@@ -123,6 +123,19 @@
       padding-inline: 24px;
     }
 
+    /* thin scroll-progress bar at the very top */
+    .scroll-progress {
+      position: fixed;
+      top: 0; left: 0;
+      height: 2px; width: 100%;
+      transform: scaleX(0);
+      transform-origin: left;
+      background: var(--accent);
+      box-shadow: 0 0 10px rgba(79,157,255,.7);
+      z-index: calc(var(--z-header) + 1);
+      pointer-events: none;
+    }
+
     .mono {
       font-family: var(--mono);
       font-size: 12px;
@@ -485,9 +498,9 @@
       padding: 18px;
       display: flex;
       flex-direction: column;
-      justify-content: flex-end;   /* anchor output to the bottom */
-      gap: 7px;
-      height: 246px;
+      justify-content: flex-start;  /* output starts at the top, like a real shell */
+      gap: 6px;
+      height: 266px;
       overflow: hidden;
       color: var(--muted);
     }
@@ -627,11 +640,11 @@
     }
     .principles { display: flex; flex-direction: column; gap: 4px; }
     .principle {
-      padding: 22px 0;
+      padding: 16px 0;
       border-top: 1px solid var(--border);
       display: grid;
       grid-template-columns: auto 1fr;
-      gap: 18px;
+      gap: 16px;
       align-items: start;
     }
     .principle:last-child { border-bottom: 1px solid var(--border); }
@@ -651,31 +664,51 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       border: 1px solid var(--border);
-      border-radius: 16px;
+      border-radius: 14px;
       overflow: hidden;
       background: var(--surface);
     }
     .stat {
-      padding: 28px 26px;
+      position: relative;
+      padding: 18px 20px;
       border-right: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
+      transition: background .25s var(--ease-out);
     }
     .stat:nth-child(2n) { border-right: 0; }
     .stat:nth-last-child(-n+2) { border-bottom: 0; }
+    /* accent top-line that scales in when the stats reveal */
+    .stat::before {
+      content: "";
+      position: absolute; top: -1px; left: 0; width: 100%; height: 2px;
+      background: var(--accent);
+      transform: scaleX(0); transform-origin: left;
+      transition: transform .6s var(--ease-out);
+    }
+    .stats.in .stat:nth-child(1)::before { transition-delay: .05s; }
+    .stats.in .stat:nth-child(2)::before { transition-delay: .13s; }
+    .stats.in .stat:nth-child(3)::before { transition-delay: .21s; }
+    .stats.in .stat:nth-child(4)::before { transition-delay: .29s; }
+    .stats.in .stat::before { transform: scaleX(1); }
+    @media (hover: hover) and (pointer: fine) {
+      .stat:hover { background: var(--surface-2); }
+    }
     .stat .num {
-      font-size: clamp(2.05rem, 3.4vw, 2.65rem);
+      font-size: clamp(2rem, 3.3vw, 2.55rem);
       font-weight: 700;
       letter-spacing: -.03em;
       line-height: 1;
       color: var(--ink);
+      font-variant-numeric: tabular-nums;
     }
+    .stat .num .pre { color: var(--muted); margin-right: 1px; }
     /* one consistent unit treatment: smaller, muted, sits on the baseline */
-    .stat .unit { font-size: .48em; font-weight: 600; letter-spacing: 0; color: var(--muted); }
+    .stat .unit { font-size: .46em; font-weight: 600; letter-spacing: 0; color: var(--muted); }
     .stat .unit.sp { margin-left: .2em; }
     .stat .lbl {
-      margin-top: 13px;
+      margin-top: 9px;
       font-family: var(--mono);
-      font-size: 11px;
+      font-size: 10.5px;
       letter-spacing: .06em;
       text-transform: uppercase;
       color: var(--faint);
@@ -900,6 +933,7 @@
   </style>
 </head>
 <body>
+  <div class="scroll-progress" id="scrollProg" aria-hidden="true"></div>
   <div class="field" aria-hidden="true"></div>
 
   <!-- ── HEADER ── -->
@@ -937,9 +971,9 @@
       <div class="hero-left">
         <h1 class="reveal d1">The IT team your business <b>runs on</b>.</h1>
         <p class="lead reveal d2">
-          We plan, build, and look after your cloud, networks, and security,
-          then pick up the phone the moment something breaks. One team for all
-          of it, sharpest on the days it matters most.
+          We plan, build, and look after your cloud, networks, security, and the
+          AI agents that run your busywork, then pick up the phone the moment
+          something breaks. One team for all of it.
         </p>
         <div class="hero-btns reveal d3">
           <a class="btn btn-primary" href="#contact"><i class="fa fa-paper-plane" aria-hidden="true"></i> Start a conversation</a>
@@ -985,56 +1019,79 @@
             <div class="term-track" id="termTrack">
 
               <div class="term-slide">
-                <div class="term" role="img" aria-label="Terminal deploying to production: nodes provisioned, patches applied, backups synced, deploy complete.">
+                <div class="term" role="img" aria-label="Terminal provisioning a web stack: Kubernetes, nginx, Postgres and Redis all up.">
+                  <div class="term-bar" aria-hidden="true">
+                    <span class="t-dot" style="background:#ff5f56"></span>
+                    <span class="t-dot" style="background:#ffbd2e"></span>
+                    <span class="t-dot" style="background:#27c93f"></span>
+                    <span class="t-label">virtup — provision</span>
+                  </div>
+                  <div class="term-body" id="termBody0" data-seq="provision" aria-hidden="true">
+                    <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup provision --stack web</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">kubernetes 1.30 · 6 nodes</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">nginx ingress · 3 replicas</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">postgres 16 · primary + 2 replicas</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">redis 7 · cache warm</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">stack up in 18.2s</span></div>
+                    <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="term-slide">
+                <div class="term" role="img" aria-label="Terminal deploying to production: image pushed, rolling update, migrations applied, deploy complete.">
                   <div class="term-bar" aria-hidden="true">
                     <span class="t-dot" style="background:#ff5f56"></span>
                     <span class="t-dot" style="background:#ffbd2e"></span>
                     <span class="t-dot" style="background:#27c93f"></span>
                     <span class="t-label">virtup — deploy</span>
                   </div>
-                  <div class="term-body" id="termBody0" data-seq="deploy" aria-hidden="true">
+                  <div class="term-body" id="termBody1" data-seq="deploy" aria-hidden="true">
                     <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup deploy --env prod</span></div>
-                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">provisioned 18/18 nodes</span></div>
-                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">security patches applied</span></div>
-                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">backups synced · 41/41</span></div>
-                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">image pushed · sha 9f2c1a</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">rolling update · 6/6 pods</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">12 migrations applied</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">cdn cache purged</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">deploy complete in 11.6s</span></div>
                     <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
                   </div>
                 </div>
               </div>
 
               <div class="term-slide">
-                <div class="term" role="img" aria-label="Terminal running a full security scan: signatures current, 1,284 endpoints scanned, zero threats found.">
+                <div class="term" role="img" aria-label="Terminal running a full security scan: signatures current, endpoints scanned, TLS valid, zero threats.">
                   <div class="term-bar" aria-hidden="true">
                     <span class="t-dot" style="background:#ff5f56"></span>
                     <span class="t-dot" style="background:#ffbd2e"></span>
                     <span class="t-dot" style="background:#27c93f"></span>
                     <span class="t-label">virtup — security</span>
                   </div>
-                  <div class="term-body" id="termBody1" data-seq="scan" aria-hidden="true">
+                  <div class="term-body" id="termBody2" data-seq="scan" aria-hidden="true">
                     <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup scan --full</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">signatures up to date</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">1,284 endpoints scanned</span></div>
-                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">0 threats · 0 quarantined</span></div>
-                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">scan complete in 8.1s</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">TLS valid · 287d avg</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">0 threats · 0 over-privileged</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">scan complete in 7.4s</span></div>
                     <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
                   </div>
                 </div>
               </div>
 
               <div class="term-slide">
-                <div class="term" role="img" aria-label="Terminal verifying backups: 41 volumes snapshotted, checksums verified, restore test passed.">
+                <div class="term" role="img" aria-label="Terminal verifying backups: volumes snapshotted, checksums verified, restore test passed.">
                   <div class="term-bar" aria-hidden="true">
                     <span class="t-dot" style="background:#ff5f56"></span>
                     <span class="t-dot" style="background:#ffbd2e"></span>
                     <span class="t-dot" style="background:#27c93f"></span>
                     <span class="t-label">virtup — backups</span>
                   </div>
-                  <div class="term-body" id="termBody2" data-seq="backup" aria-hidden="true">
+                  <div class="term-body" id="termBody3" data-seq="backup" aria-hidden="true">
                     <div class="t-line"><span class="t-prompt">$</span><span class="t-cmd">virtup backup --verify</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">snapshot 41/41 volumes</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">checksums verified</span></div>
-                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">restore test passed</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">restore test · 42s</span></div>
+                    <div class="t-out"><span class="t-ok">✔</span><span class="t-val">0 errors found</span></div>
                     <div class="t-out"><span class="t-ok">✔</span><span class="t-val">verify complete in 6.7s</span></div>
                     <div class="t-out" style="padding-left:0"><span class="cursor"></span></div>
                   </div>
@@ -1055,7 +1112,7 @@
         <div class="section-head reveal">
           <div class="kicker">What we do</div>
           <h2 id="svc-h">Everything your IT needs, from one team.</h2>
-          <p>Most companies stitch together a separate vendor for each of these. We cover all six, so the gaps between them stop being your problem.</p>
+          <p>From cloud and security to custom AI agents that run the busywork, we cover the whole stack, so the gaps between vendors stop being your problem.</p>
         </div>
 
         <div class="grid-panel reveal d1">
@@ -1088,6 +1145,21 @@
             <div class="cell-icon"><i class="fa fa-compass-drafting" aria-hidden="true"></i></div>
             <h3>IT Consulting <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
             <p>An honest read on what to fix now, what can wait, and what to stop paying for. No hardware to upsell you.</p>
+          </a>
+          <a class="cell" href="#contact">
+            <div class="cell-icon"><i class="fa fa-robot" aria-hidden="true"></i></div>
+            <h3>AI Agents <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
+            <p>Custom AI agents that handle the repetitive work, triaging tickets, drafting replies, and watching your systems, escalating to a human only when it actually matters.</p>
+          </a>
+          <a class="cell" href="#contact">
+            <div class="cell-icon"><i class="fa fa-wand-magic-sparkles" aria-hidden="true"></i></div>
+            <h3>Automation &amp; Integration <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
+            <p>We wire your tools together and let agents run the flow between them, from onboarding to reporting, so nobody copies data between tabs by hand again.</p>
+          </a>
+          <a class="cell" href="#contact">
+            <div class="cell-icon"><i class="fa fa-chart-column" aria-hidden="true"></i></div>
+            <h3>Data &amp; Analytics <i class="fa fa-arrow-right cell-arrow" aria-hidden="true"></i></h3>
+            <p>Pipelines and dashboards that turn the data you already collect into decisions, with AI summaries you can trace back to the source.</p>
           </a>
         </div>
       </div>
@@ -1138,21 +1210,21 @@
             </div>
           </div>
 
-          <div class="stats reveal d2" aria-label="Service metrics">
+          <div class="stats reveal d2" id="stats" aria-label="Service metrics">
             <div class="stat">
-              <div class="num">99.9<span class="unit">%</span></div>
+              <div class="num"><span class="n" data-to="99.9" data-dec="1">99.9</span><span class="unit">%</span></div>
               <div class="lbl">Uptime</div>
             </div>
             <div class="stat">
-              <div class="num">&lt;4<span class="unit">h</span></div>
+              <div class="num"><span class="pre">&lt;</span><span class="n" data-to="4">4</span><span class="unit">h</span></div>
               <div class="lbl">Response time</div>
             </div>
             <div class="stat">
-              <div class="num">24<span class="unit">/7</span></div>
+              <div class="num"><span class="n" data-to="24">24</span><span class="unit">/7</span></div>
               <div class="lbl">Monitoring</div>
             </div>
             <div class="stat">
-              <div class="num">1<span class="unit sp">day</span></div>
+              <div class="num"><span class="n" data-to="1">1</span><span class="unit sp">day</span></div>
               <div class="lbl">Reply time</div>
             </div>
           </div>
@@ -1253,6 +1325,9 @@
           <a href="#services" class="footer-link">Cybersecurity</a>
           <a href="#services" class="footer-link">Network &amp; Systems</a>
           <a href="#services" class="footer-link">IT Consulting</a>
+          <a href="#services" class="footer-link">AI Agents</a>
+          <a href="#services" class="footer-link">Automation &amp; Integration</a>
+          <a href="#services" class="footer-link">Data &amp; Analytics</a>
         </div>
         <div class="footer-col">
           <div class="footer-heading">Company</div>
@@ -1354,7 +1429,7 @@
         type: async (cmd) => {
           const line = add(`<span class="t-prompt">$</span> <span class="t-cmd"></span><span class="cursor"></span>`, 't-line');
           const span = line.querySelector('.t-cmd');
-          for (const ch of cmd) { span.textContent += ch; await sleep(30 + Math.random() * 55); }
+          for (const ch of cmd) { span.textContent += ch; await sleep(18 + Math.random() * 32); }
           const c = line.querySelector('.cursor'); if (c) c.remove();
           return line;
         },
@@ -1362,7 +1437,7 @@
           const line = add(`<span class="t-spin"></span><span class="t-dim">${label}</span>`);
           const s = line.querySelector('.t-spin');
           const end = Date.now() + ms; let i = 0;
-          while (Date.now() < end) { s.textContent = SPIN[i++ % SPIN.length]; await sleep(72); }
+          while (Date.now() < end) { s.textContent = SPIN[i++ % SPIN.length]; await sleep(60); }
           return line;
         },
         bar: async (label, ms) => {
@@ -1377,35 +1452,46 @@
         },
       };
       (async function loop() {
-        while (true) { t.clear(); await seq(t); await sleep(4200); }
+        while (true) { t.clear(); await seq(t); await sleep(2800); }
       })();
     }
 
     const SEQUENCES = {
+      provision: async (t) => {
+        await t.type('virtup provision --stack web'); await t.sleep(260);
+        let l = await t.spin('pulling base images', 850); t.ok(l, 'images cached'); await t.sleep(140);
+        await t.bar('installing kubernetes 1.30', 1250);
+        t.print('<span class="t-ok">✔</span><span class="t-val">cluster ready · 6 nodes</span>'); await t.sleep(150);
+        l = await t.spin('deploying nginx ingress', 800); t.ok(l, 'nginx 1.27 · <span class="t-val">3 replicas</span>'); await t.sleep(140);
+        l = await t.spin('starting postgres 16', 900); t.ok(l, 'postgres 16 · <span class="t-val">primary + 2 replicas</span>'); await t.sleep(140);
+        l = await t.spin('starting redis 7', 700); t.ok(l, 'redis 7 · cache warm'); await t.sleep(150);
+        t.print('<span class="t-ok">✔</span><span class="t-val">stack up in 18.2s</span>'); t.cursor();
+      },
       deploy: async (t) => {
-        await t.type('virtup deploy --env prod'); await t.sleep(420);
-        let l = await t.spin('provisioning cloud nodes', 1500); t.ok(l, 'provisioned <span class="t-val">18/18 nodes</span>'); await t.sleep(260);
-        await t.bar('installing security patches', 1700); await t.sleep(120);
-        t.print('<span class="t-ok">✔</span><span>patches applied</span>'); await t.sleep(340);
-        l = await t.spin('syncing backups', 1200); t.ok(l, 'backups synced <span class="t-val">41/41</span>'); await t.sleep(260);
-        l = await t.spin('running health checks', 1000); t.ok(l, 'all checks passed'); await t.sleep(300);
-        t.print('<span class="t-ok">✔</span><span class="t-val">deploy complete in 12.4s</span>'); t.cursor();
+        await t.type('virtup deploy --env prod'); await t.sleep(260);
+        await t.bar('building containers', 1200);
+        t.print('<span class="t-ok">✔</span><span class="t-val">image pushed · sha 9f2c1a</span>'); await t.sleep(150);
+        let l = await t.spin('rolling update', 950); t.ok(l, '<span class="t-val">6/6 pods</span> healthy'); await t.sleep(140);
+        l = await t.spin('running migrations', 800); t.ok(l, '12 migrations applied'); await t.sleep(140);
+        l = await t.spin('purging cdn cache', 650); t.ok(l, 'edge cache purged'); await t.sleep(150);
+        t.print('<span class="t-ok">✔</span><span class="t-val">deploy complete in 11.6s</span>'); t.cursor();
       },
       scan: async (t) => {
-        await t.type('virtup scan --full'); await t.sleep(420);
-        let l = await t.spin('fetching signature feed', 1100); t.ok(l, 'signatures up to date'); await t.sleep(240);
-        await t.bar('scanning 1,284 endpoints', 2000); await t.sleep(120);
-        t.print('<span class="t-ok">✔</span><span>1,284 endpoints scanned</span>'); await t.sleep(320);
-        l = await t.spin('analyzing anomalies', 1100); t.ok(l, '<span class="t-val">0 threats</span> · 0 quarantined'); await t.sleep(300);
-        t.print('<span class="t-ok">✔</span><span class="t-val">scan complete in 8.1s</span>'); t.cursor();
+        await t.type('virtup scan --full'); await t.sleep(260);
+        let l = await t.spin('fetching signature feed', 800); t.ok(l, 'signatures up to date'); await t.sleep(140);
+        await t.bar('scanning 1,284 endpoints', 1500);
+        t.print('<span class="t-ok">✔</span><span class="t-val">1,284 endpoints clean</span>'); await t.sleep(150);
+        l = await t.spin('checking TLS certs', 750); t.ok(l, 'all valid · 287d avg'); await t.sleep(140);
+        l = await t.spin('auditing IAM roles', 800); t.ok(l, '0 over-privileged'); await t.sleep(150);
+        t.print('<span class="t-ok">✔</span><span class="t-val">0 threats · done in 7.4s</span>'); t.cursor();
       },
       backup: async (t) => {
-        await t.type('virtup backup --verify'); await t.sleep(420);
-        let l = await t.spin('snapshotting volumes', 1300); t.ok(l, 'snapshot <span class="t-val">41/41 volumes</span>'); await t.sleep(240);
-        await t.bar('verifying checksums', 1800); await t.sleep(120);
-        t.print('<span class="t-ok">✔</span><span>checksums verified</span>'); await t.sleep(320);
-        l = await t.spin('running restore test', 1100); t.ok(l, 'restore test passed'); await t.sleep(300);
-        t.print('<span class="t-ok">✔</span><span class="t-val">verify complete in 6.7s</span>'); t.cursor();
+        await t.type('virtup backup --verify'); await t.sleep(260);
+        let l = await t.spin('snapshotting volumes', 950); t.ok(l, 'snapshot <span class="t-val">41/41 volumes</span>'); await t.sleep(140);
+        await t.bar('verifying checksums', 1300);
+        t.print('<span class="t-ok">✔</span><span class="t-val">checksums verified</span>'); await t.sleep(150);
+        l = await t.spin('test restore to sandbox', 1000); t.ok(l, 'restore ok · 42s'); await t.sleep(150);
+        t.print('<span class="t-ok">✔</span><span class="t-val">verify complete · 0 errors</span>'); t.cursor();
       },
     };
     document.querySelectorAll('[data-seq]').forEach(b => runTerminal(b, SEQUENCES[b.dataset.seq]));
@@ -1544,6 +1630,43 @@
       document.addEventListener('visibilitychange', () => { document.hidden ? stop() : start(); });
     }
     ['netHero', 'netBand'].forEach(id => { const c = document.getElementById(id); if (c) createNetwork(c); });
+
+    /* Count-up metrics when the stats grid scrolls into view */
+    (function countUp() {
+      const stats = document.getElementById('stats');
+      if (!stats) return;
+      const run = () => {
+        stats.classList.add('in');
+        if (!motionOK) return;
+        stats.querySelectorAll('.n').forEach(el => {
+          const to = parseFloat(el.dataset.to), dec = +(el.dataset.dec || 0), dur = 1200, t0 = performance.now();
+          const tick = (now) => {
+            const p = Math.min(1, (now - t0) / dur), e = 1 - Math.pow(1 - p, 3);
+            el.textContent = (to * e).toFixed(dec);
+            if (p < 1) requestAnimationFrame(tick); else el.textContent = to.toFixed(dec);
+          };
+          requestAnimationFrame(tick);
+        });
+      };
+      if ('IntersectionObserver' in window) {
+        const io = new IntersectionObserver(es => { es.forEach(e => { if (e.isIntersecting) { run(); io.disconnect(); } }); }, { threshold: 0.4 });
+        io.observe(stats);
+      } else run();
+    })();
+
+    /* Scroll-progress bar */
+    (function scrollProgress() {
+      const prog = document.getElementById('scrollProg');
+      if (!prog) return;
+      const upd = () => {
+        const doc = document.documentElement;
+        const max = doc.scrollHeight - doc.clientHeight;
+        prog.style.transform = 'scaleX(' + (max > 0 ? (doc.scrollTop / max) : 0) + ')';
+      };
+      upd();
+      window.addEventListener('scroll', upd, { passive: true });
+      window.addEventListener('resize', upd);
+    })();
 
     /* Scrollspy — highlight the nav link for the section in view */
     const navLinks = [...document.querySelectorAll('nav a')];
