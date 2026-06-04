@@ -1248,7 +1248,7 @@
 
       <!-- Wider terminal carousel, centered a little below -->
       <div class="term-stage reveal d3">
-        <div class="carousel" data-carousel data-dwell="5000">
+        <div class="carousel" data-carousel data-seq-driven>
           <span class="swipe-hint" aria-hidden="true">swipe <i class="fa fa-arrow-right"></i></span>
           <div class="cviewport">
             <div class="ctrack">
@@ -1650,10 +1650,8 @@
       }, 1800);
     })();
 
-    /* Terminal runner: typed commands, spinners, a progress bar and sleeps,
-       so each terminal reads like real commands running. */
-    function runTerminal(body, seq) {
-      if (!body || !motionOK || typeof seq !== 'function') return;
+    /* Terminal helpers: typed commands, spinners, a progress bar and sleeps. */
+    function makeTerm(body) {
       const SPIN = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
       const sleep = ms => new Promise(r => setTimeout(r, ms));
       const add = (html, cls) => {
@@ -1666,7 +1664,7 @@
         }
         return el;
       };
-      const t = {
+      return {
         sleep,
         clear: () => { body.innerHTML = ''; },
         print: (html) => add(html),
@@ -1697,8 +1695,15 @@
           return line;
         },
       };
-      (async function loop() {
-        while (true) { t.clear(); await seq(t); await sleep(2800); }
+    }
+    // Run a sequence once, then let the caret blink 2-4 times. Resolves when done.
+    function playSequence(body, seq) {
+      if (!body || typeof seq !== 'function') return Promise.resolve();
+      const t = makeTerm(body);
+      return (async () => {
+        t.clear();
+        await seq(t);                              // ends by showing the caret
+        await t.sleep(2300 + Math.random() * 2000); // ~2-4 blinks before we move on
       })();
     }
 
@@ -1740,7 +1745,8 @@
         t.print('<span class="t-ok">✔</span><span class="t-val">verify complete · 0 errors</span>'); t.cursor();
       },
     };
-    document.querySelectorAll('[data-seq]').forEach(b => runTerminal(b, SEQUENCES[b.dataset.seq]));
+    // Terminals are driven by their carousel (sequence-driven mode) so they
+    // finish a full command run before the slide advances.
 
     /* Swipeable carousel — pointer drag, snap, auto-advance, dots.
        Applied to any [data-carousel] (the panel and the terminal stage). */
@@ -1752,6 +1758,19 @@
       const slides = [...track.children];
       let index = 0, w = 0, base = 0, startX = 0, startY = 0, dir = null, dragging = false;
       let autoT = null, paused = false; const DWELL = +(root.dataset.dwell || 5000);
+      const seqDriven = root.hasAttribute('data-seq-driven');
+      let gen = 0;
+      // Sequence-driven advance: play the active terminal's command run, wait
+      // for it to finish (caret blinks), then move on — never mid-command.
+      async function playActive() {
+        const myGen = ++gen;
+        const body = slides[index] && slides[index].querySelector('[data-seq]');
+        if (!body) return;
+        await playSequence(body, SEQUENCES[body.dataset.seq]);
+        if (myGen !== gen) return;                 // navigated away meanwhile
+        while (paused) { await new Promise(r => setTimeout(r, 200)); if (myGen !== gen) return; }
+        go((index + 1) % slides.length);
+      }
       const dots = slides.map((_, i) => {
         const b = document.createElement('button');
         b.type = 'button';
@@ -1771,11 +1790,11 @@
         dots.forEach((d, k) => d.classList.toggle('on', k === index));
         const hint = root.querySelector('.swipe-hint');
         if (hint && index > 0) hint.style.opacity = '0';
-        schedule();
+        if (seqDriven) playActive(); else schedule();
       }
       function schedule() {
         clearTimeout(autoT);
-        if (paused || slides.length < 2 || !motionOK) return;
+        if (seqDriven || paused || slides.length < 2 || !motionOK) return;
         autoT = setTimeout(() => go((index + 1) % slides.length), DWELL);
       }
       const pause = () => { paused = true; clearTimeout(autoT); };
