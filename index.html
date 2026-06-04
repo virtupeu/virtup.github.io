@@ -549,6 +549,10 @@
       background: rgba(255,255,255,.02);
     }
     .term-bar .t-dot { width: 11px; height: 11px; border-radius: 50%; flex-shrink: 0; }
+    /* keep the traffic-light colors identical across breakpoints */
+    .term-bar .t-dot:nth-child(1) { background: #ff5f56; }
+    .term-bar .t-dot:nth-child(2) { background: #ffbd2e; }
+    .term-bar .t-dot:nth-child(3) { background: #27c93f; }
     .term-bar .t-label {
       margin-left: 8px;
       font-family: var(--mono);
@@ -963,6 +967,7 @@
       gap: clamp(28px, 4vw, 56px);
     }
     .footer-brand .logo { margin-bottom: 16px; }
+    .footer-brand .mark { transform: translateY(3px); }   /* align with the wordmark */
     .footer-grid p { color: var(--muted); font-size: 14px; max-width: 32ch; line-height: 1.6; }
     .footer-meta {
       margin-top: 16px;
@@ -1092,6 +1097,8 @@
       /* more breathing room between the footer headline and the CTA button
          once they stack on mobile */
       .footer-cta { gap: 36px; }
+      /* background watermark higher and more to the left on mobile */
+      .footer-mark { right: auto; left: -30px; bottom: 60px; width: 240px; }
       /* On a narrow, tall hero a top-down scrim reads better than the
          desktop left-to-right one, and keeps the headline legible. */
       .hero-bg::after {
