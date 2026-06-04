@@ -1201,7 +1201,7 @@
                       <circle class="spark-end" id="sparkEnd" cx="240" cy="7" r="3" />
                     </svg>
                     <div class="uptime">
-                      <b id="upt">99.98%</b>
+                      <b id="upt">99.998%</b>
                       <span>uptime · 30d</span>
                     </div>
                   </div>
@@ -1622,7 +1622,16 @@
       const dot  = document.getElementById('sparkEnd');
       if (path) {
         const N = 11, W = 240, H = 40, STEP = W / (N - 1);
-        let vals = Array.from({ length: N }, () => 6 + Math.random() * 26);
+        // Map each uptime value to a fixed Y band in the sparkline so the
+        // line visually tracks the number: 99.97% = low, 99.98% = mid, 99.99% = high
+        const LEVELS = [
+          { label: '99.997%', y: 10 },  // low band
+          { label: '99.998%', y: 22 },  // mid band
+          { label: '99.999%', y: 33 },  // high band
+        ];
+        let curLevel = 1;   // start at 99.98%
+        const yFor = () => LEVELS[curLevel].y + (Math.random() * 5 - 2.5);
+        let vals = Array.from({ length: N }, () => yFor());
         const render = () => {
           path.setAttribute('d', vals.map((v, i) =>
             `${i ? 'L' : 'M'}${(i * STEP).toFixed(1)},${(H - v).toFixed(1)}`).join(' '));
@@ -1630,15 +1639,14 @@
         };
         render();
         const upt = document.getElementById('upt');
-        let tick = 0;
         setInterval(() => {
-          tick++;
-          const high = (tick % 5 === 0);   // roughly every 4-5 ticks
-          // on a 99.99% tick the line peaks, so the endpoint dot sits higher
-          let n = high ? (31 + Math.random() * 3) : vals[N - 1] + (Math.random() * 12 - 6);
-          vals.push(Math.max(5, Math.min(34, n))); vals.shift();
+          // occasionally drift to a neighbouring level (±1), weighted to stay put
+          const r = Math.random();
+          if (r < 0.18 && curLevel > 0) curLevel--;
+          else if (r < 0.36 && curLevel < LEVELS.length - 1) curLevel++;
+          vals.push(Math.max(2, Math.min(H - 2, yFor()))); vals.shift();
           render();
-          if (upt) upt.textContent = high ? '99.99%' : '99.98%';
+          if (upt) upt.textContent = LEVELS[curLevel].label;
         }, 1500);
       }
       const mReq = document.getElementById('mReq');
