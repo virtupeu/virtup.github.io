@@ -442,21 +442,23 @@
 
     /* swipeable terminal carousel */
     .carousel { position: relative; }
-    .cviewport { overflow: hidden; border-radius: 16px; }
-    .ctrack {
-      display: flex;
-      touch-action: pan-y;
-      cursor: grab;
-      will-change: transform;
-      user-select: none; -webkit-user-select: none; -webkit-touch-callout: none;
+    .cviewport {
+      overflow-x: auto;
+      overflow-y: hidden;
+      border-radius: 16px;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior-x: contain;
+      scrollbar-width: none;       /* Firefox */
+      -ms-overflow-style: none;    /* IE/Edge */
     }
-    .ctrack:active { cursor: grabbing; }
-    .ctrack.dragging { transition: none !important; }
-    .cslide { flex: 0 0 100%; min-width: 0; }
+    .cviewport::-webkit-scrollbar { display: none; }   /* WebKit */
+    .ctrack { display: flex; }
+    .cslide { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
     .cdots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
     .cdots button {
       width: 8px; height: 8px; border-radius: 999px; padding: 0; border: 0;
-      background: rgba(255,255,255,.34); cursor: pointer;   /* visible gray for inactive */
+      background: rgba(255,255,255,.45); cursor: pointer;   /* visible gray for inactive */
       transition: background .2s var(--ease-out), width .25s var(--ease-out);
     }
     .cdots button:active { transform: scale(.9); }
@@ -918,7 +920,7 @@
     .footer-bg canvas { display: block; width: 100%; height: 100%; }
     /* barely-visible brand watermark */
     .footer-mark {
-      position: absolute; right: -48px; bottom: -22px; z-index: 0;
+      position: absolute; right: -78px; bottom: -22px; z-index: 0;
       width: clamp(220px, 30vw, 400px);
       aspect-ratio: 1 / 1;
       background: url("virtup-logo.png") center / contain no-repeat;
@@ -1753,54 +1755,57 @@
     // Terminals are driven by their carousel (sequence-driven mode) so they
     // finish a full command run before the slide advances.
 
-    /* Swipeable carousel — pointer drag, snap, auto-advance, dots.
-       Applied to any [data-carousel] (the panel and the terminal stage). */
+    /* Native scroll-snap carousel — reliable touch swiping, with dots and
+       (panel) auto-advance / (terminal) sequence-driven advance. */
     function setupCarousel(root) {
       const track = root.querySelector('.ctrack');
       const viewport = root.querySelector('.cviewport');
       const dotsWrap = root.querySelector('.cdots');
       if (!root || !track || !viewport || !dotsWrap) return;
       const slides = [...track.children];
-      let index = 0, w = 0, base = 0, startX = 0, startY = 0, dir = null, dragging = false;
-      let autoT = null, paused = false; const DWELL = +(root.dataset.dwell || 5000);
+      let index = 0, autoT = null, paused = false, programmatic = false, scrollT = null;
+      const DWELL = +(root.dataset.dwell || 5000);
       const seqDriven = root.hasAttribute('data-seq-driven');
       let gen = 0, dragFreeze = false;
-      // Sequence-driven advance: play the active terminal's command run, wait
-      // for it to finish (caret blinks), then move on — never mid-command.
+
       async function playActive() {
         const myGen = ++gen;
         const body = slides[index] && slides[index].querySelector('[data-seq]');
         if (!body) return;
         await playSequence(body, SEQUENCES[body.dataset.seq], () => dragFreeze);
-        if (myGen !== gen) return;                 // navigated away meanwhile
+        if (myGen !== gen) return;
         while (paused) { await new Promise(r => setTimeout(r, 200)); if (myGen !== gen) return; }
-        go((index + 1) % slides.length);
+        goTo((index + 1) % slides.length);
       }
       const dots = slides.map((_, i) => {
         const b = document.createElement('button');
         b.type = 'button';
         b.setAttribute('aria-label', 'Show view ' + (i + 1));
-        b.addEventListener('click', () => go(i));
+        b.addEventListener('click', () => goTo(i));
         dotsWrap.appendChild(b);
         return b;
       });
-      const setX = (x, anim) => {
-        track.style.transition = anim ? 'transform .42s var(--ease-out)' : 'none';
-        track.style.transform = 'translate3d(' + x + 'px,0,0)';
-      };
-      function go(i) {
+      // react to a new active slide (from a swipe, a dot, or auto-advance)
+      function setActive(i) {
         index = Math.max(0, Math.min(slides.length - 1, i));
-        w = viewport.clientWidth;
-        setX(-index * w, true);
         dots.forEach((d, k) => d.classList.toggle('on', k === index));
         const hint = root.querySelector('.swipe-hint');
         if (hint && index > 0) hint.style.opacity = '0';
         if (seqDriven) playActive(); else schedule();
       }
+      // programmatic scroll to a slide (dots / auto-advance)
+      function goTo(i, smooth = true) {
+        i = Math.max(0, Math.min(slides.length - 1, i));
+        programmatic = true;
+        viewport.scrollTo({ left: i * viewport.clientWidth, behavior: smooth ? 'smooth' : 'auto' });
+        setActive(i);
+        clearTimeout(scrollT);
+        scrollT = setTimeout(() => { programmatic = false; }, smooth ? 520 : 60);
+      }
       function schedule() {
         clearTimeout(autoT);
         if (seqDriven || paused || slides.length < 2 || !motionOK) return;
-        autoT = setTimeout(() => go((index + 1) % slides.length), DWELL);
+        autoT = setTimeout(() => goTo((index + 1) % slides.length), DWELL);
       }
       const pause = () => { paused = true; clearTimeout(autoT); };
       const resume = () => { paused = false; schedule(); };
@@ -1810,57 +1815,24 @@
       if ('IntersectionObserver' in window) {
         new IntersectionObserver(es => (es[0].isIntersecting ? resume() : pause()), { threshold: 0 }).observe(root);
       }
-      window.addEventListener('resize', () => { w = viewport.clientWidth; setX(-index * w, false); });
+      window.addEventListener('resize', () => { viewport.scrollLeft = index * viewport.clientWidth; });
 
-      // Drag with window-level listeners (more robust than pointer capture,
-      // which could get stuck after the first swipe).
-      const onMove = (e) => {
-        if (!dragging) return;
-        const dx = e.clientX - startX, dy = e.clientY - startY;
-        // bias toward horizontal: only lock vertical if it clearly dominates
-        if (dir === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) dir = (Math.abs(dx) > Math.abs(dy) * 0.6) ? 'h' : 'v';
-        if (dir === 'h') {
-          dragFreeze = true;                          // pause typing during the swipe
-          if (e.cancelable) e.preventDefault();
-          let x = base + dx;
-          const min = -(slides.length - 1) * w;
-          if (x > 0) x *= .35;                       // rubber-band at edges
-          else if (x < min) x = min + (x - min) * .35;
-          setX(x, false);
-        }
-      };
-      const onUp = (e) => {
-        if (!dragging) return;
-        dragging = false;
-        dragFreeze = false;
-        track.classList.remove('dragging');
-        window.removeEventListener('pointermove', onMove);
-        window.removeEventListener('pointerup', onUp);
-        window.removeEventListener('pointercancel', onUp);
-        if (dir === 'h') {
-          const dx = e.clientX - startX;
-          if (dx < -40) go(index + 1);
-          else if (dx > 40) go(index - 1);
-          else go(index);
-        } else if (dir === null) {
-          // a tap/click: left third → previous, right third → next
-          const r = viewport.getBoundingClientRect();
-          const x = e.clientX - r.left;
-          if (x > r.width * 0.62) go(index + 1);
-          else if (x < r.width * 0.38) go(index - 1);
-        }
-      };
-      track.addEventListener('pointerdown', e => {
-        if (dragging) return;
-        dragging = true; dir = null; startX = e.clientX; startY = e.clientY;
-        w = viewport.clientWidth; base = -index * w;
-        clearTimeout(autoT);
-        track.classList.add('dragging');
-        window.addEventListener('pointermove', onMove, { passive: false });
-        window.addEventListener('pointerup', onUp);
-        window.addEventListener('pointercancel', onUp);
-      });
-      go(0);
+      // native horizontal swipe: track scroll, freeze typing while moving,
+      // and pick up user-driven slide changes once it settles
+      let freezeT = null;
+      viewport.addEventListener('scroll', () => {
+        dragFreeze = true;
+        clearTimeout(freezeT);
+        freezeT = setTimeout(() => { dragFreeze = false; }, 180);
+        if (programmatic) return;
+        clearTimeout(scrollT);
+        scrollT = setTimeout(() => {
+          const i = Math.round(viewport.scrollLeft / viewport.clientWidth);
+          if (i !== index) setActive(i);
+        }, 110);
+      }, { passive: true });
+
+      setActive(0);
     }
     document.querySelectorAll('[data-carousel]').forEach(setupCarousel);
 
