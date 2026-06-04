@@ -455,8 +455,8 @@
     .cslide { flex: 0 0 100%; min-width: 0; }
     .cdots { display: flex; justify-content: center; gap: 8px; margin-top: 16px; }
     .cdots button {
-      width: 7px; height: 7px; border-radius: 999px; padding: 0; border: 0;
-      background: var(--border-strong); cursor: pointer;
+      width: 8px; height: 8px; border-radius: 999px; padding: 0; border: 0;
+      background: rgba(255,255,255,.34); cursor: pointer;   /* visible gray for inactive */
       transition: background .2s var(--ease-out), width .25s var(--ease-out);
     }
     .cdots button:active { transform: scale(.9); }
@@ -967,7 +967,7 @@
       gap: clamp(28px, 4vw, 56px);
     }
     .footer-brand .logo { margin-bottom: 16px; }
-    .footer-brand .mark { transform: translateY(3px); }   /* align with the wordmark */
+    .footer-brand .mark { transform: translate(3px, -3px); }   /* nudge up + right to align with the wordmark */
     .footer-grid p { color: var(--muted); font-size: 14px; max-width: 32ch; line-height: 1.6; }
     .footer-meta {
       margin-top: 16px;
@@ -1098,7 +1098,7 @@
          once they stack on mobile */
       .footer-cta { gap: 36px; }
       /* background watermark higher and more to the left on mobile */
-      .footer-mark { right: auto; left: -30px; bottom: 60px; width: 240px; }
+      .footer-mark { right: 20px; left: auto; bottom: 30px; width: 240px; }
       /* On a narrow, tall hero a top-down scrim reads better than the
          desktop left-to-right one, and keeps the headline legible. */
       .hero-bg::after {
@@ -1651,9 +1651,13 @@
     })();
 
     /* Terminal helpers: typed commands, spinners, a progress bar and sleeps. */
-    function makeTerm(body) {
+    function makeTerm(body, frozen) {
+      frozen = frozen || (() => false);
       const SPIN = ['⠋','⠙','⠹','⠸','⠼','⠴','⠦','⠧','⠇','⠏'];
       const sleep = ms => new Promise(r => setTimeout(r, ms));
+      // pause writes while the user is dragging (avoids reflow under the finger,
+      // which makes touch browsers cancel the swipe gesture)
+      const hold = async () => { while (frozen()) await sleep(60); };
       const add = (html, cls) => {
         const el = document.createElement('div');
         el.className = cls || 't-out';
@@ -1673,7 +1677,7 @@
         type: async (cmd) => {
           const line = add(`<span class="t-prompt">$</span> <span class="t-cmd"></span><span class="cursor"></span>`, 't-line');
           const span = line.querySelector('.t-cmd');
-          for (const ch of cmd) { span.textContent += ch; await sleep(18 + Math.random() * 32); }
+          for (const ch of cmd) { await hold(); span.textContent += ch; await sleep(18 + Math.random() * 32); }
           const c = line.querySelector('.cursor'); if (c) c.remove();
           return line;
         },
@@ -1681,13 +1685,14 @@
           const line = add(`<span class="t-spin"></span><span class="t-dim">${label}</span>`);
           const s = line.querySelector('.t-spin');
           const end = Date.now() + ms; let i = 0;
-          while (Date.now() < end) { s.textContent = SPIN[i++ % SPIN.length]; await sleep(60); }
+          while (Date.now() < end) { await hold(); s.textContent = SPIN[i++ % SPIN.length]; await sleep(60); }
           return line;
         },
         bar: async (label, ms) => {
           const line = add(`<span class="t-dim">${label}</span><span class="t-bar2"></span>`);
           const p = line.querySelector('.t-bar2'); const steps = 16;
           for (let i = 0; i <= steps; i++) {
+            await hold();
             const f = Math.round(i / steps * 12);
             p.innerHTML = ` [<span class="t-pf">${'█'.repeat(f)}</span>${'░'.repeat(12 - f)}] ${Math.round(i / steps * 100)}%`;
             await sleep(ms / steps);
@@ -1697,9 +1702,9 @@
       };
     }
     // Run a sequence once, then let the caret blink 2-4 times. Resolves when done.
-    function playSequence(body, seq) {
+    function playSequence(body, seq, frozen) {
       if (!body || typeof seq !== 'function') return Promise.resolve();
-      const t = makeTerm(body);
+      const t = makeTerm(body, frozen);
       return (async () => {
         t.clear();
         await seq(t);                              // ends by showing the caret
@@ -1759,14 +1764,14 @@
       let index = 0, w = 0, base = 0, startX = 0, startY = 0, dir = null, dragging = false;
       let autoT = null, paused = false; const DWELL = +(root.dataset.dwell || 5000);
       const seqDriven = root.hasAttribute('data-seq-driven');
-      let gen = 0;
+      let gen = 0, dragFreeze = false;
       // Sequence-driven advance: play the active terminal's command run, wait
       // for it to finish (caret blinks), then move on — never mid-command.
       async function playActive() {
         const myGen = ++gen;
         const body = slides[index] && slides[index].querySelector('[data-seq]');
         if (!body) return;
-        await playSequence(body, SEQUENCES[body.dataset.seq]);
+        await playSequence(body, SEQUENCES[body.dataset.seq], () => dragFreeze);
         if (myGen !== gen) return;                 // navigated away meanwhile
         while (paused) { await new Promise(r => setTimeout(r, 200)); if (myGen !== gen) return; }
         go((index + 1) % slides.length);
@@ -1812,8 +1817,10 @@
       const onMove = (e) => {
         if (!dragging) return;
         const dx = e.clientX - startX, dy = e.clientY - startY;
-        if (dir === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) dir = Math.abs(dx) >= Math.abs(dy) ? 'h' : 'v';
+        // bias toward horizontal: only lock vertical if it clearly dominates
+        if (dir === null && (Math.abs(dx) > 5 || Math.abs(dy) > 5)) dir = (Math.abs(dx) > Math.abs(dy) * 0.6) ? 'h' : 'v';
         if (dir === 'h') {
+          dragFreeze = true;                          // pause typing during the swipe
           if (e.cancelable) e.preventDefault();
           let x = base + dx;
           const min = -(slides.length - 1) * w;
@@ -1825,6 +1832,7 @@
       const onUp = (e) => {
         if (!dragging) return;
         dragging = false;
+        dragFreeze = false;
         track.classList.remove('dragging');
         window.removeEventListener('pointermove', onMove);
         window.removeEventListener('pointerup', onUp);
