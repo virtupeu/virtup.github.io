@@ -1636,46 +1636,39 @@
     });
 
     /* ── Section snap ────────────────────────────────────────────
-       Reactive proximity snap: while the user is scrolling, if
-       a section boundary comes within SNAP_ZONE px in the direction
-       of travel, Lenis slides the rest of the way and locks there.
-       Outside that zone the user scrolls freely within a section.
-       SNAP_ZONE is in absolute pixels (not viewport %) so it "sticks
-       to areas of the page" regardless of screen size.
+       After scroll settles, snap to the nearest of services /
+       approach / contact if within 26 % of viewport height.
     ────────────────────────────────────────────────────────────── */
     (function sectionSnap() {
       const sections = ['services', 'approach', 'contact']
         .map(id => document.getElementById(id)).filter(Boolean);
 
-      const SNAP_ZONE = 240; // px from boundary that triggers the pull
-      let snapping = false;
-
       function pt(el) {
         return Math.max(0, el.getBoundingClientRect().top + window.scrollY - 30);
       }
 
-      function doSnap(target) {
-        snapping = true;
-        lenis.scrollTo(target, {
-          duration: 1.6,
-          lock: true,
-          easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
-        });
-        setTimeout(() => { snapping = false; }, 1750);
-      }
-
-      lenis.on('scroll', ({ scroll, velocity }) => {
-        if (snapping || Math.abs(velocity) < 0.05) return;
-        const dir = velocity > 0 ? 1 : -1;
-        const pts = sections.map(el => pt(el));
-
-        /* find the nearest boundary in the direction of travel */
-        const near = dir > 0
-          ? pts.filter(p => p > scroll && p - scroll < SNAP_ZONE).sort((a, b) => a - b)[0]
-          : pts.filter(p => p < scroll && scroll - p < SNAP_ZONE).sort((a, b) => b - a)[0];
-
-        if (near != null) doSnap(near);
-      });
+      let timer, busy = false;
+      window.addEventListener('scroll', () => {
+        if (busy) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const y = window.scrollY;
+          const zone = window.innerHeight * 0.26;
+          let best = null, bestDist = Infinity;
+          sections.forEach(el => {
+            const d = Math.abs(pt(el) - y);
+            if (d < zone && d < bestDist) { bestDist = d; best = pt(el); }
+          });
+          if (best !== null && bestDist > 8) {
+            busy = true;
+            lenis.scrollTo(best, {
+              duration: 1.4,
+              easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+            });
+            setTimeout(() => { busy = false; }, 1550);
+          }
+        }, 160);
+      }, { passive: true });
     })();
 
     /* ── Line-by-line text reveal ────────────────────────────────
