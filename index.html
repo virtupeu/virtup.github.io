@@ -22,6 +22,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer" />
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
   <style>
     /* ─────────────────────────────────────────────────────────────
        TOKENS
@@ -68,10 +69,7 @@
       scroll-padding-top: 30px;
       -webkit-text-size-adjust: 100%;
     }
-    /* Smooth scroll only when motion is welcome */
-    @media screen {
-      html { scroll-behavior: smooth; }
-    }
+    /* Smooth scroll handled by Lenis — no CSS override needed */
 
     body {
       background: var(--bg);
@@ -1074,6 +1072,25 @@
     .d3 { transition-delay: .15s; } .d4 { transition-delay: .2s; }
     .d5 { transition-delay: .25s; } .d6 { transition-delay: .3s; }
 
+    /* ── LINE-REVEAL — text slides up line by line from overflow:hidden mask ── */
+    .split-line {
+      display: block;
+      overflow: hidden;
+      /* keep paragraph line-height so masks are flush between lines */
+    }
+    .split-inner {
+      display: block;
+      transform: translateY(108%);
+      opacity: 0;
+      transition: transform 0.72s cubic-bezier(0.16, 1, 0.3, 1),
+                  opacity 0.48s ease;
+      will-change: transform, opacity;
+    }
+    .split-inner.lr-visible {
+      transform: translateY(0);
+      opacity: 1;
+    }
+
     @media (prefers-reduced-motion: reduce) and (min-width: 99999px) {
       .js .reveal { opacity: 1; transform: none; transition: none; }
       *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; }
@@ -1345,10 +1362,10 @@
     <!-- ── SERVICES ── -->
     <section id="services" aria-labelledby="svc-h">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div class="kicker">What we do</div>
-          <h2 id="svc-h">Everything your IT needs, from one team.</h2>
-          <p>From cloud and security to custom AI agents that run the busywork, we cover the whole stack, so the gaps between vendors stop being your problem.</p>
+        <div class="section-head">
+          <div class="kicker reveal">What we do</div>
+          <h2 id="svc-h" class="reveal d1">Everything your IT needs, from one team.</h2>
+          <p data-line-reveal data-lr-delay="160">From cloud and security to custom AI agents that run the busywork, we cover the whole stack, so the gaps between vendors stop being your problem.</p>
         </div>
 
         <div class="grid-panel reveal d1">
@@ -1407,7 +1424,7 @@
       <div class="band-bg" aria-hidden="true"><canvas id="netBand"></canvas></div>
       <div class="band-inner">
         <h2 class="reveal">Quietly keeping <b>thousands of small things</b> working.</h2>
-        <p class="reveal d1">Patches, backups, certificates, monitoring: the unglamorous work that keeps a business online. We handle it in the background so you can forget it exists.</p>
+        <p data-line-reveal>Patches, backups, certificates, monitoring: the unglamorous work that keeps a business online. We handle it in the background so you can forget it exists.</p>
         <a class="btn reveal d2" href="#approach">How we work <i class="fa fa-arrow-right" aria-hidden="true" style="font-size:12px"></i></a>
       </div>
     </section>
@@ -1415,10 +1432,10 @@
     <!-- ── APPROACH ── -->
     <section id="approach" aria-labelledby="app-h">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div class="kicker">How we work</div>
-          <h2 id="app-h">Reliable, and built to stay that way.</h2>
-          <p>Good IT is the kind you forget you have. Here is how we get there, and the numbers we hold ourselves to.</p>
+        <div class="section-head">
+          <div class="kicker reveal">How we work</div>
+          <h2 id="app-h" class="reveal d1">Reliable, and built to stay that way.</h2>
+          <p data-line-reveal data-lr-delay="160">Good IT is the kind you forget you have. Here is how we get there, and the numbers we hold ourselves to.</p>
         </div>
 
         <div class="approach-grid">
@@ -1471,10 +1488,10 @@
     <!-- ── CONTACT ── -->
     <section id="contact" aria-labelledby="con-h">
       <div class="wrap">
-        <div class="section-head reveal">
-          <div class="kicker">Get in touch</div>
-          <h2 id="con-h">Tell us what's slowing you down.</h2>
-          <p>Describe your setup and what isn't working. We reply within one business day, and the first conversation costs nothing.</p>
+        <div class="section-head">
+          <div class="kicker reveal">Get in touch</div>
+          <h2 id="con-h" class="reveal d1">Tell us what's slowing you down.</h2>
+          <p data-line-reveal data-lr-delay="160">Describe your setup and what isn't working. We reply within one business day, and the first conversation costs nothing.</p>
         </div>
 
         <div class="contact-grid">
@@ -1590,6 +1607,87 @@
     /* Enable JS-gated states (reveal hidden-by-default only when JS runs,
        so content is never blank if scripts fail). */
     document.documentElement.classList.add('js');
+
+    /* ── Lenis smooth scroll ─────────────────────────────────────
+       Intercepts wheel + touch, lerps the native scroll position.
+       Duration 1.4s with an expo-out curve gives the same silky
+       "lagging behind" feel as presight.ai's ScrollSmoother setup.
+    ────────────────────────────────────────────────────────────── */
+    const lenis = new Lenis({
+      duration: 1.4,
+      easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+      smoothWheel: true,
+    });
+    (function lenisLoop(time) {
+      lenis.raf(time);
+      requestAnimationFrame(lenisLoop);
+    })(0);
+
+    /* Route hash link clicks through Lenis so they scroll smoothly */
+    document.querySelectorAll('a[href^="#"]').forEach(a => {
+      a.addEventListener('click', e => {
+        const href = a.getAttribute('href');
+        if (href === '#') return;
+        const target = document.querySelector(href);
+        if (!target) return;
+        e.preventDefault();
+        lenis.scrollTo(target, { offset: -30 });
+      });
+    });
+
+    /* ── Line-by-line text reveal ────────────────────────────────
+       Splits [data-line-reveal] elements into visual lines, wraps
+       each in an overflow:hidden mask, and animates the inner span
+       up from translateY(108%) when the element enters the viewport.
+       Mirrors the SplitText + mask:"lines" technique from presight.ai
+       but with no paid library — just DOM measurement + CSS transitions.
+    ────────────────────────────────────────────────────────────── */
+    function initLineReveal() {
+      if (!('IntersectionObserver' in window)) return;
+      document.querySelectorAll('[data-line-reveal]').forEach(el => {
+        const baseDelay = parseInt(el.dataset.lrDelay || '0', 10);
+        const text = el.textContent.trim();
+        if (!text) return;
+
+        /* Step 1 — wrap every word in a measurement span */
+        el.innerHTML = text.split(/\s+/)
+          .map(w => `<span style="display:inline">${w}</span>`)
+          .join(' ');
+
+        /* Step 2 — group spans by visual line via getBoundingClientRect */
+        const wordEls = [...el.children];
+        const lines = [];
+        let line = [], prevTop = null;
+        wordEls.forEach(w => {
+          const top = Math.round(w.getBoundingClientRect().top);
+          if (prevTop === null || Math.abs(top - prevTop) > 4) {
+            if (line.length) lines.push([...line]);
+            line = [w.textContent];
+            prevTop = top;
+          } else {
+            line.push(w.textContent);
+          }
+        });
+        if (line.length) lines.push(line);
+
+        /* Step 3 — rebuild: each line inside overflow:hidden + animated inner */
+        el.innerHTML = lines.map((words, i) =>
+          `<span class="split-line"><span class="split-inner" style="transition-delay:${baseDelay + i * 88}ms">${words.join(' ')}</span></span>`
+        ).join('');
+
+        /* Step 4 — IntersectionObserver fires the reveal */
+        const io = new IntersectionObserver(entries => {
+          entries.forEach(e => {
+            if (!e.isIntersecting) return;
+            el.querySelectorAll('.split-inner').forEach(s => s.classList.add('lr-visible'));
+            io.unobserve(el);
+          });
+        }, { threshold: 0.1, rootMargin: '0px 0px -20px 0px' });
+        io.observe(el);
+      });
+    }
+    /* Wait for fonts so line-break measurements are accurate */
+    document.fonts.ready.then(initLineReveal);
 
     /* Header: scroll-aware */
     const hdr = document.getElementById('hdr');
