@@ -1644,8 +1644,8 @@
        headings always land just below the fixed nav bar.
     ────────────────────────────────────────────────────────────── */
     (function sectionSnap() {
-      const snappables = [...document.querySelectorAll('section, footer')];
-      const getPoints = () => [0, ...snappables.map(s => Math.max(0, s.offsetTop - 30))];
+      const snappables = ['services', 'approach', 'contact'].map(id => document.getElementById(id)).filter(Boolean);
+      const getPoints = () => snappables.map(s => Math.max(0, s.offsetTop - 30));
       let pts = getPoints();
       window.addEventListener('resize', () => { pts = getPoints(); }, { passive: true });
 
