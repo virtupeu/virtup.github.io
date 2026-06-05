@@ -1655,11 +1655,10 @@
         clearTimeout(timer);
         timer = setTimeout(() => {
           const y = window.scrollY;
-          const threshold = window.innerHeight * 0.52;
           let best = null, bestDist = Infinity;
           pts.forEach(p => {
             const d = Math.abs(p - y);
-            if (d < threshold && d < bestDist) { bestDist = d; best = p; }
+            if (d < bestDist) { bestDist = d; best = p; }
           });
           if (best !== null && bestDist > 8) {
             busy = true;
