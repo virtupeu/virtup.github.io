@@ -1635,6 +1635,45 @@
       });
     });
 
+    /* ── Section snap ────────────────────────────────────────────
+       After the user stops scrolling for ~220ms, snap to the
+       nearest section boundary if within 28% of the viewport height.
+       Sections deeper than that threshold scroll freely (so tall
+       sections like Services don't fight the user mid-scroll).
+       Uses the same -30px header offset as hash navigation so
+       headings always land just below the fixed nav bar.
+    ────────────────────────────────────────────────────────────── */
+    (function sectionSnap() {
+      const snappables = [...document.querySelectorAll('section, footer')];
+      const getPoints = () => [0, ...snappables.map(s => Math.max(0, s.offsetTop - 30))];
+      let pts = getPoints();
+      window.addEventListener('resize', () => { pts = getPoints(); }, { passive: true });
+
+      let timer, busy = false;
+      window.addEventListener('scroll', () => {
+        if (busy) return;
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          const y = window.scrollY;
+          const threshold = window.innerHeight * 0.28;
+          let best = null, bestDist = Infinity;
+          pts.forEach(p => {
+            const d = Math.abs(p - y);
+            if (d < threshold && d < bestDist) { bestDist = d; best = p; }
+          });
+          if (best !== null && bestDist > 8) {
+            busy = true;
+            lenis.scrollTo(best, {
+              duration: 1.6,
+              easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+              lock: true,
+            });
+            setTimeout(() => { busy = false; }, 1850);
+          }
+        }, 220);
+      }, { passive: true });
+    })();
+
     /* ── Line-by-line text reveal ────────────────────────────────
        Splits [data-line-reveal] elements into visual lines, wraps
        each in an overflow:hidden mask, and animates the inner span
