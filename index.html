@@ -1655,7 +1655,7 @@
         clearTimeout(timer);
         timer = setTimeout(() => {
           const y = window.scrollY;
-          const threshold = window.innerHeight * 0.28;
+          const threshold = window.innerHeight * 0.52;
           let best = null, bestDist = Infinity;
           pts.forEach(p => {
             const d = Math.abs(p - y);
