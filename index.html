@@ -1631,7 +1631,7 @@
         const target = document.querySelector(href);
         if (!target) return;
         e.preventDefault();
-        lenis.scrollTo(target, { offset: -30 });
+        lenis.scrollTo(target, { offset: target.id === 'contact' ? -80 : -30 });
       });
     });
 
@@ -1644,7 +1644,8 @@
         .map(id => document.getElementById(id)).filter(Boolean);
 
       function pt(el) {
-        return Math.max(0, el.getBoundingClientRect().top + window.scrollY - 30);
+        const off = el.id === 'contact' ? 80 : 30;
+        return Math.max(0, el.getBoundingClientRect().top + window.scrollY - off);
       }
 
       let timer, busy = false;
